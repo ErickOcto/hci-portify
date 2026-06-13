@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Macbook Gng — Website Dashboard</title>
+  </head>
+  <body class="bg-slate-50 text-slate-800 antialiased font-sans">
+    <div id="app" class="flex h-screen overflow-hidden">
+      <!-- 1. Left Sidebar - Dual Pane -->
+      <aside class="flex flex-shrink-0 h-full">
+        <!-- 1a. Left Pane: Workspace selector & Profile -->
+        <div class="w-16 bg-slate-100 border-r border-slate-200 flex flex-col items-center py-4 justify-between">
+          <!-- Workspaces -->
+          <div class="flex flex-col items-center space-y-3 w-full">
+            <!-- MG (Active) -->
+            <button id="workspace-mg" class="w-10 h-10 rounded-xl bg-blue-600 text-white font-bold text-sm flex items-center justify-center shadow-md shadow-blue-200 transition-all hover:scale-105" title="Macbook Gng">
+              MG
+            </button>
+            <!-- P1 -->
+            <button class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 font-semibold text-xs flex items-center justify-center transition-all hover:border-blue-400 hover:text-blue-700 hover:scale-105" title="Project 1">
+              P1
+            </button>
+            <!-- P2 -->
+            <button class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 font-semibold text-xs flex items-center justify-center transition-all hover:border-blue-400 hover:text-blue-700 hover:scale-105" title="Project 2">
+              P2
+            </button>
+            <!-- P3 -->
+            <button class="w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 font-semibold text-xs flex items-center justify-center transition-all hover:border-blue-400 hover:text-blue-700 hover:scale-105" title="Project 3">
+              P3
+            </button>
+            <!-- Add Workspace -->
+            <button class="w-10 h-10 rounded-xl bg-white border border-dashed border-slate-300 text-slate-400 font-semibold text-xl flex items-center justify-center transition-all hover:border-blue-400 hover:text-blue-600 hover:bg-slate-50 hover:scale-105" title="Add Project">
+              +
+            </button>
+          </div>
+
+          <!-- Profile Avatar -->
+          <div class="relative group">
+            <button id="profile-btn" class="w-10 h-10 rounded-full overflow-hidden border border-slate-200 transition-all hover:ring-2 hover:ring-blue-500 hover:scale-105">
+              <img src="/avatar.png" alt="User Profile" class="w-full h-full object-cover" />
+            </button>
+            <!-- Profile Tooltip Menu -->
+            <div class="hidden absolute left-14 bottom-0 w-48 bg-white border border-slate-200 rounded-lg shadow-xl py-1 z-50 group-focus-within:block" id="profile-menu">
+              <div class="px-4 py-2 border-b border-slate-100">
+                <p class="text-xs text-slate-400">Signed in as</p>
+                <p class="text-sm font-semibold text-slate-700 truncate">Jane Doe</p>
+              </div>
+              <a href="#" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">Account Settings</a>
+              <a href="#" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">Billing</a>
+              <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-slate-100">Sign out</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1b. Right Pane: Site Navigation -->
+        <div class="w-60 bg-white border-r border-slate-200 flex flex-col justify-between py-4">
+          <div>
+            <!-- Workspace Selector Header -->
+            <div class="px-4 mb-6 flex items-center justify-between">
+              <button class="flex items-center space-x-2 font-bold text-slate-800 hover:text-blue-600 transition-colors">
+                <span>Macbook Gng</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="space-y-1 px-2" id="nav-links">
+              <!-- Overview (Active) -->
+              <button data-tab="overview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all bg-blue-50 text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                </svg>
+                <span>Overview</span>
+              </button>
+              <!-- Performance -->
+              <button data-tab="performance" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                </svg>
+                <span>Performance</span>
+              </button>
+              <!-- Database -->
+              <button data-tab="database" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0v3.75" />
+                </svg>
+                <span>Database</span>
+              </button>
+              <!-- Domain -->
+              <button data-tab="domain" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-.778.099-1.533.284-2.253" />
+                </svg>
+                <span>Domain</span>
+              </button>
+              <!-- Custom Page -->
+              <button data-tab="custom-page" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                </svg>
+                <span>Custom Page</span>
+              </button>
+              <!-- Live Preview -->
+              <button data-tab="live-preview" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Live Preview</span>
+              </button>
+              <!-- Settings -->
+              <button data-tab="settings" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Settings</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 2. Main Content Area -->
+      <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
+        <!-- Top Header Navigation -->
+        <header class="bg-white border-b border-slate-200 h-14 flex flex-shrink-0 items-center justify-between px-6 z-10 sticky top-0">
+          <div class="flex items-center space-x-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <span>Macbook Gng</span>
+            <span class="text-slate-300">/</span>
+            <span class="text-slate-600" id="current-tab-label">Dashboard</span>
+          </div>
+
+          <!-- Header Right Utilities -->
+          <div class="flex items-center space-x-4">
+            <!-- Search bar -->
+            <div class="relative w-48 lg:w-64">
+              <input type="text" placeholder="Search page/action..." class="w-full bg-slate-100 border border-transparent rounded-lg py-1.5 pl-8 pr-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-all" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </div>
+
+            <!-- Notifications -->
+            <button class="relative p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50 transition-colors" title="Notifications">
+              <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Dashboard Viewport -->
+        <div class="p-6 space-y-6 flex-1 min-w-0" id="main-content-view">
+          
+          <!-- Orange SSL Expiry Warning Banner -->
+          <div id="ssl-alert" class="bg-amber-500 text-white px-4 py-3 rounded-xl shadow-md shadow-amber-500/10 flex items-center justify-between transition-all duration-300 transform scale-100 opacity-100">
+            <div class="flex items-center space-x-3 min-w-0">
+              <div class="bg-amber-600/30 p-1.5 rounded-lg flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+              </div>
+              <p class="text-sm font-medium truncate">
+                SSL certificate expires in 7 days — renew to keep your site secure.
+              </p>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-4">
+              <button id="renew-ssl-btn" class="bg-white text-amber-600 hover:bg-slate-100 transition-all font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm">
+                Renew Now
+              </button>
+              <button id="close-ssl-alert" class="p-1 text-white/80 hover:text-white rounded-md hover:bg-white/10 transition-colors" title="Dismiss">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cards Grid Panel -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Card 1: Recent Activity -->
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[380px]">
+              <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                <h2 class="font-bold text-slate-800 tracking-tight text-base">Recent activity</h2>
+                <button class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">View All</button>
+              </div>
+              <!-- Activity List -->
+              <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-4" id="activity-list">
+                <!-- Activity Item 1 -->
+                <div class="flex items-start space-x-3">
+                  <div class="bg-blue-50 text-blue-600 p-2 rounded-xl flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-700">Products page edited</p>
+                    <p class="text-xs text-slate-400 mt-0.5">2 hours ago · by You</p>
+                  </div>
+                </div>
+                <!-- Activity Item 2 -->
+                <div class="flex items-start space-x-3">
+                  <div class="bg-emerald-50 text-emerald-600 p-2 rounded-xl flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-700">Site deployed successfully</p>
+                    <p class="text-xs text-slate-400 mt-0.5">5 hours ago · by You</p>
+                  </div>
+                </div>
+                <!-- Activity Item 3 -->
+                <div class="flex items-start space-x-3">
+                  <div class="bg-amber-50 text-amber-600 p-2 rounded-xl flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-700">SEO settings updated</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Yesterday · by Hafizh</p>
+                  </div>
+                </div>
+                <!-- Activity Item 4 -->
+                <div class="flex items-start space-x-3">
+                  <div class="bg-rose-50 text-rose-600 p-2 rounded-xl flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                  </div>
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-700">SSL certificate renewed</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Yesterday · by Claude</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Quick Actions (Spans 2 columns on lg screens) -->
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[380px] lg:col-span-2">
+              <div class="mb-5 flex-shrink-0">
+                <h2 class="font-bold text-slate-800 tracking-tight text-base">Quick Actions</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Common tasks, one click away</p>
+              </div>
+
+              <!-- Quick Actions Grid (3x2) -->
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 flex-1">
+                <!-- Action 1: Add new page -->
+                <button class="quick-action-btn flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 hover:shadow-sm hover:scale-102 group">
+                  <div class="bg-white text-slate-500 w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-colors group-hover:text-blue-500 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                  </div>
+                  <span class="text-sm font-semibold">Add new page</span>
+                </button>
+                <!-- Action 2: Check SEO -->
+                <button class="quick-action-btn flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 hover:shadow-sm hover:scale-102 group">
+                  <div class="bg-white text-slate-500 w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-colors group-hover:text-blue-500 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                  </div>
+                  <span class="text-sm font-semibold">Check SEO</span>
+                </button>
+                <!-- Action 3: Preview page -->
+                <button class="quick-action-btn flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 hover:shadow-sm hover:scale-102 group">
+                  <div class="bg-white text-slate-500 w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-colors group-hover:text-blue-500 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <span class="text-sm font-semibold">Preview page</span>
+                </button>
+                <!-- Action 4: Deploy site -->
+                <button class="quick-action-btn flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 hover:shadow-sm hover:scale-102 group">
+                  <div class="bg-white text-slate-500 w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-colors group-hover:text-blue-500 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5h10.5a2.25 2.25 0 002.25-2.25v-10.5A2.25 2.25 0 0017.25 4.5H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                  </div>
+                  <span class="text-sm font-semibold">Deploy site</span>
+                </button>
+                <!-- Action 5: Manage media -->
+                <button class="quick-action-btn flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 hover:shadow-sm hover:scale-102 group">
+                  <div class="bg-white text-slate-500 w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-colors group-hover:text-blue-500 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l1.29 1.29m-16.5-3.03v-3.375C2.25 8.284 2.784 7.5 3.444 7.5h1.656V6.75A2.25 2.25 0 017.35 4.5h9.3a2.25 2.25 0 012.25 2.25v.75h1.656c.66 0 1.194.784 1.194 1.75v3.375m-18 0h18" />
+                    </svg>
+                  </div>
+                  <span class="text-sm font-semibold">Manage media</span>
+                </button>
+                <!-- Action 6: Site settings -->
+                <button class="quick-action-btn flex flex-col items-center justify-center p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 transition-all hover:bg-blue-50 hover:border-blue-200 hover:text-blue-600 hover:shadow-sm hover:scale-102 group">
+                  <div class="bg-white text-slate-500 w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200 shadow-sm transition-colors group-hover:text-blue-500 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+              <span class="text-sm font-semibold">Site settings</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3: Website Status -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col justify-between h-[280px] hover:shadow-md transition-shadow">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <h2 class="font-bold text-slate-800 tracking-tight text-base">Website Status</h2>
+              <span id="site-status-badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 transition-all">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                Live
+              </span>
+            </div>
+            <p class="text-xs text-slate-400">Your website is live & accessible to visitors.</p>
+
+            <!-- Domain / Info block -->
+            <div class="mt-4 p-3.5 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between">
+              <div class="min-w-0">
+                <p class="text-sm font-bold text-slate-700 truncate">macbookgng.com</p>
+                <p class="text-xs text-slate-400 mt-0.5">Updated 2 hours ago · by You</p>
+              </div>
+              <div class="text-right flex-shrink-0">
+                <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">Healthy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer link / Toggle interaction -->
+          <div class="flex items-center justify-between border-t border-slate-100 pt-3">
+            <button id="toggle-maintenance-btn" class="text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors flex items-center space-x-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+              <span>Toggle Status</span>
+            </button>
+            <button class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">View Details</button>
+          </div>
+        </div>
+
+        <!-- Card 4: Performance Overview -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col justify-between h-[280px] hover:shadow-md transition-shadow">
+          <div>
+            <h2 class="font-bold text-slate-800 tracking-tight text-base mb-1">Performance Overview</h2>
+            <p class="text-xs text-slate-400">See how your website is performing.</p>
+
+            <!-- Metrics List -->
+            <div class="mt-4 grid grid-cols-3 gap-2">
+              <div class="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Visitors</p>
+                <p class="text-lg font-bold text-slate-700 mt-1">1,240</p>
+              </div>
+              <div class="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Views</p>
+                <p class="text-lg font-bold text-slate-700 mt-1">3,560</p>
+              </div>
+              <div class="bg-slate-50 border border-slate-100 p-3 rounded-xl text-center">
+                <p class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Top Page</p>
+                <p class="text-sm font-bold text-slate-700 mt-2 truncate" title="/home">Home</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end border-t border-slate-100 pt-3">
+            <button class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">View Details</button>
+          </div>
+        </div>
+
+        <!-- Card 5: Pages -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col justify-between h-[280px] hover:shadow-md transition-shadow">
+          <div>
+            <h2 class="font-bold text-slate-800 tracking-tight text-base mb-1">Pages</h2>
+            <p class="text-xs text-slate-400">Manage website structure and content.</p>
+
+            <!-- Pages list -->
+            <div class="mt-3.5 space-y-2.5">
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                  <span class="font-medium text-slate-600">Home</span>
+                </div>
+                <span class="text-xs font-semibold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md border border-emerald-100">Generated</span>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                  <span class="font-medium text-slate-600">Products</span>
+                </div>
+                <span class="text-xs font-semibold bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md border border-amber-100">Edited</span>
+              </div>
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center space-x-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                  <span class="font-medium text-slate-600">Contact</span>
+                </div>
+                <span class="text-xs font-semibold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-md">Empty</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end border-t border-slate-100 pt-3">
+            <button class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">View Details</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Card 6: Analytics Graph (spans full width/grid) -->
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col mt-6">
+        <div class="flex items-center justify-between mb-4 flex-shrink-0">
+          <div>
+            <h2 class="font-bold text-slate-800 tracking-tight text-base">Visitors Analytics</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Real-time visitor patterns over the last 7 days</p>
+          </div>
+          <!-- Chart period selector -->
+          <div class="flex space-x-1 bg-slate-100 p-0.5 rounded-lg text-xs font-semibold">
+            <button class="px-2.5 py-1 rounded-md bg-white text-slate-800 shadow-sm transition-all">7D</button>
+            <button class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all">30D</button>
+            <button class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-800 transition-all">1Y</button>
+          </div>
+        </div>
+
+        <!-- SVG Spline Chart Area -->
+        <div class="relative w-full h-60 flex items-center justify-center border-t border-slate-100 pt-4" id="chart-container">
+          <!-- Main Chart SVG (responsive viewport) -->
+          <svg id="analytics-svg" viewBox="0 0 1000 240" class="w-full h-full overflow-visible">
+            <defs>
+              <!-- Gradient fill under spline curve -->
+              <linearGradient id="chart-glow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#18a0fb" stop-opacity="0.25"></stop>
+                <stop offset="100%" stop-color="#18a0fb" stop-opacity="0.00"></stop>
+              </linearGradient>
+            </defs>
+
+            <!-- Background Grid lines (X & Y axes) -->
+            <g class="stroke-slate-100 stroke-1 stroke-dasharray-[4,4]">
+              <!-- Horizontal Grid Lines -->
+              <line x1="0" y1="40" x2="1000" y2="40"></line>
+              <line x1="0" y1="90" x2="1000" y2="90"></line>
+              <line x1="0" y1="140" x2="1000" y2="140"></line>
+              <line x1="0" y1="190" x2="1000" y2="190"></line>
+            </g>
+
+            <!-- Gradient Area under spline -->
+            <path id="chart-area-path" d="" fill="url(#chart-glow)"></path>
+
+            <!-- Main Curve Path -->
+            <path id="chart-line-path" d="" fill="none" stroke="#18a0fb" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow-[0_4px_10px_rgba(24,160,251,0.25)]"></path>
+
+            <!-- Hover Vertical Indicator Line (hidden by default) -->
+            <line id="chart-hover-line" x1="-100" y1="0" x2="-100" y2="240" class="stroke-blue-400 stroke-1.5 stroke-dasharray-[3,3] transition-all duration-75"></line>
+
+            <!-- Interaction Nodes (hoverable circles) -->
+            <g id="chart-nodes-group"></g>
+          </svg>
+
+          <!-- Dynamic Floating Tooltip Overlay -->
+          <div id="chart-tooltip" class="absolute hidden bg-slate-900 text-white rounded-lg px-3 py-2 text-xs shadow-xl pointer-events-none z-10 flex-col space-y-0.5 border border-slate-800 transition-all duration-75">
+            <p class="font-semibold text-slate-300" id="tooltip-day">Monday</p>
+            <p class="font-extrabold text-white text-sm" id="tooltip-value">256 Visitors</p>
+          </div>
+        </div>
+
+        <!-- X-Axis Labels -->
+        <div class="flex justify-between items-center px-4 mt-2 text-xs font-semibold text-slate-400 uppercase tracking-wide">
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+          <span>Sun</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notification Banner Modal Portal -->
+  <div id="notification-portal" class="fixed bottom-6 right-6 space-y-3 z-50"></div>
+
+  <!-- Script Modules -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

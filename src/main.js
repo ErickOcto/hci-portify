@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initWebsiteStatus();
   initQuickActions();
   initAnalyticsChart();
+  initUptimeGrid();
+  initPerformanceActions();
 });
 
 // --- Toast Notification System ---
@@ -60,15 +62,20 @@ function showToast(message, type = 'info') {
   }, 4000);
 }
 
-// --- 1. Sidebar Tabs ---
+// --- Tab-Switching Logic (SPA) ---
 function initTabs() {
   const navLinks = document.getElementById('nav-links');
   const label = document.getElementById('current-tab-label');
+  const overviewView = document.getElementById('overview-view');
+  const performanceView = document.getElementById('performance-view');
+
   if (!navLinks) return;
 
   const buttons = navLinks.querySelectorAll('button[data-tab]');
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
+      const tabId = btn.getAttribute('data-tab');
+
       // Clear active style on all buttons
       buttons.forEach(b => {
         b.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900";
@@ -77,13 +84,30 @@ function initTabs() {
       // Set active style on clicked
       btn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all bg-blue-50 text-blue-600";
 
-      // Update header label
+      // Update header breadcrumb label
       const tabName = btn.querySelector('span').innerText;
       if (label) {
         label.innerText = tabName;
       }
 
-      showToast(`Switched to tab: ${tabName}`);
+      // Hide all page views and show target page view
+      if (tabId === 'overview') {
+        if (overviewView) overviewView.classList.remove('hidden');
+        if (performanceView) performanceView.classList.add('hidden');
+        showToast('Switched to Dashboard Overview');
+      } else if (tabId === 'performance') {
+        if (overviewView) overviewView.classList.add('hidden');
+        if (performanceView) performanceView.classList.remove('hidden');
+        
+        // Trigger page entrance animations
+        triggerPerformanceAnimations();
+        showToast('Switched to Performance Page');
+      } else {
+        // Mock default behavior for database, domain, settings etc.
+        if (overviewView) overviewView.classList.add('hidden');
+        if (performanceView) performanceView.classList.add('hidden');
+        showToast(`Tab content for "${tabName}" is under development.`);
+      }
     });
   });
 
@@ -103,7 +127,30 @@ function initTabs() {
   }
 }
 
-// --- 2. SSL Banner ---
+// --- Trigger Performance Page Entrance Animations ---
+function triggerPerformanceAnimations() {
+  // 1. Animate Progress Bars
+  const progressFills = document.querySelectorAll('#performance-view .progress-fill');
+  progressFills.forEach(fill => {
+    fill.style.width = '0%';
+    // Force reflow
+    fill.offsetHeight;
+    const targetWidth = fill.getAttribute('data-width');
+    fill.style.width = targetWidth;
+  });
+
+  // 2. Animate Bar Chart Heights
+  const chartBars = document.querySelectorAll('#uptime-bar-chart [data-height]');
+  chartBars.forEach(bar => {
+    bar.style.height = '0%';
+    // Force reflow
+    bar.offsetHeight;
+    const targetHeight = bar.getAttribute('data-height');
+    bar.style.height = targetHeight;
+  });
+}
+
+// --- SSL Banner ---
 function initSSLBanner() {
   const alert = document.getElementById('ssl-alert');
   const closeBtn = document.getElementById('close-ssl-alert');
@@ -136,8 +183,6 @@ function initSSLBanner() {
       setTimeout(() => {
         dismissAlert();
         showToast('SSL Certificate successfully renewed for 365 days!', 'success');
-        
-        // Add renewal entry to Recent Activity log
         appendActivityLog('SSL certificate renewed', 'Just now · by System', 'rose');
       }, 1200);
     });
@@ -150,7 +195,7 @@ function appendActivityLog(title, desc, colorTheme) {
   if (!list) return;
 
   const item = document.createElement('div');
-  item.className = 'flex items-start space-x-3 animate-fade-in-down';
+  item.className = 'flex items-start space-x-3';
 
   let bgClass = 'bg-slate-50 text-slate-600';
   if (colorTheme === 'rose') bgClass = 'bg-rose-50 text-rose-600';
@@ -172,7 +217,7 @@ function appendActivityLog(title, desc, colorTheme) {
   list.insertBefore(item, list.firstChild);
 }
 
-// --- 3. Website Status Toggler ---
+// --- Website Status Toggler ---
 function initWebsiteStatus() {
   const toggleBtn = document.getElementById('toggle-maintenance-btn');
   const badge = document.getElementById('site-status-badge');
@@ -185,13 +230,11 @@ function initWebsiteStatus() {
     isLive = !isLive;
 
     if (isLive) {
-      // Toggle back to Live
       badge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100 transition-all";
       badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>Live`;
       showToast('Website is now live and serving production traffic.', 'success');
       appendActivityLog('Site status set to Live', 'Just now · by You', 'emerald');
     } else {
-      // Toggle to Maintenance
       badge.className = "inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100 transition-all";
       badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 animate-pulse"></span>Maintenance`;
       showToast('Website set to maintenance mode.', 'warning');
@@ -200,7 +243,7 @@ function initWebsiteStatus() {
   });
 }
 
-// --- 4. Quick Actions Trigger ---
+// --- Quick Actions Trigger ---
 function initQuickActions() {
   const actionButtons = document.querySelectorAll('.quick-action-btn');
   actionButtons.forEach(btn => {
@@ -227,7 +270,7 @@ function initQuickActions() {
   });
 }
 
-// --- 5. Interactive SVG Spline Chart ---
+// --- Interactive SVG Spline Chart (Overview) ---
 function initAnalyticsChart() {
   const svg = document.getElementById('analytics-svg');
   const linePath = document.getElementById('chart-line-path');
@@ -238,7 +281,6 @@ function initAnalyticsChart() {
 
   if (!svg || !linePath || !areaPath || !nodesGroup) return;
 
-  // Analytics Data Points
   const data = [
     { day: 'Monday', value: 850 },
     { day: 'Tuesday', value: 1100 },
@@ -249,7 +291,6 @@ function initAnalyticsChart() {
     { day: 'Sunday', value: 1590 }
   ];
 
-  // Coordinates Mapping System
   const svgWidth = 1000;
   const svgHeight = 240;
   const paddingX = 40;
@@ -264,14 +305,12 @@ function initAnalyticsChart() {
     return { x, y, ...d };
   });
 
-  // Spline Drawing helper (Catmull-Rom to Cubic Bezier spline)
   const drawSpline = (pts) => {
     let d = `M ${pts[0].x} ${pts[0].y}`;
     for (let i = 0; i < pts.length - 1; i++) {
       const curr = pts[i];
       const next = pts[i + 1];
       
-      // Control point offsets
       const cpX1 = curr.x + (next.x - curr.x) / 3;
       const cpY1 = curr.y;
       const cpX2 = curr.x + 2 * (next.x - curr.x) / 3;
@@ -285,16 +324,13 @@ function initAnalyticsChart() {
   const lineD = drawSpline(points);
   linePath.setAttribute('d', lineD);
 
-  // Gradient Area closing points
   const areaD = `${lineD} L ${points[points.length - 1].x} ${svgHeight} L ${points[0].x} ${svgHeight} Z`;
   areaPath.setAttribute('d', areaD);
 
-  // Render SVG Node Circles and Register Listeners
   points.forEach((p, idx) => {
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('class', 'cursor-pointer group');
 
-    // Glow ring circle
     const glowCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     glowCircle.setAttribute('cx', p.x);
     glowCircle.setAttribute('cy', p.y);
@@ -303,7 +339,6 @@ function initAnalyticsChart() {
     glowCircle.setAttribute('fill-opacity', '0');
     glowCircle.setAttribute('class', 'transition-all duration-200 group-hover:fill-opacity-25');
 
-    // Central solid dot
     const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     dot.setAttribute('cx', p.x);
     dot.setAttribute('cy', p.y);
@@ -317,27 +352,22 @@ function initAnalyticsChart() {
     group.appendChild(dot);
     nodesGroup.appendChild(group);
 
-    // Mouse Interactions (Hover Tooltips)
     group.addEventListener('mouseenter', () => {
-      // 1. Show & Position Vertical guide line
       hoverLine.setAttribute('x1', p.x);
       hoverLine.setAttribute('x2', p.x);
       hoverLine.classList.remove('opacity-0');
 
-      // 2. Format Tooltip Texts
       document.getElementById('tooltip-day').innerText = p.day;
       document.getElementById('tooltip-value').innerText = `${p.value.toLocaleString()} Visitors`;
 
-      // 3. Align Tooltip Div
       tooltip.classList.remove('hidden');
       
-      // Compute coordinates relative to the svg parent container
       const containerRect = svg.getBoundingClientRect();
       const pctX = p.x / svgWidth;
       const pctY = p.y / svgHeight;
 
       const tooltipX = pctX * containerRect.width;
-      const tooltipY = pctY * containerRect.height - 70; // Float above
+      const tooltipY = pctY * containerRect.height - 70;
 
       tooltip.style.left = `${tooltipX}px`;
       tooltip.style.top = `${tooltipY}px`;
@@ -348,5 +378,77 @@ function initAnalyticsChart() {
       hoverLine.classList.add('opacity-0');
       tooltip.classList.add('hidden');
     });
+  });
+}
+
+// --- 6. 90-day Uptime Grid (Performance Page) ---
+function initUptimeGrid() {
+  const container = document.getElementById('uptime-grid-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  // Generate 90 cells (3 rows x 30 columns)
+  for (let i = 0; i < 90; i++) {
+    const cell = document.createElement('div');
+    
+    // Default: Up (Green)
+    let bgClass = 'bg-emerald-500 hover:bg-emerald-400';
+    let statusText = 'Up';
+
+    // Set mock degraded days matching Figma visual
+    if (i === 5) {
+      bgClass = 'bg-amber-500 hover:bg-amber-400';
+      statusText = 'Degraded Performance (32ms latency)';
+    } else if (i === 80 || i === 81) {
+      bgClass = 'bg-amber-500 hover:bg-amber-400';
+      statusText = 'Degraded Performance (64ms latency)';
+    }
+
+    cell.className = `${bgClass} rounded-[3px] transition-colors cursor-pointer w-full h-full`;
+    cell.setAttribute('title', `Day ${90 - i}: ${statusText}`);
+    container.appendChild(cell);
+  }
+}
+
+// --- 7. Performance actions (Performance Page) ---
+function initPerformanceActions() {
+  const runBtn = document.getElementById('run-audit-btn');
+  const scoreVal = document.getElementById('perf-score-val');
+
+  if (!runBtn || !scoreVal) return;
+
+  runBtn.addEventListener('click', () => {
+    runBtn.innerText = 'Analyzing...';
+    runBtn.disabled = true;
+
+    showToast('Starting Lighthouse speed audit...', 'info');
+
+    setTimeout(() => {
+      runBtn.innerText = 'Run audit';
+      runBtn.disabled = false;
+
+      showToast('Performance audit completed!', 'success');
+
+      // Animate score counting up from 87 to 92
+      let currentScore = 87;
+      const targetScore = 92;
+      const duration = 800; // ms
+      const intervalTime = Math.floor(duration / (targetScore - currentScore));
+
+      const counter = setInterval(() => {
+        currentScore++;
+        scoreVal.innerText = currentScore;
+
+        if (currentScore >= targetScore) {
+          clearInterval(counter);
+          
+          // Animate color to emerald if score hits higher target
+          scoreVal.parentElement.classList.remove('text-amber-500');
+          scoreVal.parentElement.classList.add('text-emerald-500');
+          showToast('Performance Score increased to 92/100!', 'success');
+        }
+      }, intervalTime);
+    }, 1500);
   });
 }

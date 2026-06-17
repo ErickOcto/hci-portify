@@ -1,5 +1,328 @@
 import './style.css';
 
+// --- Portify Global State System ---
+let activeProject = 'macbookgng';
+const activePages = {
+  macbookgng: 'home',
+  p1: 'home',
+  p2: 'home',
+  p3: 'home'
+};
+
+const projectData = {
+  macbookgng: {
+    name: 'Macbook Gng',
+    domain: 'macbookgng.com',
+    updated: 'Updated 2 hours ago · by You',
+    pages: {
+      home: {
+        name: 'Home',
+        status: 'Generated',
+        sections: [
+          { type: 'hero', id: 'hero-1', headline: 'Design Macbook Gang Pro', subhead: 'The ultimate portfolio theme for modern creators and designers. Clean layout, dark modes, and modular blocks.', bgTheme: 'slate-dark', ctaPrimary: 'Get Theme', ctaSecondary: 'Learn More' },
+          { type: 'features', id: 'features-1', headline: 'Core Core Features', subhead: 'Optimized for speed, visually stunning, and highly modular templates.', bgTheme: 'slate-light', ctaPrimary: '', ctaSecondary: '' },
+          { type: 'testimonials', id: 'testimonials-1', headline: 'Trusted by MacBook Gang Creators', subhead: 'Join thousands of designers deploying responsive portfolios.', bgTheme: 'white', ctaPrimary: '', ctaSecondary: '' }
+        ]
+      },
+      products: {
+        name: 'Products',
+        status: 'Edited',
+        sections: [
+          { type: 'hero', id: 'hero-2', headline: 'Macbook Pro Accessories', subhead: 'Premium docks, sleeves, and stands to unlock the ultimate desktop experience.', bgTheme: 'violet-gradient', ctaPrimary: 'Explore Gear', ctaSecondary: 'Compare Specs' },
+          { type: 'pricing', id: 'pricing-1', headline: 'Gear Bundles', subhead: 'Simple, flat pricing for individual accessories or complete workspace kits.', bgTheme: 'white', ctaPrimary: '', ctaSecondary: '' }
+        ]
+      },
+      contact: {
+        name: 'Contact',
+        status: 'Empty',
+        sections: [
+          { type: 'contact', id: 'contact-1', headline: 'Contact Macbook Gang Team', subhead: 'Ask questions, report issues, or get in touch with our creative directors.', bgTheme: 'white', ctaPrimary: '', ctaSecondary: '' }
+        ]
+      }
+    }
+  },
+  p1: {
+    name: 'Project 1',
+    domain: 'project1.portify.io',
+    updated: 'Created 1 day ago · by System',
+    pages: {
+      home: {
+        name: 'Home',
+        status: 'Generated',
+        sections: [
+          { type: 'hero', id: 'hero-p1', headline: 'Welcome to Project 1', subhead: 'A clean, modern boilerplate theme ready for your creative content.', bgTheme: 'blue-royal', ctaPrimary: 'Start Building', ctaSecondary: 'Documentation' }
+        ]
+      }
+    }
+  },
+  p2: {
+    name: 'Project 2',
+    domain: 'project2.portify.io',
+    updated: 'Created 2 days ago · by System',
+    pages: {
+      home: {
+        name: 'Home',
+        status: 'Generated',
+        sections: [
+          { type: 'hero', id: 'hero-p2', headline: 'Welcome to Project 2', subhead: 'A clean SaaS website framework for bootstrapping micro-businesses.', bgTheme: 'slate-light', ctaPrimary: 'Get Access', ctaSecondary: 'Pricing Plans' }
+        ]
+      }
+    }
+  },
+  p3: {
+    name: 'Project 3',
+    domain: 'project3.portify.io',
+    updated: 'Created 3 days ago · by System',
+    pages: {
+      home: {
+        name: 'Home',
+        status: 'Generated',
+        sections: [
+          { type: 'hero', id: 'hero-p3', headline: 'Welcome to Project 3', subhead: 'A minimalist photography showcase theme optimized for light and dark contrast.', bgTheme: 'white', ctaPrimary: 'View Gallery', ctaSecondary: 'Read Biography' }
+        ]
+      }
+    }
+  }
+};
+
+// --- Responsive mobile sidebar functions ---
+function initMobileSidebar() {
+  const toggleBtn = document.getElementById('mobile-sidebar-toggle');
+  const sidebar = document.getElementById('main-sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const navLinks = document.getElementById('nav-links');
+
+  if (!toggleBtn || !sidebar || !backdrop) return;
+
+  const openSidebar = () => {
+    backdrop.classList.remove('hidden');
+    // force reflow
+    backdrop.offsetHeight;
+    backdrop.classList.add('opacity-100');
+    sidebar.classList.remove('-translate-x-full');
+  };
+
+  const closeSidebar = () => {
+    sidebar.classList.add('-translate-x-full');
+    backdrop.classList.remove('opacity-100');
+    setTimeout(() => {
+      backdrop.classList.add('hidden');
+    }, 300);
+  };
+
+  toggleBtn.addEventListener('click', openSidebar);
+  backdrop.addEventListener('click', closeSidebar);
+
+  // Close mobile sidebar on link clicks
+  if (navLinks) {
+    navLinks.querySelectorAll('button[data-tab]').forEach(btn => {
+      btn.addEventListener('click', closeSidebar);
+    });
+  }
+}
+
+// --- Dynamic project selector functions ---
+function initProjectSwitcher() {
+  const projectBtns = document.querySelectorAll('.project-tab-btn');
+  
+  projectBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const projectId = btn.getAttribute('data-project');
+      selectProject(projectId);
+    });
+  });
+}
+
+function selectProject(projectId) {
+  if (!projectData[projectId]) return;
+  activeProject = projectId;
+
+  // Sync Left Sidebar Buttons Styling
+  const projectBtns = document.querySelectorAll('.project-tab-btn');
+  projectBtns.forEach(b => {
+    const pId = b.getAttribute('data-project');
+    if (pId === projectId) {
+      b.className = "project-tab-btn w-10 h-10 rounded-xl bg-blue-600 text-white font-bold text-sm flex items-center justify-center shadow-md shadow-blue-200 transition-all hover:scale-105";
+    } else {
+      b.className = "project-tab-btn w-10 h-10 rounded-xl bg-white border border-slate-200 text-blue-600 font-semibold text-xs flex items-center justify-center transition-all hover:border-blue-400 hover:text-blue-700 hover:scale-105";
+    }
+  });
+
+  const proj = projectData[projectId];
+
+  // Sync Headers
+  const sidebarProjName = document.getElementById('sidebar-project-name');
+  const headerProjName = document.getElementById('header-project-name');
+  if (sidebarProjName) sidebarProjName.innerText = proj.name;
+  if (headerProjName) headerProjName.innerText = proj.name;
+
+  // Sync Website status card in Overview
+  const statusDomain = document.getElementById('status-card-domain');
+  const statusUpdated = document.getElementById('status-card-updated');
+  if (statusDomain) statusDomain.innerText = proj.domain;
+  if (statusUpdated) statusUpdated.innerText = proj.updated;
+
+  // Sync Visual Builder Site Badge
+  const siteBadgeText = document.getElementById('builder-site-badge-text');
+  if (siteBadgeText) siteBadgeText.innerText = proj.domain;
+
+  // Refresh Overview Pages list
+  renderOverviewPages();
+
+  // Refresh builder dropdown options
+  if (window.builderPageManager) {
+    window.builderPageManager.updatePageSelect();
+    window.builderPageManager.loadPageCanvas(activePages[projectId]);
+  }
+
+  showToast(`Switched to workspace: ${proj.name}`, 'success');
+}
+
+// --- Dynamic pages list card in Overview ---
+function renderOverviewPages() {
+  const pagesList = document.getElementById('overview-pages-list');
+  if (!pagesList) return;
+
+  pagesList.innerHTML = '';
+  const proj = projectData[activeProject];
+
+  Object.keys(proj.pages).forEach(key => {
+    const page = proj.pages[key];
+    const item = document.createElement('div');
+    item.className = 'flex items-center justify-between text-sm hover:bg-slate-50/50 p-1.5 rounded-lg transition-colors cursor-pointer group';
+    
+    let badgeClass = 'bg-slate-100 text-slate-500';
+    if (page.status === 'Generated') badgeClass = 'bg-emerald-50 text-emerald-600 border border-emerald-100';
+    if (page.status === 'Edited') badgeClass = 'bg-amber-50 text-amber-600 border border-amber-100';
+
+    item.innerHTML = `
+      <div class="flex items-center space-x-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-blue-500 transition-colors"></span>
+        <span class="font-medium text-slate-600 group-hover:text-slate-900 transition-colors">${page.name}</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span class="text-xs font-semibold px-2 py-0.5 rounded-md ${badgeClass}">${page.status}</span>
+        <button class="overview-edit-page-btn text-slate-400 hover:text-blue-600 p-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity" title="Edit in Builder" data-page="${key}">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+          </svg>
+        </button>
+      </div>
+    `;
+
+    // Click handler to open page directly in visual builder
+    item.addEventListener('click', () => {
+      activePages[activeProject] = key;
+      
+      const builderSelect = document.getElementById('builder-page-select');
+      if (builderSelect) builderSelect.value = key;
+      
+      if (window.builderPageManager) {
+        window.builderPageManager.loadPageCanvas(key);
+      }
+
+      // Switch view tabs
+      const builderTabBtn = document.querySelector('button[data-tab="custom-page"]');
+      if (builderTabBtn) builderTabBtn.click();
+    });
+
+    pagesList.appendChild(item);
+  });
+}
+
+// --- Add New Page Modal initializer ---
+function initAddPageModal() {
+  const addPageModal = document.getElementById('add-page-modal');
+  const addPageModalCard = document.getElementById('add-page-modal-card');
+  const closeBtn = document.getElementById('close-add-page-modal');
+  const cancelBtn = document.getElementById('cancel-add-page-btn');
+  const form = document.getElementById('add-page-form');
+
+  const openBtns = [
+    document.getElementById('quick-add-page-btn'),
+    document.getElementById('overview-add-page-btn'),
+    document.getElementById('builder-add-page-btn')
+  ];
+
+  if (!addPageModal || !addPageModalCard || !form) return;
+
+  const openModal = () => toggleModalState(addPageModal, addPageModalCard, true);
+  const closeModal = () => toggleModalState(addPageModal, addPageModalCard, false);
+
+  openBtns.forEach(btn => {
+    if (btn) btn.addEventListener('click', openModal);
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const pageName = document.getElementById('add-page-name').value.trim();
+    const template = document.getElementById('add-page-template').value;
+
+    if (!pageName) return;
+
+    // Standardize page ID
+    const pageId = pageName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!pageId) return;
+
+    // Check if page already exists
+    const proj = projectData[activeProject];
+    if (proj.pages[pageId]) {
+      showToast('A page with this name already exists!', 'warning');
+      return;
+    }
+
+    // Template definitions
+    let sections = [];
+    if (template === 'default') {
+      sections = [
+        { type: 'hero', id: `hero-${Date.now()}`, headline: `Welcome to ${pageName}`, subhead: `This is the ${pageName} page of your website. Start custom building sections manually or write AI prompts to instantly rewrite styling.`, bgTheme: 'slate-dark', ctaPrimary: 'Get Started', ctaSecondary: 'Learn More' },
+        { type: 'features', id: `features-${Date.now()}`, headline: 'Core Features', subhead: 'Discover the power and flexibility of modular design components.', bgTheme: 'slate-light', ctaPrimary: '', ctaSecondary: '' },
+        { type: 'testimonials', id: `testimonials-${Date.now()}`, headline: 'Customer Endorsements', subhead: 'What people are saying about our modern design studio.', bgTheme: 'white', ctaPrimary: '', ctaSecondary: '' }
+      ];
+    } else if (template === 'landing') {
+      sections = [
+        { type: 'hero', id: `hero-${Date.now()}`, headline: `Explore ${pageName}`, subhead: `Learn how ${pageName} enables your team to build layouts fast and compile at the edge in seconds.`, bgTheme: 'blue-royal', ctaPrimary: 'Start Free', ctaSecondary: 'Contact Sales' },
+        { type: 'cta', id: `cta-${Date.now()}`, headline: 'Ready to launch?', subhead: 'Click below to publish this page instantly to production CDN networks.', bgTheme: 'slate-dark', ctaPrimary: 'Publish Now', ctaSecondary: 'Cancel' }
+      ];
+    } else {
+      sections = [
+        { type: 'hero', id: `hero-${Date.now()}`, headline: pageName, subhead: 'This is a blank canvas. Drag components from the left panel onto this canvas to build your page layout.', bgTheme: 'white', ctaPrimary: 'Action 1', ctaSecondary: 'Action 2' }
+      ];
+    }
+
+    // Add page
+    proj.pages[pageId] = {
+      name: pageName,
+      status: 'Generated',
+      sections: sections
+    };
+
+    activePages[activeProject] = pageId;
+
+    // Refresh layout views
+    renderOverviewPages();
+    
+    if (window.builderPageManager) {
+      window.builderPageManager.updatePageSelect();
+      window.builderPageManager.loadPageCanvas(pageId);
+    }
+
+    // Reset and close
+    form.reset();
+    closeModal();
+
+    showToast(`Page "${pageName}" successfully created!`, 'success');
+    appendActivityLog(`Created page: ${pageName}`, 'Just now · by You', 'emerald');
+
+    // Automatically navigate to builder
+    const builderTabBtn = document.querySelector('button[data-tab="custom-page"]');
+    if (builderTabBtn) builderTabBtn.click();
+  });
+}
+
 // --- Global UI Elements & Setup ---
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
@@ -12,6 +335,21 @@ document.addEventListener('DOMContentLoaded', () => {
   initDatabasePage();
   initDomainPage();
   initVisualBuilder();
+  
+  // Custom layout Initializations
+  initMobileSidebar();
+  initProjectSwitcher();
+  initAddPageModal();
+  renderOverviewPages();
+
+  // Overview View Builder footer button redirection
+  const viewBuilderBtn = document.getElementById('overview-view-builder-btn');
+  if (viewBuilderBtn) {
+    viewBuilderBtn.addEventListener('click', () => {
+      const builderTabBtn = document.querySelector('button[data-tab="custom-page"]');
+      if (builderTabBtn) builderTabBtn.click();
+    });
+  }
 });
 
 // --- Toast Notification System ---
@@ -1023,6 +1361,59 @@ function initVisualBuilder() {
     'blue-royal': 'bg-blue-600 text-white'
   };
 
+  // --- Save current canvas state to JS memory ---
+  function saveCanvasStateToData() {
+    const sectionEls = sectionsContainer.querySelectorAll('.canvas-section:not(#canvas-drop-indicator)');
+    const sections = [];
+    sectionEls.forEach(el => {
+      sections.push({
+        type: el.getAttribute('data-section-type'),
+        id: el.getAttribute('data-section-id'),
+        headline: el.getAttribute('data-headline') || '',
+        subhead: el.getAttribute('data-subhead') || '',
+        ctaPrimary: el.getAttribute('data-cta-primary') || '',
+        ctaSecondary: el.getAttribute('data-cta-secondary') || '',
+        bgTheme: el.getAttribute('data-bg-theme') || 'white'
+      });
+    });
+    
+    const pageId = activePages[activeProject];
+    if (projectData[activeProject].pages[pageId]) {
+      projectData[activeProject].pages[pageId].sections = sections;
+      
+      // If page status is Empty, update it to Edited
+      if (projectData[activeProject].pages[pageId].status === 'Empty') {
+        projectData[activeProject].pages[pageId].status = 'Edited';
+        renderOverviewPages();
+      }
+    }
+  }
+
+  // --- Load page sections into canvas ---
+  function loadPageCanvas(projectId, pageId) {
+    // Clear existing sections
+    const oldSections = sectionsContainer.querySelectorAll('.canvas-section:not(#canvas-drop-indicator)');
+    oldSections.forEach(s => s.remove());
+
+    // Reset inspector
+    selectedSection = null;
+    if (inspectorEmptyState) inspectorEmptyState.classList.remove('hidden');
+    if (inspectorEditPanel) inspectorEditPanel.classList.add('hidden');
+
+    const page = projectData[projectId].pages[pageId];
+    if (!page || !page.sections) return;
+
+    page.sections.forEach(secData => {
+      const newSec = createSectionElement(secData.type, secData);
+      if (dropIndicator) {
+        sectionsContainer.insertBefore(newSec, dropIndicator);
+      } else {
+        sectionsContainer.appendChild(newSec);
+      }
+      bindSectionEvents(newSec);
+    });
+  }
+
   // 1. Draggable Components Panel Event Setup
   if (componentsList) {
     componentsList.querySelectorAll('[draggable="true"]').forEach(card => {
@@ -1039,7 +1430,6 @@ function initVisualBuilder() {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
 
-    // Show drop indicator and find position
     if (dropIndicator) {
       dropIndicator.classList.remove('hidden');
       dropIndicator.classList.add('flex');
@@ -1054,7 +1444,6 @@ function initVisualBuilder() {
   });
 
   canvas.addEventListener('dragleave', (e) => {
-    // Hide indicator when drag leaves canvas boundaries
     const rect = canvas.getBoundingClientRect();
     if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
       if (dropIndicator) {
@@ -1069,10 +1458,8 @@ function initVisualBuilder() {
     const type = e.dataTransfer.getData('text/plain') || draggedComponentType;
     if (!type) return;
 
-    // Create block elements
     const newSection = createSectionElement(type);
     
-    // Insert section in place of indicator
     if (dropIndicator && dropIndicator.parentNode) {
       sectionsContainer.insertBefore(newSection, dropIndicator);
       dropIndicator.classList.add('hidden');
@@ -1081,17 +1468,14 @@ function initVisualBuilder() {
       sectionsContainer.appendChild(newSection);
     }
 
-    // Bind event listeners to new section
     bindSectionEvents(newSection);
-
-    // Auto focus new section
     selectSection(newSection);
+    saveCanvasStateToData();
 
     showToast(`Added ${type} section to visual canvas.`, 'success');
     appendActivityLog(`Added block: ${type}`, 'Just now · by You', 'blue');
   });
 
-  // Calculate insertion position between section elements
   function getDragAfterElement(container, y) {
     const draggableElements = [...container.querySelectorAll('.canvas-section:not(#canvas-drop-indicator)')];
 
@@ -1106,23 +1490,28 @@ function initVisualBuilder() {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
   }
 
-  // Section Creator Factory
+  // Section Creator Factory (Enhanced for State Integration)
   let sectionIndex = 10;
-  function createSectionElement(type) {
+  function createSectionElement(type, data = null) {
     sectionIndex++;
-    const id = `${type}-${sectionIndex}`;
+    const id = data ? data.id : `${type}-${sectionIndex}`;
     const div = document.createElement('div');
     div.className = 'canvas-section relative group/section border-2 border-transparent hover:border-blue-500/50 transition-all select-text cursor-pointer p-8';
     div.setAttribute('data-section-id', id);
     div.setAttribute('data-section-type', type);
 
-    // Default configuration content
-    let headline = '';
-    let subhead = '';
-    let innerHTML = '';
-    let bgTheme = 'white';
+    // Setup initial contents from state or defaults
+    let headline = data ? data.headline : (type === 'hero' ? 'Headline Title' : (type === 'features' ? 'Feature Section Title' : (type === 'pricing' ? 'Flexible Pricing' : (type === 'testimonials' ? 'Client Endorsements' : (type === 'cta' ? 'Launch your next project' : 'Contact Support')))));
+    let subhead = data ? data.subhead : (type === 'hero' ? 'Start editing this description to explain your product value proposition.' : (type === 'features' ? 'Describe your core architectural advantages or layouts.' : (type === 'pricing' ? 'Choose a plan that fits your business scale.' : (type === 'testimonials' ? 'Hear what leading visual architects say about our services.' : (type === 'cta' ? 'Get started with high performance hosting and CDN networks.' : 'Fill out details to get in touch with our team.')))));
+    let btnPrimary = data ? data.ctaPrimary : 'Get Started';
+    let btnSecondary = data ? data.ctaSecondary : 'Learn More';
+    let bgTheme = data ? data.bgTheme : (type === 'hero' ? 'slate-dark' : (type === 'features' ? 'slate-light' : (type === 'cta' ? 'blue-royal' : 'white')));
 
-    // Move controls toolbar overlay html
+    div.className += ' ' + (themeClasses[bgTheme] || themeClasses['white']);
+    if (type === 'hero' || type === 'cta') {
+      div.className += ' text-center';
+    }
+
     const toolbarHtml = `
       <div class="absolute top-2 right-2 flex items-center space-x-1 opacity-0 group-hover/section:opacity-100 transition-opacity bg-slate-900/90 text-white rounded-lg p-1 text-[10px] font-bold border border-slate-800 z-10" onclick="event.stopPropagation();">
         <button class="section-move-up-btn hover:bg-slate-800 p-1 rounded transition-colors" title="Move Up">
@@ -1137,11 +1526,9 @@ function initVisualBuilder() {
       </div>
     `;
 
+    let innerHTML = '';
+
     if (type === 'hero') {
-      headline = 'Headline Title';
-      subhead = 'Start editing this description to explain your product value proposition.';
-      bgTheme = 'slate-dark';
-      div.className += ' text-center ' + themeClasses[bgTheme];
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-blue-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Hero Banner</span>
@@ -1149,16 +1536,12 @@ function initVisualBuilder() {
           <h2 class="text-3xl font-extrabold tracking-tight" id="${id}-headline">${headline}</h2>
           <p class="text-xs text-slate-300 mt-2 leading-relaxed" id="${id}-subhead">${subhead}</p>
           <div class="mt-5 flex items-center justify-center space-x-3">
-            <span class="bg-blue-600 text-white font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-primary">Get Started</span>
-            <span class="border border-white/20 text-white font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-secondary">Learn More</span>
+            <span class="bg-blue-600 text-white font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-primary">${btnPrimary}</span>
+            <span class="border border-white/20 text-white font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-secondary">${btnSecondary}</span>
           </div>
         </div>
       `;
     } else if (type === 'features') {
-      headline = 'Feature Section Title';
-      subhead = 'Describe your core architectural advantages or layouts.';
-      bgTheme = 'slate-light';
-      div.className += ' ' + themeClasses[bgTheme];
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-emerald-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Features Grid</span>
@@ -1166,29 +1549,25 @@ function initVisualBuilder() {
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
-        <div class="grid grid-cols-3 gap-4 text-left">
+        <div class="grid grid-cols-3 gap-4 text-left text-slate-800">
           <div class="bg-white border border-slate-200 rounded-lg p-3">
             <span class="text-blue-500 font-bold text-xs">01</span>
-            <h4 class="font-bold text-xs text-slate-700 mt-1">First Core Spec</h4>
-            <p class="text-[10px] text-slate-400 mt-0.5">Visually custom build block metrics.</p>
+            <h4 class="font-bold text-xs text-slate-700 mt-1">Stunning Speed</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5">Vite + Tailwind V4 delivers 100 score speed.</p>
           </div>
           <div class="bg-white border border-slate-200 rounded-lg p-3">
             <span class="text-emerald-500 font-bold text-xs">02</span>
-            <h4 class="font-bold text-xs text-slate-700 mt-1">Performance High</h4>
-            <p class="text-[10px] text-slate-400 mt-0.5">Compiled at the edge in seconds.</p>
+            <h4 class="font-bold text-xs text-slate-700 mt-1">Modular Architecture</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5">Drag-and-drop builder with zero-code configs.</p>
           </div>
           <div class="bg-white border border-slate-200 rounded-lg p-3">
             <span class="text-purple-500 font-bold text-xs">03</span>
-            <h4 class="font-bold text-xs text-slate-700 mt-1">Robust Analytics</h4>
-            <p class="text-[10px] text-slate-400 mt-0.5">Interactive graphs and statistics logs.</p>
+            <h4 class="font-bold text-xs text-slate-700 mt-1">AI Powered Copy</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5">Describe your website, AI shapes elements.</p>
           </div>
         </div>
       `;
     } else if (type === 'pricing') {
-      headline = 'Flexible Pricing';
-      subhead = 'Choose a plan that fits your business scale.';
-      bgTheme = 'white';
-      div.className += ' ' + themeClasses[bgTheme];
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-amber-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Pricing Table</span>
@@ -1196,7 +1575,7 @@ function initVisualBuilder() {
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
-        <div class="grid grid-cols-2 gap-6 max-w-md mx-auto">
+        <div class="grid grid-cols-2 gap-6 max-w-md mx-auto text-slate-800">
           <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/50">
             <h4 class="font-bold text-xs text-slate-700">Startup Plan</h4>
             <div class="text-xl font-extrabold text-slate-800 mt-1">$9<span class="text-[10px] text-slate-400 font-normal">/mo</span></div>
@@ -1213,10 +1592,6 @@ function initVisualBuilder() {
         </div>
       `;
     } else if (type === 'testimonials') {
-      headline = 'Client Endorsements';
-      subhead = 'Hear what leading visual architects say about our services.';
-      bgTheme = 'slate-light';
-      div.className += ' ' + themeClasses[bgTheme];
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-purple-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Testimonials</span>
@@ -1224,22 +1599,18 @@ function initVisualBuilder() {
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
-        <div class="grid grid-cols-2 gap-4 text-left">
-          <div class="border border-slate-100 rounded-lg p-3 bg-white">
+        <div class="grid grid-cols-2 gap-4 text-left text-slate-800">
+          <div class="border border-slate-100 rounded-lg p-3 bg-slate-50/50">
             <p class="italic text-[10px] text-slate-500">"This visual builder is a game changer. Drag, drop, prompt, publish. Took my project portfolio from draft to deploy in 10 minutes."</p>
             <h5 class="text-[10px] font-bold text-slate-700 mt-2">— Alex Rivera, UI Architect</h5>
           </div>
-          <div class="border border-slate-100 rounded-lg p-3 bg-white">
+          <div class="border border-slate-100 rounded-lg p-3 bg-slate-50/50">
             <p class="italic text-[10px] text-slate-500">"AI generated copy rewritten for my business was spot-on. Dragging elements feels premium and responsive. 10/10 UX design."</p>
             <h5 class="text-[10px] font-bold text-slate-700 mt-2">— Sophia Chen, Dev Rel</h5>
           </div>
         </div>
       `;
     } else if (type === 'cta') {
-      headline = 'Launch your next project';
-      subhead = 'Get started with high performance hosting and CDN networks.';
-      bgTheme = 'blue-royal';
-      div.className += ' text-center ' + themeClasses[bgTheme];
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-rose-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Call-to-Action</span>
@@ -1247,20 +1618,16 @@ function initVisualBuilder() {
           <h2 class="text-2xl font-extrabold tracking-tight" id="${id}-headline">${headline}</h2>
           <p class="text-xs text-blue-100 mt-1" id="${id}-subhead">${subhead}</p>
           <div class="mt-4 flex items-center justify-center space-x-3">
-            <span class="bg-white text-blue-600 font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-primary">Start Free</span>
-            <span class="border border-white/20 text-white font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-secondary">Contact Sales</span>
+            <span class="bg-white text-blue-600 font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-primary">${btnPrimary}</span>
+            <span class="border border-white/20 text-white font-semibold text-xs px-4 py-2 rounded-lg" id="${id}-btn-secondary">${btnSecondary}</span>
           </div>
         </div>
       `;
     } else if (type === 'contact') {
-      headline = 'Contact Support';
-      subhead = 'Fill out details to get in touch with our team.';
-      bgTheme = 'white';
-      div.className += ' ' + themeClasses[bgTheme];
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-indigo-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Contact Form</span>
-        <div class="max-w-md mx-auto">
+        <div class="max-w-md mx-auto text-slate-800">
           <div class="text-center mb-5">
             <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
             <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
@@ -1282,8 +1649,8 @@ function initVisualBuilder() {
 
     div.setAttribute('data-headline', headline);
     div.setAttribute('data-subhead', subhead);
-    div.setAttribute('data-cta-primary', 'Get Started');
-    div.setAttribute('data-cta-secondary', 'Learn More');
+    div.setAttribute('data-cta-primary', btnPrimary);
+    div.setAttribute('data-cta-secondary', btnSecondary);
     div.setAttribute('data-bg-theme', bgTheme);
     div.innerHTML = innerHTML;
 
@@ -1294,19 +1661,16 @@ function initVisualBuilder() {
   function selectSection(section) {
     if (!section) return;
 
-    // Deselect old
     sectionsContainer.querySelectorAll('.canvas-section').forEach(s => {
       s.classList.remove('border-blue-500/50');
       s.classList.add('border-transparent');
     });
 
-    // Select new
     section.classList.remove('border-transparent');
     section.classList.add('border-blue-500/50');
 
     selectedSection = section;
 
-    // Populate Inspector
     if (inspectorEmptyState) inspectorEmptyState.classList.add('hidden');
     if (inspectorEditPanel) inspectorEditPanel.classList.remove('hidden');
 
@@ -1325,7 +1689,6 @@ function initVisualBuilder() {
     if (inspectorBtnSecondary) inspectorBtnSecondary.value = btnSecondary;
     if (inspectorBgTheme) inspectorBgTheme.value = theme;
 
-    // Hide/show CTA buttons editing controls
     if (inspectorCtasGroup) {
       if (type === 'hero' || type === 'cta') {
         inspectorCtasGroup.classList.remove('hidden');
@@ -1338,7 +1701,6 @@ function initVisualBuilder() {
   function bindSectionEvents(section) {
     section.addEventListener('click', () => selectSection(section));
 
-    // Toolbar overlay actions
     const upBtn = section.querySelector('.section-move-up-btn');
     const downBtn = section.querySelector('.section-move-down-btn');
     const delBtn = section.querySelector('.section-delete-btn');
@@ -1349,6 +1711,7 @@ function initVisualBuilder() {
         const prev = section.previousElementSibling;
         if (prev && !prev.id.includes('indicator')) {
           sectionsContainer.insertBefore(section, prev);
+          saveCanvasStateToData();
           showToast('Moved section up.', 'info');
         }
       });
@@ -1360,6 +1723,7 @@ function initVisualBuilder() {
         const next = section.nextElementSibling;
         if (next && !next.id.includes('indicator')) {
           sectionsContainer.insertBefore(next, section);
+          saveCanvasStateToData();
           showToast('Moved section down.', 'info');
         }
       });
@@ -1375,15 +1739,11 @@ function initVisualBuilder() {
         }
         const type = section.getAttribute('data-section-type');
         section.remove();
+        saveCanvasStateToData();
         showToast(`Removed ${type} section from canvas.`, 'info');
       });
     }
   }
-
-  // Bind initial sections on load
-  sectionsContainer.querySelectorAll('.canvas-section').forEach(section => {
-    bindSectionEvents(section);
-  });
 
   // 4. Bind Real-time Inspector Input Fields
   if (inspectorTitle) {
@@ -1395,6 +1755,7 @@ function initVisualBuilder() {
       const id = selectedSection.getAttribute('data-section-id');
       const headlineEl = document.getElementById(`${id}-headline`);
       if (headlineEl) headlineEl.innerText = val;
+      saveCanvasStateToData();
     });
   }
 
@@ -1407,6 +1768,7 @@ function initVisualBuilder() {
       const id = selectedSection.getAttribute('data-section-id');
       const subheadEl = document.getElementById(`${id}-subhead`);
       if (subheadEl) subheadEl.innerText = val;
+      saveCanvasStateToData();
     });
   }
 
@@ -1419,6 +1781,7 @@ function initVisualBuilder() {
       const id = selectedSection.getAttribute('data-section-id');
       const btnEl = document.getElementById(`${id}-btn-primary`);
       if (btnEl) btnEl.innerText = val;
+      saveCanvasStateToData();
     });
   }
 
@@ -1431,6 +1794,7 @@ function initVisualBuilder() {
       const id = selectedSection.getAttribute('data-section-id');
       const btnEl = document.getElementById(`${id}-btn-secondary`);
       if (btnEl) btnEl.innerText = val;
+      saveCanvasStateToData();
     });
   }
 
@@ -1442,7 +1806,6 @@ function initVisualBuilder() {
       
       selectedSection.setAttribute('data-bg-theme', newTheme);
       
-      // Update element background classes
       if (themeClasses[oldTheme]) {
         const oldClassList = themeClasses[oldTheme].split(' ');
         oldClassList.forEach(cls => selectedSection.classList.remove(cls));
@@ -1453,7 +1816,6 @@ function initVisualBuilder() {
         newClassList.forEach(cls => selectedSection.classList.add(cls));
       }
 
-      // Small adjustment: for dark themes, CTA buttons look nicer with white borders, adjust secondary btn color
       const id = selectedSection.getAttribute('data-section-id');
       const btnSecondaryEl = document.getElementById(`${id}-btn-secondary`);
       if (btnSecondaryEl) {
@@ -1463,6 +1825,7 @@ function initVisualBuilder() {
           btnSecondaryEl.className = "border border-slate-200 text-slate-700 font-semibold text-xs px-4 py-2 rounded-lg";
         }
       }
+      saveCanvasStateToData();
     });
   }
 
@@ -1471,7 +1834,7 @@ function initVisualBuilder() {
     builderResetBtn.addEventListener('click', () => {
       sectionsContainer.innerHTML = '';
       
-      // Re-create default layout
+      // Default basic template
       const h = createSectionElement('hero');
       const f = createSectionElement('features');
       const t = createSectionElement('testimonials');
@@ -1480,14 +1843,13 @@ function initVisualBuilder() {
       sectionsContainer.appendChild(f);
       sectionsContainer.appendChild(t);
 
-      // Re-bind
       [h, f, t].forEach(sec => bindSectionEvents(sec));
 
-      // Reset inspector
       selectedSection = null;
       if (inspectorEmptyState) inspectorEmptyState.classList.remove('hidden');
       if (inspectorEditPanel) inspectorEditPanel.classList.add('hidden');
 
+      saveCanvasStateToData();
       showToast('Visual workspace template reset.', 'success');
     });
   }
@@ -1508,9 +1870,19 @@ function initVisualBuilder() {
     });
   }
 
+  // --- Dynamic page switcher selector handler ---
+  const pageSelect = document.getElementById('builder-page-select');
+  if (pageSelect) {
+    pageSelect.addEventListener('change', (e) => {
+      const pageId = e.target.value;
+      activePages[activeProject] = pageId;
+      loadPageCanvas(activeProject, pageId);
+      showToast(`Switched builder page to: ${projectData[activeProject].pages[pageId].name}`);
+    });
+  }
+
   // 6. AI Prompt Site Copilot Simulator
   if (aiGenerateBtn) {
-    // Preset Prompts Chips
     document.querySelectorAll('.ai-preset-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         if (aiPromptInput) {
@@ -1530,7 +1902,6 @@ function initVisualBuilder() {
       aiGenerateBtn.disabled = true;
       if (aiBtnIcon) aiBtnIcon.classList.add('animate-spin');
 
-      // AI Generation simulation states
       const steps = [
         'Analyzing canvas sections...',
         'Regenerating copy using Portify AI...',
@@ -1547,11 +1918,9 @@ function initVisualBuilder() {
         } else {
           clearInterval(interval);
 
-          // Apply AI changes
           const lowerPrompt = prompt.toLowerCase();
           
           if (lowerPrompt.includes('dark') || lowerPrompt.includes('premium') || lowerPrompt.includes('violet')) {
-            // Rewrite all sections to dark slate / violet gradients
             sectionsContainer.querySelectorAll('.canvas-section').forEach((sec, idx) => {
               const oldTheme = sec.getAttribute('data-bg-theme');
               const newTheme = idx % 2 === 0 ? 'violet-gradient' : 'slate-dark';
@@ -1564,7 +1933,6 @@ function initVisualBuilder() {
             });
             showToast('AI applied dark premium theme gradients!', 'success');
           } else if (lowerPrompt.includes('saas') || lowerPrompt.includes('startup') || lowerPrompt.includes('tech') || lowerPrompt.includes('vercel')) {
-            // Rewrite copy to SaaS tech copywriting
             sectionsContainer.querySelectorAll('.canvas-section').forEach(sec => {
               const type = sec.getAttribute('data-section-type');
               const id = sec.getAttribute('data-section-id');
@@ -1587,7 +1955,6 @@ function initVisualBuilder() {
             });
             showToast('AI rewritten copywriting for Tech SaaS!', 'success');
           } else if (lowerPrompt.includes('portfolio') || lowerPrompt.includes('minimalist') || lowerPrompt.includes('bold')) {
-            // Rewrite copy for Designer Portfolio
             sectionsContainer.querySelectorAll('.canvas-section').forEach(sec => {
               const type = sec.getAttribute('data-section-type');
               const id = sec.getAttribute('data-section-id');
@@ -1605,7 +1972,6 @@ function initVisualBuilder() {
             });
             showToast('AI rewritten copywriting for Creative Portfolio!', 'success');
           } else {
-            // Fallback generic rewrite
             const hero = sectionsContainer.querySelector('.canvas-section[data-section-type="hero"]');
             if (hero) {
               const id = hero.getAttribute('data-section-id');
@@ -1621,12 +1987,12 @@ function initVisualBuilder() {
             showToast('AI processed layout request.', 'success');
           }
 
-          // Reset button
+          saveCanvasStateToData();
+
           aiBtnText.innerText = 'Generate with AI';
           aiGenerateBtn.disabled = false;
           if (aiBtnIcon) aiBtnIcon.classList.remove('animate-spin');
 
-          // Sync inspector if focused
           if (selectedSection) {
             selectSection(selectedSection);
           }
@@ -1636,5 +2002,28 @@ function initVisualBuilder() {
       }, 600);
     });
   }
+
+  // --- Expose manager API to other modules ---
+  window.builderPageManager = {
+    loadPageCanvas: (pageId) => loadPageCanvas(activeProject, pageId),
+    updatePageSelect: () => {
+      const select = document.getElementById('builder-page-select');
+      if (!select) return;
+      select.innerHTML = '';
+      const proj = projectData[activeProject];
+      Object.keys(proj.pages).forEach(key => {
+        const page = proj.pages[key];
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.innerText = `Page: ${page.name}`;
+        select.appendChild(opt);
+      });
+      select.value = activePages[activeProject];
+    }
+  };
+
+  // Initial load
+  window.builderPageManager.updatePageSelect();
+  window.builderPageManager.loadPageCanvas(activePages[activeProject]);
 }
 

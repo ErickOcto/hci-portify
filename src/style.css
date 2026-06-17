@@ -28,3 +28,10 @@
   grid-template-columns: repeat(30, minmax(0, 1fr));
 }
 
+/* Responsive Custom Page height override for stacked viewports */
+@media (max-width: 1279px) {
+  #custom-page-view {
+    height: auto !important;
+  }
+}
+

@@ -174,7 +174,26 @@
             </button>
             <span id="header-project-name">Macbook Gng</span>
             <span class="text-slate-300">/</span>
-            <span class="text-slate-600" id="current-tab-label">Dashboard</span>
+            <span class="text-slate-600 mr-1.5" id="current-tab-label">Dashboard</span>
+
+            <!-- Hoverable Guidance Icon -->
+            <div class="relative group inline-block normal-case tracking-normal">
+              <button class="text-slate-400 hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-slate-50 flex items-center justify-center cursor-help" aria-label="Dashboard Guidance">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 1 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.852l.041-.028M12 4.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5z" />
+                </svg>
+              </button>
+              
+              <!-- Tooltip Panel -->
+              <div class="absolute left-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-xs text-white text-xs rounded-xl p-4 shadow-xl border border-slate-800/80 z-50 opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-200 transform origin-top-left">
+                <div class="font-bold mb-1.5 flex items-center gap-1.5 text-blue-400" id="guidance-title">
+                  Dashboard Overview
+                </div>
+                <p class="leading-relaxed text-slate-300 font-normal" id="guidance-desc">
+                  This dashboard gives you a high-level summary of your project. Monitor site status (deployment, SSL, domain), track recent activities, see listed pages, and access quick actions.
+                </p>
+              </div>
+            </div>
           </div>
         </header>
 

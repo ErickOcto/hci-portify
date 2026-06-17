@@ -435,6 +435,34 @@ function initTabs() {
         label.innerText = tabName;
       }
 
+      // Update dynamic guidance tooltip content
+      const guidanceTitle = document.getElementById('guidance-title');
+      const guidanceDesc = document.getElementById('guidance-desc');
+      if (guidanceTitle && guidanceDesc) {
+        if (tabId === 'overview') {
+          guidanceTitle.innerText = 'Dashboard Overview';
+          guidanceDesc.innerText = 'This dashboard gives you a high-level summary of your project. Monitor site status (deployment, SSL, domain), track recent activities, see listed pages, and access quick actions.';
+        } else if (tabId === 'performance') {
+          guidanceTitle.innerText = 'Performance Analytics';
+          guidanceDesc.innerText = 'Real-time speed and optimization metrics. Monitor page speed, layout stability (CLS), total requests, and resource load times to optimize your website for SEO and users.';
+        } else if (tabId === 'database') {
+          guidanceTitle.innerText = 'Database Explorer';
+          guidanceDesc.innerText = 'Manage your project\'s database tables and records. Perform SQL-style queries, inspect connection statistics, create or delete tables, and track real-time logs.';
+        } else if (tabId === 'domain') {
+          guidanceTitle.innerText = 'Domain & DNS Settings';
+          guidanceDesc.innerText = 'Configure your custom domains and DNS records. Set up custom branding (e.g. yourname.com) and manage records like A, CNAME, and TXT for hosting.';
+        } else if (tabId === 'custom-page') {
+          guidanceTitle.innerText = 'Visual Builder';
+          guidanceDesc.innerText = 'Customize layouts visually. Add components, drag and drop to reorder, delete sections, edit copy in the inspector, or prompt the AI assistant to instantly style sections.';
+        } else if (tabId === 'live-preview') {
+          guidanceTitle.innerText = 'Live Site Preview';
+          guidanceDesc.innerText = 'View and test your published website in a live preview. Switch views to inspect responsiveness across desktop, tablet, and mobile layouts.';
+        } else {
+          guidanceTitle.innerText = tabName + ' Guide';
+          guidanceDesc.innerText = 'Guidance and controls for managing your project\'s settings and page layout options.';
+        }
+      }
+
       // Hide all page views and show target page view
       if (tabId === 'overview') {
         if (overviewView) overviewView.classList.remove('hidden');

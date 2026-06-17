@@ -9,7 +9,7 @@
   <body class="bg-slate-50 text-slate-800 antialiased font-sans">
     <div id="app" class="flex h-screen overflow-hidden">
       <!-- 1. Left Sidebar - Dual Pane -->
-      <aside class="flex flex-shrink-0 h-full">
+      <aside class="flex shrink-0 h-full">
         <!-- 1a. Left Pane: Workspace selector & Profile -->
         <div class="w-16 bg-slate-100 border-r border-slate-200 flex flex-col items-center py-4 justify-between">
           <!-- Workspaces -->
@@ -129,7 +129,7 @@
       <!-- 2. Main Content Area -->
       <main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
         <!-- Top Header Navigation -->
-        <header class="bg-white border-b border-slate-200 h-14 flex flex-shrink-0 items-center justify-between px-6 z-10 sticky top-0">
+        <header class="bg-white border-b border-slate-200 h-14 flex shrink-0 items-center justify-between px-6 z-10 sticky top-0">
           <div class="flex items-center space-x-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
             <span>Macbook Gng</span>
             <span class="text-slate-300">/</span>
@@ -157,12 +157,12 @@
         </header>
 
         <!-- View 1: Overview Dashboard View -->
-        <div id="overview-view" class="p-6 space-y-6 flex-grow min-w-0">
+        <div id="overview-view" class="p-6 space-y-6 grow min-w-0">
           
           <!-- Orange SSL Expiry Warning Banner -->
           <div id="ssl-alert" class="bg-amber-500 text-white px-4 py-3 rounded-xl shadow-md shadow-amber-500/10 flex items-center justify-between transition-all duration-300 transform scale-100 opacity-100">
             <div class="flex items-center space-x-3 min-w-0">
-              <div class="bg-amber-600/30 p-1.5 rounded-lg flex-shrink-0">
+              <div class="bg-amber-600/30 p-1.5 rounded-lg shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                 </svg>
@@ -171,7 +171,7 @@
                 SSL certificate expires in 7 days — renew to keep your site secure.
               </p>
             </div>
-            <div class="flex items-center space-x-2 flex-shrink-0 ml-4">
+            <div class="flex items-center space-x-2 shrink-0 ml-4">
               <button id="renew-ssl-btn" class="bg-white text-amber-600 hover:bg-slate-100 transition-all font-semibold text-xs px-3.5 py-1.5 rounded-lg shadow-sm">
                 Renew Now
               </button>
@@ -188,7 +188,7 @@
             
             <!-- Card 1: Recent Activity -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[380px]">
-              <div class="flex items-center justify-between mb-4 flex-shrink-0">
+              <div class="flex items-center justify-between mb-4 shrink-0">
                 <h2 class="font-bold text-slate-800 tracking-tight text-base">Recent activity</h2>
                 <button class="text-xs font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">View All</button>
               </div>
@@ -196,7 +196,7 @@
               <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-4" id="activity-list">
                 <!-- Activity Item 1 -->
                 <div class="flex items-start space-x-3">
-                  <div class="bg-blue-50 text-blue-600 p-2 rounded-xl flex-shrink-0">
+                  <div class="bg-blue-50 text-blue-600 p-2 rounded-xl shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                     </svg>
@@ -208,7 +208,7 @@
                 </div>
                 <!-- Activity Item 2 -->
                 <div class="flex items-start space-x-3">
-                  <div class="bg-emerald-50 text-emerald-600 p-2 rounded-xl flex-shrink-0">
+                  <div class="bg-emerald-50 text-emerald-600 p-2 rounded-xl shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -220,7 +220,7 @@
                 </div>
                 <!-- Activity Item 3 -->
                 <div class="flex items-start space-x-3">
-                  <div class="bg-amber-50 text-amber-600 p-2 rounded-xl flex-shrink-0">
+                  <div class="bg-amber-50 text-amber-600 p-2 rounded-xl shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
                     </svg>
@@ -232,7 +232,7 @@
                 </div>
                 <!-- Activity Item 4 -->
                 <div class="flex items-start space-x-3">
-                  <div class="bg-rose-50 text-rose-600 p-2 rounded-xl flex-shrink-0">
+                  <div class="bg-rose-50 text-rose-600 p-2 rounded-xl shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                     </svg>
@@ -247,7 +247,7 @@
 
             <!-- Card 2: Quick Actions (Spans 2 columns on lg screens) -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[380px] lg:col-span-2">
-              <div class="mb-5 flex-shrink-0">
+              <div class="mb-5 shrink-0">
                 <h2 class="font-bold text-slate-800 tracking-tight text-base">Quick Actions</h2>
                 <p class="text-xs text-slate-400 mt-0.5">Common tasks, one click away</p>
               </div>
@@ -331,7 +331,7 @@
                 <p class="text-sm font-bold text-slate-700 truncate">macbookgng.com</p>
                 <p class="text-xs text-slate-400 mt-0.5">Updated 2 hours ago · by You</p>
               </div>
-              <div class="text-right flex-shrink-0">
+              <div class="text-right shrink-0">
                 <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">Healthy</span>
               </div>
             </div>
@@ -418,7 +418,7 @@
 
       <!-- Card 6: Analytics Graph (spans full width/grid) -->
       <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col mt-6">
-        <div class="flex items-center justify-between mb-4 flex-shrink-0">
+        <div class="flex items-center justify-between mb-4 shrink-0">
           <div>
             <h2 class="font-bold text-slate-800 tracking-tight text-base">Visitors Analytics</h2>
             <p class="text-xs text-slate-400 mt-0.5">Real-time visitor patterns over the last 7 days</p>
@@ -487,7 +487,7 @@
         </div>
 
         <!-- View 2: Performance Page View -->
-        <div id="performance-view" class="p-6 space-y-6 flex-grow min-w-0 hidden">
+        <div id="performance-view" class="p-6 space-y-6 grow min-w-0 hidden">
           <!-- Top Metrics Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Card 1: Performance Score -->
@@ -573,7 +573,7 @@
             <!-- Card 1: Fix these to boost your score -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[320px] lg:col-span-2 justify-between">
               <div>
-                <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                <div class="flex items-center justify-between mb-4 shrink-0">
                   <div>
                     <h2 class="font-bold text-slate-800 tracking-tight text-base">Fix these to boost your score</h2>
                     <p class="text-xs text-slate-400 mt-0.5">Recommended optimization opportunities</p>
@@ -587,7 +587,7 @@
                   <!-- Audit 1 -->
                   <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl">
                     <div class="flex items-center space-x-3 min-w-0">
-                      <div class="bg-rose-50 text-rose-500 p-2 rounded-xl flex-shrink-0">
+                      <div class="bg-rose-50 text-rose-500 p-2 rounded-xl shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l1.29 1.29m-16.5-3.03v-3.375C2.25 8.284 2.784 7.5 3.444 7.5h1.656V6.75A2.25 2.25 0 017.35 4.5h9.3a2.25 2.25 0 012.25 2.25v.75h1.656c.66 0 1.194.784 1.194 1.75v3.375m-18 0h18" />
                         </svg>
@@ -602,7 +602,7 @@
                   <!-- Audit 2 -->
                   <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl">
                     <div class="flex items-center space-x-3 min-w-0">
-                      <div class="bg-amber-50 text-amber-500 p-2 rounded-xl flex-shrink-0">
+                      <div class="bg-amber-50 text-amber-500 p-2 rounded-xl shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                         </svg>
@@ -617,7 +617,7 @@
                   <!-- Audit 3 -->
                   <div class="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl">
                     <div class="flex items-center space-x-3 min-w-0">
-                      <div class="bg-emerald-50 text-emerald-500 p-2 rounded-xl flex-shrink-0">
+                      <div class="bg-emerald-50 text-emerald-500 p-2 rounded-xl shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0v3.75" />
                         </svg>
@@ -677,52 +677,52 @@
               </div>
 
               <!-- Bar Chart Container -->
-              <div class="flex-grow flex items-end justify-between px-3 h-44 mb-2 mt-4" id="uptime-bar-chart">
+              <div class="grow flex items-end justify-between px-3 h-44 mb-2 mt-4" id="uptime-bar-chart">
                 <!-- Sat -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-blue-600 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="90%" title="Score: 90"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Sat</span>
                 </div>
                 <!-- Sun -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-blue-600 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="88%" title="Score: 88"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Sun</span>
                 </div>
                 <!-- Mon -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-blue-600 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="95%" title="Score: 95"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Mon</span>
                 </div>
                 <!-- Tue -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-amber-500 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="67%" title="Score: 67 (Degraded)"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Tue</span>
                 </div>
                 <!-- Wed -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-blue-600 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="93%" title="Score: 93"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Wed</span>
                 </div>
                 <!-- Thu -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-blue-600 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="92%" title="Score: 92"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Thu</span>
                 </div>
                 <!-- Fri -->
                 <div class="flex flex-col items-center h-full flex-1 group">
-                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden flex-grow flex items-end justify-center mb-2">
+                  <div class="w-6 bg-blue-100 rounded-t-md group-hover:bg-blue-200 transition-all relative overflow-hidden grow flex items-end justify-center mb-2">
                     <div class="w-full bg-blue-600 rounded-t-md cursor-pointer transition-all duration-1000 h-0" data-height="98%" title="Score: 98"></div>
                   </div>
                   <span class="text-[10px] font-semibold text-slate-400">Fri</span>
@@ -859,7 +859,7 @@
         </div>
 
         <!-- View 3: Database View -->
-        <div id="database-view" class="p-6 space-y-6 flex-grow min-w-0 hidden">
+        <div id="database-view" class="p-6 space-y-6 grow min-w-0 hidden">
           <!-- Top Stats Row -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Card 1: Total Tables -->
@@ -884,7 +884,7 @@
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Card 1: Query Log -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[380px] lg:col-span-2">
-              <div class="flex items-center justify-between mb-4 flex-shrink-0">
+              <div class="flex items-center justify-between mb-4 shrink-0">
                 <div>
                   <h2 class="font-bold text-slate-800 tracking-tight text-base">Query log</h2>
                   <p class="text-xs text-slate-400 mt-0.5">Real-time database queries executed by application</p>
@@ -900,22 +900,22 @@
               <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-3 font-mono text-[11px]" id="db-query-log-list">
                 <!-- Row 1 -->
                 <div class="flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-colors">
-                  <span class="text-slate-400 flex-shrink-0">12:04:31</span>
+                  <span class="text-slate-400 shrink-0">12:04:31</span>
                   <p class="text-slate-700 break-all"><span class="text-blue-600 font-semibold">SELECT</span> * <span class="text-blue-600 font-semibold">FROM</span> users <span class="text-blue-600 font-semibold">WHERE</span> id = 1042</p>
                 </div>
                 <!-- Row 2 -->
                 <div class="flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-colors">
-                  <span class="text-slate-400 flex-shrink-0">12:04:28</span>
+                  <span class="text-slate-400 shrink-0">12:04:28</span>
                   <p class="text-slate-700 break-all"><span class="text-amber-600 font-semibold">UPDATE</span> orders <span class="text-amber-600 font-semibold">SET</span> status='shipped' <span class="text-blue-600 font-semibold">WHERE</span> id = 8792</p>
                 </div>
                 <!-- Row 3 -->
                 <div class="flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-colors">
-                  <span class="text-slate-400 flex-shrink-0">12:04:20</span>
+                  <span class="text-slate-400 shrink-0">12:04:20</span>
                   <p class="text-slate-700 break-all"><span class="text-blue-600 font-semibold">SELECT</span> * <span class="text-blue-600 font-semibold">FROM</span> sessions <span class="text-blue-600 font-semibold">JOIN</span> users <span class="text-blue-600 font-semibold">ON</span> sessions.user_id = users.id <span class="text-blue-600 font-semibold">LIMIT</span> 500</p>
                 </div>
                 <!-- Row 4 -->
                 <div class="flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-colors">
-                  <span class="text-slate-400 flex-shrink-0">12:03:55</span>
+                  <span class="text-slate-400 shrink-0">12:03:55</span>
                   <p class="text-slate-700 break-all"><span class="text-rose-600 font-semibold">DELETE</span> <span class="text-blue-600 font-semibold">FROM</span> sessions <span class="text-blue-600 font-semibold">WHERE</span> expires_at &lt; <span class="text-blue-600 font-semibold">NOW()</span></p>
                 </div>
               </div>
@@ -1009,28 +1009,28 @@
               <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mt-2 border-t border-slate-50 pt-2.5">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-1.5 min-w-0">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
                     <span class="text-slate-500 truncate">orders</span>
                   </div>
                   <span class="font-bold text-slate-700 ml-1">890MB</span>
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-1.5 min-w-0">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
                     <span class="text-slate-500 truncate">users</span>
                   </div>
                   <span class="font-bold text-slate-700 ml-1">420MB</span>
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-1.5 min-w-0">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 flex-shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
                     <span class="text-slate-500 truncate">products</span>
                   </div>
                   <span class="font-bold text-slate-700 ml-1">310MB</span>
                 </div>
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-1.5 min-w-0">
-                    <span class="w-2.5 h-2.5 rounded-full bg-slate-400 flex-shrink-0"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-400 shrink-0"></span>
                     <span class="text-slate-500 truncate">other</span>
                   </div>
                   <span class="font-bold text-slate-700 ml-1">480MB</span>
@@ -1040,7 +1040,7 @@
 
             <!-- Database Tables Card -->
             <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-[360px] lg:col-span-2 hover:shadow-md transition-shadow">
-              <div class="flex items-center justify-between mb-4 flex-shrink-0">
+              <div class="flex items-center justify-between mb-4 shrink-0">
                 <div>
                   <h2 class="font-bold text-slate-800 tracking-tight text-base">Database tables</h2>
                   <p class="text-xs text-slate-400 mt-0.5" id="tables-subtitle">5 tables · PostgreSQL</p>
@@ -1059,7 +1059,7 @@
               </div>
 
               <!-- Tables List -->
-              <div class="flex-grow overflow-y-auto custom-scrollbar pr-1">
+              <div class="grow overflow-y-auto custom-scrollbar pr-1">
                 <table class="w-full text-left border-collapse text-xs">
                   <thead>
                     <tr class="text-slate-400 font-semibold border-b border-slate-100 uppercase tracking-wider">
@@ -1225,7 +1225,7 @@
 
           <!-- Automated Backups Section -->
           <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col mt-6 hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4 flex-shrink-0">
+            <div class="flex items-center justify-between mb-4 shrink-0">
               <div>
                 <h2 class="font-bold text-slate-800 tracking-tight text-base">Automated backups</h2>
                 <p class="text-xs text-slate-400 mt-0.5">Daily backups · Retained 30 days</p>
@@ -1295,7 +1295,7 @@
         </div>
 
         <!-- View 4: Domain View -->
-        <div id="domain-view" class="p-6 space-y-6 flex-grow min-w-0 hidden">
+        <div id="domain-view" class="p-6 space-y-6 grow min-w-0 hidden">
           <!-- Top Domain Info Banner -->
           <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-2xl p-6 shadow-md shadow-blue-500/10 flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div>
@@ -1432,7 +1432,7 @@
 
           <!-- DNS Records Card -->
           <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-md transition-shadow">
-            <div class="flex items-center justify-between mb-4 flex-shrink-0">
+            <div class="flex items-center justify-between mb-4 shrink-0">
               <div>
                 <h2 class="font-bold text-slate-800 tracking-tight text-base">DNS records</h2>
                 <p class="text-xs text-slate-400 mt-0.5" id="dns-subtitle">5 records · Last updated 2 days ago</p>
@@ -1558,11 +1558,12 @@
               </table>
           </div>
         </div>
+      </div>
 
-        <!-- View 5: Visual Site Builder (Custom Page) -->
-        <div id="custom-page-view" class="p-6 space-y-6 flex-grow min-w-0 hidden flex flex-col h-[calc(100vh-80px)]">
+      <!-- View 5: Visual Site Builder (Custom Page) -->
+      <div id="custom-page-view" class="p-6 space-y-6 grow min-w-0 hidden flex flex-col" style="height: calc(100vh - 80px);">
           <!-- Header Row -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex-shrink-0">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm shrink-0">
             <div>
               <div class="flex items-center space-x-2">
                 <h1 class="text-lg font-bold text-slate-800 tracking-tight">Visual Builder</h1>
@@ -1588,7 +1589,7 @@
           </div>
 
           <!-- Workspace Row -->
-          <div class="flex-grow grid grid-cols-1 xl:grid-cols-4 gap-6 min-h-0 overflow-hidden">
+          <div class="grow grid grid-cols-1 xl:grid-cols-4 gap-6 min-h-0 overflow-hidden">
             
             <!-- 1. Left Panel: Component List -->
             <div class="xl:col-span-1 bg-white border border-slate-200 rounded-2xl p-4 flex flex-col h-full min-h-0 shadow-sm">
@@ -1682,7 +1683,7 @@
             <!-- 2. Center Panel: Visual Canvas -->
             <div class="xl:col-span-2 bg-slate-100 border border-slate-200 rounded-2xl p-4 flex flex-col h-full min-h-0 shadow-sm relative">
               <!-- Canvas ToolBar -->
-              <div class="flex items-center justify-between pb-3 border-b border-slate-200/60 mb-3 flex-shrink-0">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-200/60 mb-3 shrink-0">
                 <div class="flex items-center space-x-2">
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   <span class="text-xs font-semibold text-slate-600">Visual Workspace Preview</span>
@@ -1695,7 +1696,7 @@
 
               <!-- Preview Frame Canvas -->
               <div class="flex-1 overflow-y-auto bg-white rounded-xl border border-slate-200 shadow-sm relative custom-scrollbar flex flex-col min-h-0" id="builder-canvas">
-                <div id="canvas-sections-container" class="divide-y divide-dashed divide-slate-200 flex-grow pb-12 min-h-[400px]">
+                <div id="canvas-sections-container" class="divide-y divide-dashed divide-slate-200 grow pb-12 min-h-[400px]">
                   
                   <!-- Hero Section (Pre-populated) -->
                   <div class="canvas-section relative group/section border-2 border-transparent hover:border-blue-500/50 transition-all select-text cursor-pointer p-8 text-center bg-linear-to-br from-slate-900 to-blue-950 text-white" data-section-id="hero-1" data-section-type="hero" data-headline="Design Macbook Gang Pro" data-subhead="The ultimate portfolio theme for modern creators and designers. Clean layout, dark modes, and modular blocks." data-cta-primary="Get Theme" data-cta-secondary="Learn More" data-bg-theme="slate-dark">
@@ -1811,7 +1812,7 @@
               
               <!-- Inspector Section -->
               <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col min-h-0 flex-1 shadow-sm">
-                <div class="mb-3 flex-shrink-0">
+                <div class="mb-3 shrink-0">
                   <h2 class="font-bold text-slate-800 text-sm tracking-tight flex items-center space-x-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-500">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992" />
@@ -1822,7 +1823,7 @@
                 </div>
 
                 <!-- Empty State -->
-                <div id="inspector-empty-state" class="flex-grow flex flex-col items-center justify-center text-center p-4 text-slate-400 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+                <div id="inspector-empty-state" class="grow flex flex-col items-center justify-center text-center p-4 text-slate-400 border border-dashed border-slate-200 rounded-xl bg-slate-50/50">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 mb-2 opacity-55">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.042 9.152c.582.448 1.148.89 1.676 1.345m-1.676-1.345c-.528-.407-1.15-.845-1.748-1.282m3.424 2.627A48.067 48.067 0 0121 12.83M13.294 7.87c-.598-.437-1.247-.866-1.874-1.267m0 0a48.033 48.033 0 00-3.478-2.122m3.424 2.122L12 7.5m-5.385-2.915a48.009 48.009 0 00-3.14 1.777m3.14-1.777L5.25 6" />
                   </svg>
@@ -1875,8 +1876,8 @@
               </div>
 
               <!-- AI Copilot Section -->
-              <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col flex-shrink-0 shadow-sm">
-                <div class="mb-3 flex-shrink-0">
+              <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col shrink-0 shadow-sm">
+                <div class="mb-3 shrink-0">
                   <h2 class="font-bold text-slate-800 text-sm tracking-tight flex items-center space-x-1.5">
                     <span class="p-1 bg-amber-50 text-amber-600 rounded">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 animate-pulse">

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publish - Portify</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <header class="border-b border-slate-200 px-6 py-3 flex items-center justify-between">
+    <button onclick="window.history.back()" class="inline-flex items-center gap-2 border border-slate-200 text-slate-500 text-sm font-medium px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+      </svg>
+      Back to editor
+    </button>
+    <div class="flex gap-3">
+      <button class="border border-blue-600 text-blue-600 font-semibold text-sm px-5 py-2 rounded-lg hover:bg-blue-50 transition">Edit Design</button>
+      <button onclick="publishSite()" class="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold text-sm px-5 py-2 rounded-lg hover:bg-blue-700 transition">
+        Publish Now
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- BODY: split layout -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- LEFT PANEL -->
+    <aside class="w-80 flex-shrink-0 border-r border-slate-200 p-6 flex flex-col gap-6 overflow-y-auto">
+
+      <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-1">Publish your portfolio</h2>
+        <p class="text-sm text-slate-400">Set your domain and make your portfolio live.</p>
+      </div>
+
+      <!-- Domain -->
+      <div>
+        <label class="text-xs font-semibold text-slate-600 block mb-2">Your domain</label>
+        <div class="flex items-center border border-slate-200 rounded-lg overflow-hidden">
+          <span class="bg-slate-50 text-slate-400 text-sm px-3 py-2.5 border-r border-slate-200">https://</span>
+          <input id="domain-input" type="text" value="creativevision" class="flex-1 text-sm px-3 py-2.5 outline-none text-slate-700" oninput="updateDomainPreview()" />
+          <span class="bg-slate-50 text-slate-400 text-sm px-3 py-2.5 border-l border-slate-200">.io</span>
+        </div>
+      </div>
+
+      <!-- Visibility -->
+      <div>
+        <label class="text-xs font-semibold text-slate-600 block mb-2">Visibility</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="vis-public" onclick="setVisibility('public')" class="border-2 border-blue-600 rounded-lg p-3 text-left transition">
+            <p class="text-sm font-semibold text-slate-800">Public</p>
+            <p class="text-xs text-slate-400">Anyone with link</p>
+          </button>
+          <button id="vis-private" onclick="setVisibility('private')" class="border-2 border-slate-200 rounded-lg p-3 text-left transition">
+            <p class="text-sm font-semibold text-slate-800">Private</p>
+            <p class="text-xs text-slate-400">Only you</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div>
+        <p class="text-xs font-semibold text-slate-600 mb-3">Ready to publish</p>
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-2 text-sm text-slate-600">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Profile information complete
+          </div>
+          <div class="flex items-center gap-2 text-sm text-slate-600">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Design theme selected
+          </div>
+          <div class="flex items-center gap-2 text-sm text-slate-600">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Domain name available
+          </div>
+        </div>
+      </div>
+
+      <!-- Publish button -->
+      <div class="mt-auto">
+        <button onclick="publishSite()" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition text-sm">
+          Publish Portfolio
+        </button>
+        <p class="text-xs text-slate-400 text-center mt-2">You can update or unpublish anytime</p>
+      </div>
+
+    </aside>
+
+    <!-- RIGHT PANEL: Preview -->
+    <main class="flex-1 bg-slate-50 p-8 overflow-y-auto flex flex-col items-center">
+      <p class="text-xs font-semibold text-slate-400 tracking-widest uppercase mb-4">Preview</p>
+
+      <!-- Browser mockup -->
+      <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+        <!-- Browser bar -->
+        <div class="bg-slate-100 px-4 py-3 flex items-center gap-3 border-b border-slate-200">
+          <div class="flex gap-1.5">
+            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+          </div>
+          <div class="flex-1 bg-white rounded-md px-3 py-1 text-xs text-slate-400 border border-slate-200" id="url-bar">
+            https://creativevision.io
+          </div>
+        </div>
+
+        <!-- Portfolio preview content -->
+        <div class="p-8">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-full bg-slate-200 overflow-hidden">
+              <img src="https://i.pravatar.cc/100?img=11" alt="avatar" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-slate-900">Bobby</h3>
+              <p class="text-sm text-slate-500">AI ENGINEER | JAKARTA</p>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500 mb-6 leading-relaxed">Crafting intelligent solutions with a passion for innovation and user-centric design. Based in Jakarta.</p>
+          <div class="flex gap-2 mb-6">
+            <button class="bg-blue-600 text-white text-xs font-semibold px-4 py-1.5 rounded-lg">View Resume</button>
+            <button class="border border-slate-200 text-slate-600 text-xs font-semibold px-4 py-1.5 rounded-lg">Explore Projects</button>
+          </div>
+          <p class="text-xs font-bold text-slate-700 mb-2 tracking-wide">SKILLS</p>
+          <div class="flex flex-wrap gap-1.5 mb-6 text-xs text-slate-500">
+            <span>🎨 UI/UX Design</span><span>|</span>
+            <span>🐍 Python</span><span>|</span>
+            <span>✏️ Figma</span><span>|</span>
+            <span>⚛️ React</span>
+          </div>
+          <p class="text-xs font-bold text-slate-700 mb-2 tracking-wide">PORTFOLIO</p>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="border border-slate-100 rounded-lg p-3">
+              <p class="text-xs font-semibold text-blue-600 mb-1">Project Alpha</p>
+              <p class="text-xs text-slate-400 leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+            </div>
+            <div class="border border-slate-100 rounded-lg p-3">
+              <p class="text-xs font-semibold text-blue-600 mb-1">Project Beta</p>
+              <p class="text-xs text-slate-400 leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+            </div>
+            <div class="border border-slate-100 rounded-lg p-3">
+              <p class="text-xs font-semibold text-blue-600 mb-1">Gamma</p>
+              <p class="text-xs text-slate-400 leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- URL bar below -->
+        <div class="border-t border-slate-100 bg-white px-8 py-4">
+          <p id="preview-url" class="text-sm font-semibold text-slate-700">https://creativevision.io</p>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Once you click "Publish", you will be redirected to your dashboard. This is where you can easily manage the website we've created for you.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- SUCCESS MODAL (hidden) -->
+  <div id="success-modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 text-center">
+      <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900 mb-2">Your Website is Live!</h3>
+      <p class="text-sm text-slate-500 leading-relaxed mb-6">Your website has been successfully published. You'll now be redirected to your dashboard, where you can manage and update everything with ease.</p>
+      <button onclick="window.location.href='../index.html'" class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition text-sm">
+        Go to Dashboard
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function setVisibility(v) {
+      document.getElementById('vis-public').className = v === 'public'
+        ? 'border-2 border-blue-600 rounded-lg p-3 text-left transition'
+        : 'border-2 border-slate-200 rounded-lg p-3 text-left transition hover:border-blue-200';
+      document.getElementById('vis-private').className = v === 'private'
+        ? 'border-2 border-blue-600 rounded-lg p-3 text-left transition'
+        : 'border-2 border-slate-200 rounded-lg p-3 text-left transition hover:border-blue-200';
+    }
+
+    function updateDomainPreview() {
+      const val = document.getElementById('domain-input').value || 'yourname';
+      const url = 'https://' + val + '.io';
+      document.getElementById('url-bar').textContent = url;
+      document.getElementById('preview-url').textContent = url;
+    }
+
+    function publishSite() {
+      document.getElementById('success-modal').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

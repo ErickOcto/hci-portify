@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload CV - Portify</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .drop-zone-active {
+      border-color: #2563eb !important;
+      background-color: #dbeafe !important;
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col">
+
+  <!-- STEPPER -->
+  <header class="border-b border-slate-200 py-4">
+    <div class="max-w-3xl mx-auto px-6 flex items-center justify-center">
+
+      <!-- Step 1 - Active -->
+      <div class="flex flex-col items-center">
+        <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow">1</div>
+        <span class="text-xs font-semibold text-blue-600 mt-1">Upload CV</span>
+      </div>
+
+      <!-- Line 1-2 (blue = active) -->
+      <div class="h-0.5 w-32 bg-blue-600 mb-4"></div>
+
+      <!-- Step 2 - Inactive -->
+      <div class="flex flex-col items-center">
+        <div class="w-9 h-9 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center font-bold text-sm">2</div>
+        <span class="text-xs text-slate-400 mt-1">AI Analysis</span>
+      </div>
+
+      <!-- Line 2-3 (grey = inactive) -->
+      <div class="h-0.5 w-32 bg-slate-200 mb-4"></div>
+
+      <!-- Step 3 - Inactive -->
+      <div class="flex flex-col items-center">
+        <div class="w-9 h-9 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center font-bold text-sm">3</div>
+        <span class="text-xs text-slate-400 mt-1">Design Selection</span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-4xl mx-auto w-full px-6 py-10">
+
+    <span class="inline-block bg-blue-50 text-blue-600 text-xs font-medium px-3 py-1 rounded-full mb-3">Step 1 of 3</span>
+    <h1 class="text-3xl font-bold text-slate-900 mb-2">Upload your CV</h1>
+    <p class="text-sm text-slate-500 mb-8 max-w-xs leading-relaxed">We'll extract your information automatically. No manual input needed.</p>
+
+    <!-- Drop Zone -->
+    <div
+      id="drop-zone"
+      class="w-full border-2 border-dashed border-blue-200 bg-blue-50 rounded-xl flex flex-col items-center justify-center py-20 px-6 cursor-pointer transition-all"
+      ondragover="handleDragOver(event)"
+      ondragleave="handleDragLeave(event)"
+      ondrop="handleDrop(event)"
+      onclick="document.getElementById('file-input').click()"
+    >
+      <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.621 9.879a3 3 0 00-5.121 2.121M10.5 18.75h3M12 15v3.75" />
+        </svg>
+      </div>
+      <p class="text-blue-600 font-semibold text-base mb-1">Drag & drop your file here</p>
+      <p class="text-slate-400 text-sm mb-4">or</p>
+      <button
+        class="border border-slate-300 text-slate-700 font-semibold text-sm px-5 py-2 rounded-lg hover:bg-slate-50 transition"
+        onclick="event.stopPropagation(); document.getElementById('file-input').click()"
+      >Browse file</button>
+      <p class="text-slate-400 text-xs mt-4">Supported formats: PDF, DOCX · Max size: 5MB</p>
+      <input id="file-input" type="file" accept=".pdf,.docx" class="hidden" onchange="handleFileSelect(event)" />
+    </div>
+
+    <!-- File selected state -->
+    <div id="file-selected" class="hidden mt-4 flex items-center gap-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+      <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div class="flex-1">
+        <p id="file-name" class="text-sm font-medium text-slate-700"></p>
+        <p id="file-size" class="text-xs text-slate-400"></p>
+      </div>
+      <button onclick="removeFile()" class="text-slate-400 hover:text-slate-600">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Error message -->
+    <div id="error-msg" class="hidden mt-4 flex items-center gap-3 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+      <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <p id="error-text" class="text-sm text-red-600"></p>
+    </div>
+
+  </main>
+
+  <!-- FOOTER BAR -->
+  <footer class="border-t border-slate-200 px-6 py-4 flex items-center justify-between">
+    <p class="text-sm text-slate-400">Your data is only used to generate your portfolio</p>
+    <a
+      id="next-btn"
+      href="ai-analysis.html"
+      class="inline-flex items-center gap-2 bg-blue-600 text-white font-semibold text-sm px-6 py-2.5 rounded-lg opacity-40 pointer-events-none transition"
+    >
+      Next
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+      </svg>
+    </a>
+  </footer>
+
+  <script>
+    let selectedFile = null;
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('drop-zone').classList.add('drop-zone-active');
+    }
+    function handleDragLeave(e) {
+      document.getElementById('drop-zone').classList.remove('drop-zone-active');
+    }
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('drop-zone').classList.remove('drop-zone-active');
+      const file = e.dataTransfer.files[0];
+      if (file) processFile(file);
+    }
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) processFile(file);
+    }
+    function processFile(file) {
+      const validTypes = ['application/pdf','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      const maxSize = 5 * 1024 * 1024;
+      hideError();
+      if (!validTypes.includes(file.type)) { showError('Please upload a PDF or DOCX file.'); return; }
+      if (file.size > maxSize) { showError('File size exceeds 5MB. Please upload a smaller file.'); return; }
+      selectedFile = file;
+      document.getElementById('file-name').textContent = file.name;
+      document.getElementById('file-size').textContent = (file.size / (1024*1024)).toFixed(2) + ' MB';
+      document.getElementById('file-selected').classList.remove('hidden');
+      const btn = document.getElementById('next-btn');
+      btn.classList.remove('opacity-40','pointer-events-none');
+    }
+    function removeFile() {
+      selectedFile = null;
+      document.getElementById('file-selected').classList.add('hidden');
+      document.getElementById('file-input').value = '';
+      const btn = document.getElementById('next-btn');
+      btn.classList.add('opacity-40','pointer-events-none');
+    }
+    function showError(msg) {
+      document.getElementById('error-text').textContent = msg;
+      document.getElementById('error-msg').classList.remove('hidden');
+    }
+    function hideError() {
+      document.getElementById('error-msg').classList.add('hidden');
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create an Account - Portify</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex">
+
+  <!-- LEFT PANEL: Gradient intro -->
+  <aside class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-500 to-blue-700 flex-col justify-center px-16">
+    <h1 class="text-4xl font-extrabold text-white mb-4">Let's start !</h1>
+    <p class="text-lg font-semibold text-blue-100">Register to start your journey,,,</p>
+  </aside>
+
+  <!-- RIGHT PANEL: Form -->
+  <main class="flex-1 flex flex-col justify-center px-8 sm:px-16 py-12">
+    <div class="max-w-md w-full mx-auto">
+      <h2 class="text-2xl font-bold text-blue-900 mb-1">Create an account</h2>
+      <p class="text-sm text-blue-400 mb-8">Enter your information below to create your account</p>
+
+      <form id="signup-form" class="space-y-5" onsubmit="handleSignup(event)">
+
+        <div>
+          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Full Name</label>
+          <input id="full-name" type="text" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
+        </div>
+
+        <div>
+          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Email</label>
+          <input id="signup-email" type="email" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
+          <p class="text-xs text-blue-400 mt-1.5">We'll use this to contact you. We will not share your email with anyone else.</p>
+        </div>
+
+        <div>
+          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Password</label>
+          <input id="signup-password" type="password" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
+          <p class="text-xs text-blue-400 mt-1.5">Must be at least 8 characters.</p>
+        </div>
+
+        <div>
+          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Confirm Password</label>
+          <input id="signup-confirm-password" type="password" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
+          <p class="text-xs text-blue-400 mt-1.5">Please confirm your password.</p>
+        </div>
+
+        <!-- Error message -->
+        <div id="signup-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-xs rounded-lg px-4 py-3"></div>
+
+        <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-3 rounded-xl hover:bg-blue-800 transition text-sm">Create Account</button>
+        <button type="button" onclick="mockGoogleSignup()" class="w-full bg-blue-50/60 border border-blue-200 text-blue-900 font-semibold py-3 rounded-xl hover:bg-blue-50 transition text-sm">Sign up with Google</button>
+      </form>
+
+      <p class="text-sm text-blue-700 text-center mt-6">Already have an account? <a href="login.html" class="underline font-semibold">Login</a></p>
+    </div>
+  </main>
+
+  <script>
+    function handleSignup(e) {
+      e.preventDefault();
+
+      const fullName = document.getElementById('full-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+      if (!fullName || !email || !password || !confirmPassword) {
+        showSignupError('Please fill in all fields.');
+        return;
+      }
+      if (password.length < 8) {
+        showSignupError('Password must be at least 8 characters.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        showSignupError('Passwords do not match.');
+        return;
+      }
+
+      hideSignupError();
+      // Account created (simulated) — start the onboarding wizard
+      window.location.href = 'upload-cv.html';
+    }
+
+    function showSignupError(msg) {
+      const errorBox = document.getElementById('signup-error');
+      errorBox.textContent = msg;
+      errorBox.classList.remove('hidden');
+    }
+
+    function hideSignupError() {
+      document.getElementById('signup-error').classList.add('hidden');
+    }
+
+    function mockGoogleSignup() {
+      showSignupError('Google sign-up is simulated in this demo — please use the form above instead.');
+    }
+  </script>
+</body>
+</html>

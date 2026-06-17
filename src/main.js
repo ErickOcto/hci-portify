@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDatabasePage();
   initDomainPage();
   initVisualBuilder();
-  
+  initLivePreview();
   // Custom layout Initializations
   initMobileSidebar();
   initProjectSwitcher();
@@ -412,6 +412,7 @@ function initTabs() {
   const databaseView = document.getElementById('database-view');
   const domainView = document.getElementById('domain-view');
   const customPageView = document.getElementById('custom-page-view');
+  const livePreviewView = document.getElementById('live-preview-view');
 
   if (!navLinks) return;
 
@@ -441,6 +442,7 @@ function initTabs() {
         if (databaseView) databaseView.classList.add('hidden');
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
         showToast('Switched to Dashboard Overview');
       } else if (tabId === 'performance') {
         if (overviewView) overviewView.classList.add('hidden');
@@ -448,6 +450,7 @@ function initTabs() {
         if (databaseView) databaseView.classList.add('hidden');
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
         
         // Trigger page entrance animations
         triggerPerformanceAnimations();
@@ -458,6 +461,7 @@ function initTabs() {
         if (databaseView) databaseView.classList.remove('hidden');
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
         
         // Trigger database page animations
         triggerDatabaseAnimations();
@@ -468,6 +472,7 @@ function initTabs() {
         if (databaseView) databaseView.classList.add('hidden');
         if (domainView) domainView.classList.remove('hidden');
         if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
         
         // Trigger domain page animations
         triggerDomainAnimations();
@@ -478,10 +483,22 @@ function initTabs() {
         if (databaseView) databaseView.classList.add('hidden');
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.remove('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
         
         // Trigger custom page animations
         triggerCustomPageAnimations();
         showToast('Switched to Visual Builder Page');
+      } else if (tabId === 'live-preview') {
+        if (overviewView) overviewView.classList.add('hidden');
+        if (performanceView) performanceView.classList.add('hidden');
+        if (databaseView) databaseView.classList.add('hidden');
+        if (domainView) domainView.classList.add('hidden');
+        if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.remove('hidden');
+
+        // Trigger live preview animations
+        triggerLivePreviewAnimations();
+        showToast('Switched to Live Preview Page');
       } else {
         // Mock default behavior for settings etc.
         if (overviewView) overviewView.classList.add('hidden');
@@ -489,6 +506,7 @@ function initTabs() {
         if (databaseView) databaseView.classList.add('hidden');
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
         showToast(`Tab content for "${tabName}" is under development.`);
       }
     });
@@ -1320,6 +1338,103 @@ function triggerCustomPageAnimations() {
     bar.offsetHeight;
     bar.style.height = bar.getAttribute('data-height');
   });
+}
+
+// --- Live Preview Device Frame Helper ---
+function setLivePreviewDevice(device) {
+  const toggleGroup = document.getElementById('preview-device-toggle');
+  const bezel = document.getElementById('preview-bezel');
+  const browserChrome = document.getElementById('preview-browser-chrome');
+  const phoneChrome = document.getElementById('preview-phone-chrome');
+  const notch = document.getElementById('preview-notch');
+  const homeIndicator = document.getElementById('preview-home-indicator');
+  const navDesktop = document.getElementById('preview-nav-desktop');
+  const navMobile = document.getElementById('preview-nav-mobile');
+  const hero = document.getElementById('preview-hero');
+  const portfolioGrid = document.getElementById('preview-portfolio-grid');
+
+  if (!bezel) return;
+
+  const bezelClasses = {
+    laptop: 'w-full max-w-4xl bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200 transition-all duration-300 relative',
+    tablet: 'w-full max-w-xl bg-white rounded-[2rem] shadow-lg overflow-hidden border-[10px] border-slate-900 transition-all duration-300 relative',
+    phone: 'w-[300px] bg-white rounded-[2.25rem] shadow-lg overflow-hidden border-[10px] border-slate-900 transition-all duration-300 relative'
+  };
+  bezel.className = bezelClasses[device] || bezelClasses.laptop;
+
+  if (toggleGroup) {
+    toggleGroup.querySelectorAll('.device-toggle-btn').forEach(btn => {
+      const isActive = btn.getAttribute('data-device') === device;
+      btn.className = isActive
+        ? 'device-toggle-btn px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all bg-white text-blue-600 shadow-sm border border-blue-200'
+        : 'device-toggle-btn px-3.5 py-1.5 rounded-md text-xs font-semibold transition-all text-slate-500 hover:text-slate-700';
+    });
+  }
+
+  if (device === 'phone') {
+    if (browserChrome) browserChrome.classList.add('hidden');
+    if (phoneChrome) phoneChrome.classList.remove('hidden');
+    if (notch) notch.classList.remove('hidden');
+  } else {
+    if (browserChrome) browserChrome.classList.remove('hidden');
+    if (phoneChrome) phoneChrome.classList.add('hidden');
+    if (notch) notch.classList.add('hidden');
+  }
+
+  if (homeIndicator) {
+    if (device === 'laptop') homeIndicator.classList.add('hidden');
+    else homeIndicator.classList.remove('hidden');
+  }
+
+  if (device === 'phone') {
+    if (navDesktop) navDesktop.classList.add('hidden');
+    if (navMobile) navMobile.classList.remove('hidden');
+  } else {
+    if (navDesktop) navDesktop.classList.remove('hidden');
+    if (navMobile) navMobile.classList.add('hidden');
+  }
+
+  if (hero) {
+    hero.className = device === 'phone'
+      ? 'flex flex-col items-center text-center gap-3 mb-5'
+      : 'flex items-center gap-5 mb-6';
+  }
+
+  if (portfolioGrid) {
+    portfolioGrid.className = device === 'phone'
+      ? 'grid grid-cols-1 gap-3 mb-6'
+      : 'grid grid-cols-3 gap-3 mb-6';
+  }
+}
+
+// --- Initialize Live Preview Page Interactions ---
+function initLivePreview() {
+  const toggleGroup = document.getElementById('preview-device-toggle');
+  const continueToEditBtn = document.getElementById('continue-to-edit-btn');
+
+  if (!toggleGroup) return;
+
+  toggleGroup.querySelectorAll('.device-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const device = btn.getAttribute('data-device');
+      setLivePreviewDevice(device);
+      showToast(`Previewing in ${device.charAt(0).toUpperCase() + device.slice(1)} mode`, 'info');
+    });
+  });
+
+  if (continueToEditBtn) {
+    continueToEditBtn.addEventListener('click', () => {
+      const builderTabBtn = document.querySelector('#nav-links button[data-tab="custom-page"]');
+      if (builderTabBtn) builderTabBtn.click();
+    });
+  }
+
+  setLivePreviewDevice('laptop');
+}
+
+// --- Trigger Live Preview Page Entrance Behavior ---
+function triggerLivePreviewAnimations() {
+  setLivePreviewDevice('laptop');
 }
 
 // --- Initialize Visual Site Builder ---

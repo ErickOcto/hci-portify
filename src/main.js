@@ -521,10 +521,24 @@ function initTabs() {
       profileMenu.classList.toggle('hidden');
     });
 
+    // Prevent clicks inside the profile menu from closing it immediately via document listener
+    profileMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
     // Close menu when clicking outside
     document.addEventListener('click', () => {
       profileMenu.classList.add('hidden');
     });
+
+    // Programmatic redirection for logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'src/pages/landing.html';
+      });
+    }
   }
 }
 

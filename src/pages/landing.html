@@ -183,7 +183,7 @@
         <a href="#community" class="py-2 text-sm font-medium text-gray-600 hover:text-blue-600" onclick="toggleMobileMenu()">Community</a>
         <div class="pt-3 border-t border-gray-100 flex flex-col gap-2 mt-1">
           <a href="login.html" class="text-center py-2.5 text-sm font-semibold text-gray-700 border border-gray-200 rounded-full">Sign in</a>
-          <a href="register.html" class="text-center py-2.5 text-sm font-semibold text-white rounded-full" style="background:#2563EB">Get Started</a>
+          <a href="signup.html" class="text-center py-2.5 text-sm font-semibold text-white rounded-full" style="background:#2563EB">Get Started</a>
         </div>
       </nav>
     </div>
@@ -209,7 +209,7 @@
       </p>
 
       <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
-        <a href="register.html" class="btn-primary">Get Started</a>
+        <a href="signup.html" class="btn-primary">Get Started</a>
         <a href="../../index.html" class="btn-outline">View Demo</a>
       </div>
     </div>
@@ -560,7 +560,7 @@
           <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Starter</p>
           <div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-black text-gray-900">$0</span><span class="text-sm text-gray-400">/forever</span></div>
           <p class="text-sm text-gray-500 mb-6">Everything you need to get started.</p>
-          <a href="register.html" class="btn-outline w-full justify-center mb-7">Get started free</a>
+          <a href="signup.html" class="btn-outline w-full justify-center mb-7">Get started free</a>
           <div><p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">FEATURES</p>
             <ul class="space-y-2.5">
               <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>1 portfolio site</li>
@@ -576,7 +576,7 @@
           <p class="text-xs font-black uppercase tracking-widest mb-3" style="color:#2563EB">Pro</p>
           <div class="flex items-baseline gap-1 mb-0.5"><span class="text-4xl font-black text-gray-900" id="pro-price">$9</span><span class="text-sm text-gray-400" id="pro-period">/month</span></div>
           <p class="text-xs text-gray-400 mb-5" id="pro-note">Billed yearly &middot; save $36/year</p>
-          <a href="register.html" class="btn-primary w-full justify-center mb-7">Upgrade to Pro</a>
+          <a href="signup.html" class="btn-primary w-full justify-center mb-7">Upgrade to Pro</a>
           <div><p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">FEATURES</p>
             <ul class="space-y-2.5">
               <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Unlimited portfolio sites</li>
@@ -591,7 +591,7 @@
           <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Enterprise</p>
           <div class="flex items-baseline gap-1 mb-0.5"><span class="text-4xl font-black text-gray-900" id="ent-price">$29</span><span class="text-sm text-gray-400" id="ent-period">/month</span></div>
           <p class="text-xs text-gray-400 mb-5" id="ent-note">Billed yearly</p>
-          <a href="register.html" class="btn-outline w-full justify-center mb-7">Get started</a>
+          <a href="signup.html" class="btn-outline w-full justify-center mb-7">Get started</a>
           <div><p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">FEATURES</p>
             <ul class="space-y-2.5">
               <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Team workspaces</li>
@@ -613,7 +613,7 @@
       <h2 class="text-3xl sm:text-4xl font-extrabold mb-4 leading-tight">Start Your Portfolio Today<br/>&#x2014; It's Free</h2>
       <p class="text-blue-100 text-sm mb-10 max-w-md mx-auto">Join 12,000+ professionals who built their portfolio on Portify.</p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-        <a href="register.html" class="flex items-center gap-2 bg-white font-bold text-sm px-7 py-3.5 rounded-full hover:bg-blue-50 transition w-full sm:w-auto justify-center" style="color:#2563EB">
+        <a href="signup.html" class="flex items-center gap-2 bg-white font-bold text-sm px-7 py-3.5 rounded-full hover:bg-blue-50 transition w-full sm:w-auto justify-center" style="color:#2563EB">
           Get Started for Free
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
         </a>
@@ -702,9 +702,41 @@
       { threshold: 0.1 }
     );
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('header nav a.nav-link');
+
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').style.boxShadow =
         window.scrollY > 8 ? '0 1px 16px rgba(0,0,0,0.07)' : '';
+
+      let current = 'home';
+      const scrollPosition = window.scrollY + 120;
+
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const id = section.getAttribute('id');
+        if (scrollPosition >= top) {
+          if (['about', 'features', 'pricing', 'community'].includes(id)) {
+            current = id;
+          }
+        }
+      });
+
+      // Special case: if we are at the absolute bottom of the page, force the last nav item (pricing) to be active
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+        current = 'pricing';
+      }
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === 'landing.html' && current === 'home') {
+          link.classList.add('active');
+        } else if (href === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
     });
   </script>
 </body>

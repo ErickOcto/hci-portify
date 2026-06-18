@@ -14,6 +14,17 @@ const projectData = {
     name: 'Macbook Gng',
     domain: 'macbookgng.com',
     updated: 'Updated 2 hours ago · by You',
+    description: 'The ultimate portfolio theme for modern creators and designers. Clean layout, dark modes, and modular blocks.',
+    language: 'en',
+    seoTitle: 'Design Macbook Gang Pro — Portfolio Theme',
+    seoDescription: 'Check out the official Macbook Gang website. Designed with modular blocks, sleek gradients, and clean performance optimization.',
+    analyticsId: 'UA-129988-1',
+    primaryColor: '#2563eb',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' },
+      { name: 'Hafizh', email: 'hafizh@portify.io', role: 'Collaborator', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -45,6 +56,16 @@ const projectData = {
     name: 'Project 1',
     domain: 'project1.portify.io',
     updated: 'Created 1 day ago · by System',
+    description: 'A clean, modern boilerplate theme ready for your creative content.',
+    language: 'en',
+    seoTitle: 'Welcome to Project 1',
+    seoDescription: 'Project 1 boilerplate site. Kickstart your next development project with custom components.',
+    analyticsId: 'UA-129988-2',
+    primaryColor: '#3b82f6',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -59,6 +80,16 @@ const projectData = {
     name: 'Project 2',
     domain: 'project2.portify.io',
     updated: 'Created 2 days ago · by System',
+    description: 'A clean SaaS website framework for bootstrapping micro-businesses.',
+    language: 'en',
+    seoTitle: 'Welcome to Project 2',
+    seoDescription: 'Project 2 SaaS site. Start selling your product today.',
+    analyticsId: 'UA-129988-3',
+    primaryColor: '#8b5cf6',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -73,6 +104,16 @@ const projectData = {
     name: 'Project 3',
     domain: 'project3.portify.io',
     updated: 'Created 3 days ago · by System',
+    description: 'A minimalist photography showcase theme optimized for light and dark contrast.',
+    language: 'en',
+    seoTitle: 'Welcome to Project 3',
+    seoDescription: 'Project 3 photography portfolio site. Stunning visual gallery.',
+    analyticsId: 'UA-129988-4',
+    primaryColor: '#10b981',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -173,6 +214,15 @@ function selectProject(projectId) {
   if (window.builderPageManager) {
     window.builderPageManager.updatePageSelect();
     window.builderPageManager.loadPageCanvas(activePages[projectId]);
+  }
+
+  // Apply visual branding color/font
+  applyBrandingStyles();
+
+  // If settings view is open, synchronize fields
+  const settingsView = document.getElementById('settings-view');
+  if (settingsView && !settingsView.classList.contains('hidden')) {
+    syncSettingsFields();
   }
 
   showToast(`Switched to workspace: ${proj.name}`, 'success');
@@ -341,6 +391,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectSwitcher();
   initAddPageModal();
   renderOverviewPages();
+  initSettingsPage();
+  applyBrandingStyles();
 
   // Overview View Builder footer button redirection
   const viewBuilderBtn = document.getElementById('overview-view-builder-btn');
@@ -413,6 +465,7 @@ function initTabs() {
   const domainView = document.getElementById('domain-view');
   const customPageView = document.getElementById('custom-page-view');
   const livePreviewView = document.getElementById('live-preview-view');
+  const settingsView = document.getElementById('settings-view');
 
   if (!navLinks) return;
 
@@ -435,6 +488,37 @@ function initTabs() {
         label.innerText = tabName;
       }
 
+      // Update dynamic guidance tooltip content
+      const guidanceTitle = document.getElementById('guidance-title');
+      const guidanceDesc = document.getElementById('guidance-desc');
+      if (guidanceTitle && guidanceDesc) {
+        if (tabId === 'overview') {
+          guidanceTitle.innerText = 'Dashboard Overview';
+          guidanceDesc.innerText = 'This dashboard gives you a high-level summary of your project. Monitor site status (deployment, SSL, domain), track recent activities, see listed pages, and access quick actions.';
+        } else if (tabId === 'performance') {
+          guidanceTitle.innerText = 'Performance Analytics';
+          guidanceDesc.innerText = 'Real-time speed and optimization metrics. Monitor page speed, layout stability (CLS), total requests, and resource load times to optimize your website for SEO and users.';
+        } else if (tabId === 'database') {
+          guidanceTitle.innerText = 'Database Explorer';
+          guidanceDesc.innerText = 'Manage your project\'s database tables and records. Perform SQL-style queries, inspect connection statistics, create or delete tables, and track real-time logs.';
+        } else if (tabId === 'domain') {
+          guidanceTitle.innerText = 'Domain & DNS Settings';
+          guidanceDesc.innerText = 'Configure your custom domains and DNS records. Set up custom branding (e.g. yourname.com) and manage records like A, CNAME, and TXT for hosting.';
+        } else if (tabId === 'custom-page') {
+          guidanceTitle.innerText = 'Visual Builder';
+          guidanceDesc.innerText = 'Customize layouts visually. Add components, drag and drop to reorder, delete sections, edit copy in the inspector, or prompt the AI assistant to instantly style sections.';
+        } else if (tabId === 'live-preview') {
+          guidanceTitle.innerText = 'Live Site Preview';
+          guidanceDesc.innerText = 'View and test your published website in a live preview. Switch views to inspect responsiveness across desktop, tablet, and mobile layouts.';
+        } else if (tabId === 'settings') {
+          guidanceTitle.innerText = 'Project Settings';
+          guidanceDesc.innerText = 'Manage your project configurations, descriptions, search engine indexing preferences, access control lists, and custom css branding palettes.';
+        } else {
+          guidanceTitle.innerText = tabName + ' Guide';
+          guidanceDesc.innerText = 'Guidance and controls for managing your project\'s settings and page layout options.';
+        }
+      }
+
       // Hide all page views and show target page view
       if (tabId === 'overview') {
         if (overviewView) overviewView.classList.remove('hidden');
@@ -443,6 +527,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         showToast('Switched to Dashboard Overview');
       } else if (tabId === 'performance') {
         if (overviewView) overviewView.classList.add('hidden');
@@ -451,6 +536,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger page entrance animations
         triggerPerformanceAnimations();
@@ -462,6 +548,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger database page animations
         triggerDatabaseAnimations();
@@ -473,6 +560,7 @@ function initTabs() {
         if (domainView) domainView.classList.remove('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger domain page animations
         triggerDomainAnimations();
@@ -484,6 +572,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.remove('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger custom page animations
         triggerCustomPageAnimations();
@@ -495,10 +584,22 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.remove('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
 
         // Trigger live preview animations
         triggerLivePreviewAnimations();
         showToast('Switched to Live Preview Page');
+      } else if (tabId === 'settings') {
+        if (overviewView) overviewView.classList.add('hidden');
+        if (performanceView) performanceView.classList.add('hidden');
+        if (databaseView) databaseView.classList.add('hidden');
+        if (domainView) domainView.classList.add('hidden');
+        if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.remove('hidden');
+
+        syncSettingsFields();
+        showToast('Switched to Settings Page');
       } else {
         // Mock default behavior for settings etc.
         if (overviewView) overviewView.classList.add('hidden');
@@ -507,6 +608,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         showToast(`Tab content for "${tabName}" is under development.`);
       }
     });
@@ -521,10 +623,35 @@ function initTabs() {
       profileMenu.classList.toggle('hidden');
     });
 
+    // Prevent clicks inside the profile menu from closing it immediately via document listener
+    profileMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
     // Close menu when clicking outside
     document.addEventListener('click', () => {
       profileMenu.classList.add('hidden');
     });
+
+    // Programmatic redirection for logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'src/pages/landing.html';
+      });
+    }
+
+    // Programmatic redirection for account settings
+    const profileSettingsBtn = document.getElementById('profile-settings-btn');
+    if (profileSettingsBtn) {
+      profileSettingsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        profileMenu.classList.add('hidden');
+        const settingsTabBtn = document.querySelector('button[data-tab="settings"]');
+        if (settingsTabBtn) settingsTabBtn.click();
+      });
+    }
   }
 }
 
@@ -1008,45 +1135,62 @@ function initDatabasePage() {
     { type: 'DELETE', color: 'text-rose-600', sql: 'DELETE FROM logs WHERE created_at < NOW() - INTERVAL 30 DAY' }
   ];
 
-  if (runMockQueryBtn && queryLogList) {
-    runMockQueryBtn.addEventListener('click', () => {
-      const q = queries[Math.floor(Math.random() * queries.length)];
-      const now = new Date();
-      const timeStr = now.toTimeString().split(' ')[0];
+  const executeMockQuery = (showToastAndActivity = true) => {
+    if (!queryLogList) return;
+    const q = queries[Math.floor(Math.random() * queries.length)];
+    const now = new Date();
+    const timeStr = now.toTimeString().split(' ')[0];
 
-      const item = document.createElement('div');
-      item.className = 'flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-all duration-300 opacity-0 -translate-y-2';
-      
-      // SQL Highlight formatting
-      let formattedSql = q.sql;
-      formattedSql = formattedSql.replace(/(SELECT|UPDATE|INSERT|DELETE|FROM|WHERE|ORDER BY|LIMIT|SET|INTO|VALUES|INTERVAL|DAY|AND|OR|JOIN|ON|NOW\(\))/g, '<span class="text-blue-600 font-semibold">$1</span>');
-      // Fix specific color matching
-      if (q.type === 'UPDATE') {
-        formattedSql = formattedSql.replace('UPDATE', '<span class="text-amber-600 font-semibold">UPDATE</span>');
-      } else if (q.type === 'INSERT') {
-        formattedSql = formattedSql.replace('INSERT', '<span class="text-emerald-600 font-semibold">INSERT</span>');
-      } else if (q.type === 'DELETE') {
-        formattedSql = formattedSql.replace('DELETE', '<span class="text-rose-600 font-semibold">DELETE</span>');
-      }
+    const item = document.createElement('div');
+    item.className = 'flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-all duration-300 opacity-0 -translate-y-2';
+    
+    // SQL Highlight formatting
+    let formattedSql = q.sql;
+    formattedSql = formattedSql.replace(/(SELECT|UPDATE|INSERT|DELETE|FROM|WHERE|ORDER BY|LIMIT|SET|INTO|VALUES|INTERVAL|DAY|AND|OR|JOIN|ON|NOW\(\))/g, '<span class="text-blue-600 font-semibold">$1</span>');
+    // Fix specific color matching
+    if (q.type === 'UPDATE') {
+      formattedSql = formattedSql.replace('UPDATE', '<span class="text-amber-600 font-semibold">UPDATE</span>');
+    } else if (q.type === 'INSERT') {
+      formattedSql = formattedSql.replace('INSERT', '<span class="text-emerald-600 font-semibold">INSERT</span>');
+    } else if (q.type === 'DELETE') {
+      formattedSql = formattedSql.replace('DELETE', '<span class="text-rose-600 font-semibold">DELETE</span>');
+    }
 
-      item.innerHTML = `
-        <span class="text-slate-400 flex-shrink-0">${timeStr}</span>
-        <p class="text-slate-700 break-all">${formattedSql}</p>
-      `;
+    item.innerHTML = `
+      <span class="text-slate-400 flex-shrink-0">${timeStr}</span>
+      <p class="text-slate-700 break-all">${formattedSql}</p>
+    `;
 
-      queryLogList.insertBefore(item, queryLogList.firstChild);
-      
-      // Animate in
-      setTimeout(() => {
-        item.classList.remove('opacity-0', '-translate-y-2');
-      }, 10);
+    queryLogList.insertBefore(item, queryLogList.firstChild);
+    
+    // Animate in
+    setTimeout(() => {
+      item.classList.remove('opacity-0', '-translate-y-2');
+    }, 10);
 
-      // Scroll list to top
-      queryLogList.scrollTop = 0;
+    // Limit list length to prevent infinite growth
+    if (queryLogList.children.length > 25) {
+      queryLogList.lastChild.remove();
+    }
 
+    // Scroll list to top
+    queryLogList.scrollTop = 0;
+
+    if (showToastAndActivity) {
       showToast(`Mock query executed: ${q.type}`, 'success');
       appendActivityLog(`Database ${q.type} query executed`, `Just now · by System`, 'blue');
+    }
+  };
+
+  if (runMockQueryBtn && queryLogList) {
+    runMockQueryBtn.addEventListener('click', () => {
+      executeMockQuery(true);
     });
+
+    // Automatically execute dummy query every 4 seconds for prototyping simulation
+    setInterval(() => {
+      executeMockQuery(false);
+    }, 4000);
   }
 
   // Backup execution
@@ -1453,9 +1597,16 @@ function initVisualBuilder() {
   const inspectorBtnPrimary = document.getElementById('inspector-btn-primary');
   const inspectorBtnSecondary = document.getElementById('inspector-btn-secondary');
   const inspectorBgTheme = document.getElementById('inspector-bg-theme');
+  const inspectorPadding = document.getElementById('inspector-padding');
+  const inspectorAlignment = document.getElementById('inspector-alignment');
+  const inspectorGridGroup = document.getElementById('inspector-grid-group');
+  const inspectorGridCols = document.getElementById('inspector-grid-cols');
 
   const builderResetBtn = document.getElementById('builder-reset-btn');
   const builderSaveBtn = document.getElementById('builder-save-btn');
+  const builderDesktopBtn = document.getElementById('builder-desktop-btn');
+  const builderMobileBtn = document.getElementById('builder-mobile-btn');
+  const mobileStatusBar = document.getElementById('mobile-status-bar');
   
   const aiPromptInput = document.getElementById('ai-prompt-input');
   const aiGenerateBtn = document.getElementById('ai-generate-btn');
@@ -1488,7 +1639,10 @@ function initVisualBuilder() {
         subhead: el.getAttribute('data-subhead') || '',
         ctaPrimary: el.getAttribute('data-cta-primary') || '',
         ctaSecondary: el.getAttribute('data-cta-secondary') || '',
-        bgTheme: el.getAttribute('data-bg-theme') || 'white'
+        bgTheme: el.getAttribute('data-bg-theme') || 'white',
+        padding: el.getAttribute('data-padding') || 'py-8',
+        alignment: el.getAttribute('data-alignment') || 'text-left',
+        gridCols: el.getAttribute('data-grid-cols') || 'grid-cols-3'
       });
     });
     
@@ -1611,21 +1765,23 @@ function initVisualBuilder() {
     sectionIndex++;
     const id = data ? data.id : `${type}-${sectionIndex}`;
     const div = document.createElement('div');
-    div.className = 'canvas-section relative group/section border-2 border-transparent hover:border-blue-500/50 transition-all select-text cursor-pointer p-8';
     div.setAttribute('data-section-id', id);
     div.setAttribute('data-section-type', type);
 
     // Setup initial contents from state or defaults
-    let headline = data ? data.headline : (type === 'hero' ? 'Headline Title' : (type === 'features' ? 'Feature Section Title' : (type === 'pricing' ? 'Flexible Pricing' : (type === 'testimonials' ? 'Client Endorsements' : (type === 'cta' ? 'Launch your next project' : 'Contact Support')))));
-    let subhead = data ? data.subhead : (type === 'hero' ? 'Start editing this description to explain your product value proposition.' : (type === 'features' ? 'Describe your core architectural advantages or layouts.' : (type === 'pricing' ? 'Choose a plan that fits your business scale.' : (type === 'testimonials' ? 'Hear what leading visual architects say about our services.' : (type === 'cta' ? 'Get started with high performance hosting and CDN networks.' : 'Fill out details to get in touch with our team.')))));
+    let headline = data ? data.headline : (type === 'hero' ? 'Headline Title' : (type === 'features' ? 'Feature Section Title' : (type === 'pricing' ? 'Flexible Pricing' : (type === 'testimonials' ? 'Client Endorsements' : (type === 'cta' ? 'Launch your next project' : (type === 'gallery' ? 'Interactive Gallery' : (type === 'faq' ? 'Frequently Asked Questions' : (type === 'stats' ? 'Platform Performance' : (type === 'footer' ? 'Portify Labs' : 'Contact Support')))))))));
+    let subhead = data ? data.subhead : (type === 'hero' ? 'Start editing this description to explain your product value proposition.' : (type === 'features' ? 'Describe your core architectural advantages or layouts.' : (type === 'pricing' ? 'Choose a plan that fits your business scale.' : (type === 'testimonials' ? 'Hear what leading visual architects say about our services.' : (type === 'cta' ? 'Get started with high performance hosting and CDN networks.' : (type === 'gallery' ? 'A showcase of our layout compositions, product screenshots, and design elements.' : (type === 'faq' ? 'Common queries about our visual editor features, custom hosting limits, and billing.' : (type === 'stats' ? 'Fast, reliable, secure. Backed by enterprise infrastructure.' : (type === 'footer' ? '© 2026 Portify Inc. All rights reserved. Deployed at the edge.' : 'Fill out details to get in touch with our team.')))))))));
     let btnPrimary = data ? data.ctaPrimary : 'Get Started';
     let btnSecondary = data ? data.ctaSecondary : 'Learn More';
-    let bgTheme = data ? data.bgTheme : (type === 'hero' ? 'slate-dark' : (type === 'features' ? 'slate-light' : (type === 'cta' ? 'blue-royal' : 'white')));
+    let bgTheme = data ? data.bgTheme : (type === 'hero' ? 'slate-dark' : (type === 'features' ? 'slate-light' : (type === 'cta' ? 'blue-royal' : (type === 'gallery' ? 'white' : (type === 'faq' ? 'white' : (type === 'stats' ? 'slate-light' : (type === 'footer' ? 'slate-light' : 'white')))))));
+    
+    // Framer style custom styling variables
+    let padding = data ? (data.padding || 'py-8') : 'py-8';
+    let alignment = data ? (data.alignment || (type === 'hero' || type === 'cta' ? 'text-center' : 'text-left')) : (type === 'hero' || type === 'cta' ? 'text-center' : 'text-left');
+    let gridCols = data ? (data.gridCols || 'grid-cols-3') : 'grid-cols-3';
 
+    div.className = 'canvas-section relative group/section border-2 border-transparent hover:border-blue-500/50 transition-all select-text cursor-pointer px-8 ' + padding + ' ' + alignment;
     div.className += ' ' + (themeClasses[bgTheme] || themeClasses['white']);
-    if (type === 'hero' || type === 'cta') {
-      div.className += ' text-center';
-    }
 
     const toolbarHtml = `
       <div class="absolute top-2 right-2 flex items-center space-x-1 opacity-0 group-hover/section:opacity-100 transition-opacity bg-slate-900/90 text-white rounded-lg p-1 text-[10px] font-bold border border-slate-800 z-10" onclick="event.stopPropagation();">
@@ -1647,7 +1803,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-blue-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Hero Banner</span>
-        <div class="max-w-xl mx-auto py-8">
+        <div class="max-w-xl mx-auto py-4">
           <h2 class="text-3xl font-extrabold tracking-tight" id="${id}-headline">${headline}</h2>
           <p class="text-xs text-slate-300 mt-2 leading-relaxed" id="${id}-subhead">${subhead}</p>
           <div class="mt-5 flex items-center justify-center space-x-3">
@@ -1660,11 +1816,11 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-emerald-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Features Grid</span>
-        <div class="max-w-xl mx-auto text-center mb-6">
+        <div class="max-w-xl mx-auto mb-6">
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
-        <div class="grid grid-cols-3 gap-4 text-left text-slate-800">
+        <div class="grid ${gridCols} gap-4 text-left text-slate-800" id="${id}-grid-container">
           <div class="bg-white border border-slate-200 rounded-lg p-3">
             <span class="text-blue-500 font-bold text-xs">01</span>
             <h4 class="font-bold text-xs text-slate-700 mt-1">Stunning Speed</h4>
@@ -1686,7 +1842,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-amber-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Pricing Table</span>
-        <div class="max-w-xl mx-auto text-center mb-6">
+        <div class="max-w-xl mx-auto mb-6">
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
@@ -1710,7 +1866,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-purple-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Testimonials</span>
-        <div class="max-w-xl mx-auto text-center mb-6">
+        <div class="max-w-xl mx-auto mb-6">
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
@@ -1729,7 +1885,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-rose-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Call-to-Action</span>
-        <div class="max-w-xl mx-auto py-6">
+        <div class="max-w-xl mx-auto py-4">
           <h2 class="text-2xl font-extrabold tracking-tight" id="${id}-headline">${headline}</h2>
           <p class="text-xs text-blue-100 mt-1" id="${id}-subhead">${subhead}</p>
           <div class="mt-4 flex items-center justify-center space-x-3">
@@ -1743,7 +1899,7 @@ function initVisualBuilder() {
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-indigo-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Contact Form</span>
         <div class="max-w-md mx-auto text-slate-800">
-          <div class="text-center mb-5">
+          <div class="mb-5">
             <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
             <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
           </div>
@@ -1760,6 +1916,116 @@ function initVisualBuilder() {
           </div>
         </div>
       `;
+    } else if (type === 'gallery') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-purple-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Media Gallery</span>
+        <div class="max-w-4xl mx-auto">
+          <div class="mb-6">
+            <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
+            <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="grid ${gridCols} gap-4 text-left" id="${id}-grid-container">
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200">
+              <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 1">
+            </div>
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200">
+              <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 2">
+            </div>
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 3">
+            </div>
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200 ${gridCols === 'grid-cols-4' ? '' : 'hidden'}" id="${id}-img-4">
+              <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 4">
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'faq') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-sky-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">FAQ Accordion</span>
+        <div class="max-w-2xl mx-auto">
+          <div class="mb-6">
+            <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
+            <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="space-y-3 text-slate-800">
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+              <button class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors" onclick="event.stopPropagation(); const p = this.nextElementSibling; const svg = this.querySelector('svg'); p.classList.toggle('hidden'); svg.classList.toggle('rotate-180');">
+                <span>Is the layout fully responsive?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-slate-400 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </button>
+              <div class="px-4 pb-3.5 text-[10.5px] text-slate-500 leading-relaxed border-t border-slate-50 pt-2.5">
+                Yes! Every layout block is optimized for mobile responsiveness and grid systems automatically.
+              </div>
+            </div>
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+              <button class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors" onclick="event.stopPropagation(); const p = this.nextElementSibling; const svg = this.querySelector('svg'); p.classList.toggle('hidden'); svg.classList.toggle('rotate-180');">
+                <span>Can I export code directly from Portify?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-slate-400 transition-transform rotate-180"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </button>
+              <div class="px-4 pb-3.5 text-[10.5px] text-slate-500 leading-relaxed border-t border-slate-50 pt-2.5 hidden">
+                Yes! In the advanced settings tab, you can compile and download the entire project layout as a clean JSON structure or HTML/JS build.
+              </div>
+            </div>
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+              <button class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors" onclick="event.stopPropagation(); const p = this.nextElementSibling; const svg = this.querySelector('svg'); p.classList.toggle('hidden'); svg.classList.toggle('rotate-180');">
+                <span>Is SSL certificate hosting free?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-slate-400 transition-transform rotate-180"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </button>
+              <div class="px-4 pb-3.5 text-[10.5px] text-slate-500 leading-relaxed border-t border-slate-50 pt-2.5 hidden">
+                 Absolutely. All websites deployed via Portify receive custom domain security SSL certificates completely free.
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'stats') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-orange-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Stats Counters</span>
+        <div class="max-w-4xl mx-auto">
+          <div class="mb-6">
+            <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
+            <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="grid ${gridCols} gap-4 text-slate-800" id="${id}-grid-container">
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm">
+              <div class="text-3xl font-extrabold text-blue-600 tracking-tight">99.9%</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">Uptime SLA</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm">
+              <div class="text-3xl font-extrabold text-emerald-500 tracking-tight">&lt; 100ms</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">Page Load Time</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm">
+              <div class="text-3xl font-extrabold text-purple-600 tracking-tight">500k+</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">Deployments</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm ${gridCols === 'grid-cols-4' ? '' : 'hidden'}" id="${id}-stat-4">
+              <div class="text-3xl font-extrabold text-amber-500 tracking-tight">100M+</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">API Requests</p>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'footer') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-slate-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Custom Footer</span>
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-slate-200/50 pt-4 text-slate-500">
+          <div class="mb-4 md:mb-0">
+            <h4 class="font-bold text-xs text-slate-700" id="${id}-headline">${headline}</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="flex space-x-5 text-[10px] font-semibold text-slate-400">
+            <a href="#" class="hover:text-blue-600 transition-colors" onclick="event.preventDefault(); showToast('Navigating to Privacy Policy (mock)');">Privacy Policy</a>
+            <a href="#" class="hover:text-blue-600 transition-colors" onclick="event.preventDefault(); showToast('Navigating to Terms of Service (mock)');">Terms of Use</a>
+            <a href="#" class="hover:text-blue-600 transition-colors" onclick="event.preventDefault(); showToast('Navigating to Help Documentation (mock)');">Documentation</a>
+          </div>
+        </div>
+      `;
     }
 
     div.setAttribute('data-headline', headline);
@@ -1767,6 +2033,9 @@ function initVisualBuilder() {
     div.setAttribute('data-cta-primary', btnPrimary);
     div.setAttribute('data-cta-secondary', btnSecondary);
     div.setAttribute('data-bg-theme', bgTheme);
+    div.setAttribute('data-padding', padding);
+    div.setAttribute('data-alignment', alignment);
+    div.setAttribute('data-grid-cols', gridCols);
     div.innerHTML = innerHTML;
 
     return div;
@@ -1803,6 +2072,22 @@ function initVisualBuilder() {
     if (inspectorBtnPrimary) inspectorBtnPrimary.value = btnPrimary;
     if (inspectorBtnSecondary) inspectorBtnSecondary.value = btnSecondary;
     if (inspectorBgTheme) inspectorBgTheme.value = theme;
+
+    const padding = section.getAttribute('data-padding') || 'py-8';
+    const alignment = section.getAttribute('data-alignment') || (type === 'hero' || type === 'cta' ? 'text-center' : 'text-left');
+    const gridCols = section.getAttribute('data-grid-cols') || 'grid-cols-3';
+
+    if (inspectorPadding) inspectorPadding.value = padding;
+    if (inspectorAlignment) inspectorAlignment.value = alignment;
+    if (inspectorGridCols) inspectorGridCols.value = gridCols;
+
+    if (inspectorGridGroup) {
+      if (type === 'features' || type === 'gallery' || type === 'stats') {
+        inspectorGridGroup.classList.remove('hidden');
+      } else {
+        inspectorGridGroup.classList.add('hidden');
+      }
+    }
 
     if (inspectorCtasGroup) {
       if (type === 'hero' || type === 'cta') {
@@ -1941,6 +2226,90 @@ function initVisualBuilder() {
         }
       }
       saveCanvasStateToData();
+    });
+  }
+
+  if (inspectorPadding) {
+    inspectorPadding.addEventListener('change', (e) => {
+      if (!selectedSection) return;
+      const newVal = e.target.value;
+      const oldVal = selectedSection.getAttribute('data-padding') || 'py-8';
+      selectedSection.setAttribute('data-padding', newVal);
+      selectedSection.classList.remove(oldVal);
+      selectedSection.classList.add(newVal);
+      saveCanvasStateToData();
+    });
+  }
+
+  if (inspectorAlignment) {
+    inspectorAlignment.addEventListener('change', (e) => {
+      if (!selectedSection) return;
+      const newVal = e.target.value;
+      const oldVal = selectedSection.getAttribute('data-alignment') || 'text-left';
+      selectedSection.setAttribute('data-alignment', newVal);
+      selectedSection.classList.remove(oldVal);
+      selectedSection.classList.add(newVal);
+      saveCanvasStateToData();
+    });
+  }
+
+  if (inspectorGridCols) {
+    inspectorGridCols.addEventListener('change', (e) => {
+      if (!selectedSection) return;
+      const newVal = e.target.value;
+      const oldVal = selectedSection.getAttribute('data-grid-cols') || 'grid-cols-3';
+      selectedSection.setAttribute('data-grid-cols', newVal);
+
+      const id = selectedSection.getAttribute('data-section-id');
+      const gridContainer = document.getElementById(`${id}-grid-container`);
+      if (gridContainer) {
+        gridContainer.classList.remove(oldVal);
+        gridContainer.classList.add(newVal);
+      }
+
+      // Toggle 4th item visibility in gallery or stats if applicable
+      const img4 = document.getElementById(`${id}-img-4`);
+      if (img4) {
+        if (newVal === 'grid-cols-4') {
+          img4.classList.remove('hidden');
+        } else {
+          img4.classList.add('hidden');
+        }
+      }
+      const stat4 = document.getElementById(`${id}-stat-4`);
+      if (stat4) {
+        if (newVal === 'grid-cols-4') {
+          stat4.classList.remove('hidden');
+        } else {
+          stat4.classList.add('hidden');
+        }
+      }
+
+      saveCanvasStateToData();
+    });
+  }
+
+  if (builderDesktopBtn && builderMobileBtn && canvas && mobileStatusBar) {
+    builderDesktopBtn.addEventListener('click', () => {
+      builderDesktopBtn.className = "px-2.5 py-1 rounded bg-white text-slate-800 shadow-2xs transition-all cursor-pointer";
+      builderMobileBtn.className = "px-2.5 py-1 rounded text-slate-500 hover:text-slate-800 transition-all cursor-pointer";
+
+      canvas.style.width = '';
+      canvas.className = "flex-1 overflow-y-auto bg-white rounded-xl border border-slate-200 shadow-sm relative custom-scrollbar flex flex-col min-h-0 transition-all duration-300";
+
+      mobileStatusBar.classList.add('hidden');
+      mobileStatusBar.classList.remove('flex');
+    });
+
+    builderMobileBtn.addEventListener('click', () => {
+      builderMobileBtn.className = "px-2.5 py-1 rounded bg-white text-slate-800 shadow-2xs transition-all cursor-pointer";
+      builderDesktopBtn.className = "px-2.5 py-1 rounded text-slate-500 hover:text-slate-800 transition-all cursor-pointer";
+
+      canvas.style.width = '375px';
+      canvas.className = "flex-1 overflow-y-auto bg-white border-[12px] border-slate-900 rounded-[32px] mx-auto shadow-2xl relative custom-scrollbar flex flex-col min-h-0 transition-all duration-300";
+
+      mobileStatusBar.classList.remove('hidden');
+      mobileStatusBar.classList.add('flex');
     });
   }
 
@@ -2140,5 +2509,454 @@ function initVisualBuilder() {
   // Initial load
   window.builderPageManager.updatePageSelect();
   window.builderPageManager.loadPageCanvas(activePages[activeProject]);
+}
+
+// --- Dynamic Settings Page Implementation ---
+function syncSettingsFields() {
+  const proj = projectData[activeProject];
+  if (!proj) return;
+
+  // General Settings
+  const settingName = document.getElementById('setting-project-name');
+  const settingLang = document.getElementById('setting-project-lang');
+  const settingDesc = document.getElementById('setting-project-desc');
+  if (settingName) settingName.value = proj.name || '';
+  if (settingLang) settingLang.value = proj.language || 'en';
+  if (settingDesc) settingDesc.value = proj.description || '';
+
+  // SEO Settings
+  const settingSeoTitle = document.getElementById('setting-seo-title');
+  const settingSeoDesc = document.getElementById('setting-seo-desc');
+  const settingAnalyticsId = document.getElementById('setting-analytics-id');
+  if (settingSeoTitle) {
+    settingSeoTitle.value = proj.seoTitle || '';
+    updateCharCounter('setting-seo-title', 'char-count-title', 60);
+  }
+  if (settingSeoDesc) {
+    settingSeoDesc.value = proj.seoDescription || '';
+    updateCharCounter('setting-seo-desc', 'char-count-desc', 160);
+  }
+  if (settingAnalyticsId) settingAnalyticsId.value = proj.analyticsId || '';
+
+  // Branding Settings
+  const settingAccentPicker = document.getElementById('setting-accent-color-picker');
+  const settingAccentHex = document.getElementById('setting-accent-color-hex');
+  const settingFontFamily = document.getElementById('setting-font-family');
+  if (settingAccentPicker) settingAccentPicker.value = proj.primaryColor || '#2563eb';
+  if (settingAccentHex) settingAccentHex.value = proj.primaryColor || '#2563eb';
+  if (settingFontFamily) settingFontFamily.value = proj.fontFamily || 'Inter';
+
+  // Team members
+  renderMembersTable();
+}
+
+function updateCharCounter(inputId, counterId, limit) {
+  const input = document.getElementById(inputId);
+  const counter = document.getElementById(counterId);
+  if (!input || !counter) return;
+  const len = input.value.length;
+  counter.innerText = `${len} / ${limit}`;
+  if (len > limit) {
+    counter.className = 'text-[10px] font-bold text-red-500';
+  } else {
+    counter.className = 'text-[10px] font-bold text-slate-400';
+  }
+}
+
+function renderMembersTable() {
+  const tbody = document.getElementById('settings-members-list-body');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  const proj = projectData[activeProject];
+  if (!proj || !proj.members) return;
+
+  proj.members.forEach((member, index) => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-slate-50/50 transition-colors opacity-0 translate-y-2';
+    const isOwner = member.role === 'Owner';
+    const actionsHtml = isOwner 
+      ? `<span class="text-[10px] font-medium text-slate-400">System Protected</span>`
+      : `<button type="button" class="remove-member-btn text-red-600 hover:text-red-800 hover:bg-red-55 p-1.5 rounded-md transition-all cursor-pointer hover:scale-110" data-member-index="${index}" title="Remove Member">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+          </svg>
+        </button>`;
+
+    tr.innerHTML = `
+      <td class="py-3 font-semibold text-slate-700 flex items-center space-x-2">
+        <img src="${member.avatar || '/avatar.png'}" class="w-6 h-6 rounded-full object-cover" alt="" />
+        <span>${member.name}</span>
+      </td>
+      <td class="py-3 text-slate-500 font-mono text-[11px]">${member.email}</td>
+      <td class="py-3">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold ${isOwner ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-slate-100 text-slate-600'}">${member.role}</span>
+      </td>
+      <td class="py-3 text-center">
+        ${actionsHtml}
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+    // Trigger enter animation
+    setTimeout(() => {
+      tr.classList.remove('opacity-0', 'translate-y-2');
+      tr.classList.add('opacity-100', 'translate-y-0');
+    }, index * 50);
+  });
+
+  // Bind remove buttons
+  tbody.querySelectorAll('.remove-member-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const index = parseInt(btn.getAttribute('data-member-index'));
+      const member = proj.members[index];
+      if (confirm(`Are you sure you want to remove ${member.name} from this project?`)) {
+        proj.members.splice(index, 1);
+        showToast(`Removed ${member.name}`, 'warning');
+        appendActivityLog(`Removed collaborator: ${member.name}`, `Just now · by You`, 'rose');
+        renderMembersTable();
+      }
+    });
+  });
+}
+
+function applyBrandingStyles() {
+  const proj = projectData[activeProject];
+  if (!proj) return;
+
+  const color = proj.primaryColor || '#2563eb';
+  const font = proj.fontFamily || 'Inter';
+
+  let styleEl = document.getElementById('dynamic-branding-styles');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'dynamic-branding-styles';
+    document.head.appendChild(styleEl);
+  }
+
+  styleEl.innerHTML = `
+    :root {
+      --brand-primary: ${color};
+      --brand-font: '${font}', sans-serif;
+    }
+    
+    /* Apply Font Family */
+    body {
+      font-family: var(--brand-font) !important;
+    }
+
+    /* Override buttons or accent styles */
+    .bg-blue-600 {
+      background-color: var(--brand-primary) !important;
+    }
+    .text-blue-600 {
+      color: var(--brand-primary) !important;
+    }
+    .bg-blue-50 {
+      background-color: color-mix(in srgb, var(--brand-primary) 10%, transparent) !important;
+    }
+    .border-blue-200 {
+      border-color: color-mix(in srgb, var(--brand-primary) 20%, transparent) !important;
+    }
+    .border-blue-400 {
+      border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent) !important;
+    }
+    .focus\\:border-blue-400:focus {
+      border-color: var(--brand-primary) !important;
+    }
+    .group-hover\\:text-blue-500:hover {
+      color: var(--brand-primary) !important;
+    }
+  `;
+}
+
+function initSettingsPage() {
+  // 1. Settings sub-navigation tabs
+  const nav = document.getElementById('settings-nav');
+  if (nav) {
+    const buttons = nav.querySelectorAll('button[data-sett-tab]');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-sett-tab');
+        
+        // Active styling
+        buttons.forEach(b => {
+          b.className = "w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer";
+        });
+        btn.className = "w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all bg-blue-50 text-blue-600 cursor-pointer";
+
+        // Toggle panels
+        document.querySelectorAll('.settings-panel').forEach(panel => {
+          panel.classList.add('hidden');
+        });
+        const activePanel = document.getElementById(`settings-panel-${targetTab}`);
+        if (activePanel) activePanel.classList.remove('hidden');
+      });
+    });
+  }
+
+  // 2. Character counters binding
+  const seoTitleInput = document.getElementById('setting-seo-title');
+  const seoDescInput = document.getElementById('setting-seo-desc');
+  if (seoTitleInput) {
+    seoTitleInput.addEventListener('input', () => updateCharCounter('setting-seo-title', 'char-count-title', 60));
+  }
+  if (seoDescInput) {
+    seoDescInput.addEventListener('input', () => updateCharCounter('setting-seo-desc', 'char-count-desc', 160));
+  }
+
+  // 3. Save General Settings
+  const generalForm = document.getElementById('general-settings-form');
+  if (generalForm) {
+    generalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      const newName = document.getElementById('setting-project-name').value.trim();
+      const newLang = document.getElementById('setting-project-lang').value;
+      const newDesc = document.getElementById('setting-project-desc').value.trim();
+
+      if (!newName) return;
+
+      proj.name = newName;
+      proj.language = newLang;
+      proj.description = newDesc;
+
+      // Sync across header & sidebar elements
+      const sidebarProjName = document.getElementById('sidebar-project-name');
+      const headerProjName = document.getElementById('header-project-name');
+      if (sidebarProjName) sidebarProjName.innerText = newName;
+      if (headerProjName) headerProjName.innerText = newName;
+
+      // Update the Left Sidebar P1, P2 or MG button text if changed
+      const activeBtn = document.getElementById(`project-btn-${activeProject}`);
+      if (activeBtn) {
+        // Just extract first two letters
+        const initials = newName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        activeBtn.innerText = initials;
+      }
+
+      showToast('General Settings saved successfully!', 'success');
+      appendActivityLog('General settings updated', 'Just now · by You', 'blue');
+    });
+  }
+
+  // 4. Save SEO Settings
+  const seoForm = document.getElementById('seo-settings-form');
+  if (seoForm) {
+    seoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      proj.seoTitle = document.getElementById('setting-seo-title').value.trim();
+      proj.seoDescription = document.getElementById('setting-seo-desc').value.trim();
+      proj.analyticsId = document.getElementById('setting-analytics-id').value.trim();
+
+      showToast('SEO Settings saved successfully!', 'success');
+      appendActivityLog('SEO settings updated', 'Just now · by You', 'blue');
+    });
+  }
+
+  // 5. Invite Member Form
+  const inviteForm = document.getElementById('invite-member-form');
+  if (inviteForm) {
+    inviteForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      const name = document.getElementById('invite-name').value.trim();
+      const email = document.getElementById('invite-email').value.trim();
+      const role = document.getElementById('invite-role').value;
+
+      if (!name || !email) return;
+
+      // Check duplicate email
+      const exists = proj.members.some(m => m.email.toLowerCase() === email.toLowerCase());
+      if (exists) {
+        showToast('Member with this email is already in the project!', 'warning');
+        return;
+      }
+
+      proj.members.push({
+        name,
+        email,
+        role,
+        avatar: '/avatar.png'
+      });
+
+      showToast(`Invited ${name} as ${role}!`, 'success');
+      appendActivityLog(`Invited collaborator: ${name}`, 'Just now · by You', 'emerald');
+      inviteForm.reset();
+      renderMembersTable();
+    });
+  }
+
+  // 6. Branding Accent Color bindings
+  const accentPicker = document.getElementById('setting-accent-color-picker');
+  const accentHex = document.getElementById('setting-accent-color-hex');
+  if (accentPicker && accentHex) {
+    accentPicker.addEventListener('input', (e) => {
+      accentHex.value = e.target.value;
+    });
+    accentHex.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (/^#[0-9A-F]{6}$/i.test(val)) {
+        accentPicker.value = val;
+      }
+    });
+  }
+
+  const brandingForm = document.getElementById('branding-settings-form');
+  if (brandingForm) {
+    brandingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      proj.primaryColor = document.getElementById('setting-accent-color-picker').value;
+      proj.fontFamily = document.getElementById('setting-font-family').value;
+
+      // Apply branding changes
+      applyBrandingStyles();
+
+      showToast('Branding styles updated!', 'success');
+      appendActivityLog('Visual branding styles updated', 'Just now · by You', 'blue');
+    });
+  }
+
+  // Bind quick color preset chips
+  const colorChips = document.querySelectorAll('.preset-color-chip');
+  colorChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const color = chip.getAttribute('data-color');
+      if (accentPicker) accentPicker.value = color;
+      if (accentHex) accentHex.value = color;
+    });
+  });
+
+  // 7. Export static build bundle
+  const exportBtn = document.getElementById('export-site-btn');
+  const exportProgress = document.getElementById('export-status-container');
+  const exportLabel = document.getElementById('export-status-label');
+  const exportPct = document.getElementById('export-pct');
+  const exportFill = document.getElementById('export-progress-fill');
+  if (exportBtn && exportProgress) {
+    exportBtn.addEventListener('click', () => {
+      exportBtn.disabled = true;
+      exportProgress.classList.remove('hidden');
+      exportLabel.innerText = 'Packaging assets...';
+      exportPct.innerText = '0%';
+      exportFill.style.width = '0%';
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          exportLabel.innerText = 'Build package ready for download!';
+          showToast('Project static build exported!', 'success');
+          appendActivityLog('Project static build exported', 'Just now · by You', 'emerald');
+          exportBtn.disabled = false;
+          
+          // Trigger fake file download
+          const blob = new Blob([JSON.stringify(projectData[activeProject], null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${activeProject}_build_static.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        exportPct.innerText = `${progress}%`;
+        exportFill.style.width = `${progress}%`;
+      }, 150);
+    });
+  }
+
+  // 8. Delete Project Workflow
+  const openDeleteBtn = document.getElementById('open-delete-project-btn');
+  const deleteModal = document.getElementById('delete-project-modal');
+  const deleteCard = document.getElementById('delete-project-modal-card');
+  const closeDeleteBtn = document.getElementById('close-delete-project-modal');
+  const cancelDeleteBtn = document.getElementById('cancel-delete-project-btn');
+  const confirmDeleteBtn = document.getElementById('confirm-delete-project-btn');
+  const deleteInput = document.getElementById('delete-project-confirm-input');
+  const deleteNameSpan = document.getElementById('delete-project-name-span');
+
+  if (openDeleteBtn && deleteModal && deleteCard) {
+    openDeleteBtn.addEventListener('click', () => {
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      if (deleteNameSpan) deleteNameSpan.innerText = proj.name;
+      if (deleteInput) deleteInput.value = '';
+      if (confirmDeleteBtn) {
+        confirmDeleteBtn.disabled = true;
+        confirmDeleteBtn.className = "bg-red-600 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-not-allowed opacity-50";
+      }
+
+      toggleModalState(deleteModal, deleteCard, true);
+    });
+
+    const closeModal = () => toggleModalState(deleteModal, deleteCard, false);
+
+    if (closeDeleteBtn) closeDeleteBtn.addEventListener('click', closeModal);
+    if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeModal);
+
+    if (deleteInput) {
+      deleteInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        const proj = projectData[activeProject];
+        if (proj && val.toLowerCase() === proj.name.toLowerCase()) {
+          confirmDeleteBtn.disabled = false;
+          confirmDeleteBtn.className = "bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-pointer";
+        } else {
+          confirmDeleteBtn.disabled = true;
+          confirmDeleteBtn.className = "bg-red-600 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-not-allowed opacity-50";
+        }
+      });
+    }
+
+    if (confirmDeleteBtn) {
+      confirmDeleteBtn.addEventListener('click', () => {
+        const nameToDelete = projectData[activeProject].name;
+        const keys = Object.keys(projectData);
+        if (keys.length <= 1) {
+          showToast('Cannot delete the only workspace left!', 'warning');
+          closeModal();
+          return;
+        }
+
+        // Remove project from state
+        delete projectData[activeProject];
+        showToast(`Project "${nameToDelete}" successfully deleted.`, 'success');
+        
+        // Find another project to switch to
+        const remainingKeys = Object.keys(projectData);
+        const nextActive = remainingKeys[0];
+        
+        // Hide settings modal
+        closeModal();
+
+        // Switch to the other project button (which automatically triggers selectProject)
+        const targetBtn = document.getElementById(`project-btn-${nextActive}`);
+        if (targetBtn) {
+          targetBtn.click();
+        } else {
+          selectProject(nextActive);
+        }
+
+        // Switch tab back to Overview
+        const overviewTabBtn = document.querySelector('button[data-tab="overview"]');
+        if (overviewTabBtn) overviewTabBtn.click();
+      });
+    }
+  }
 }
 

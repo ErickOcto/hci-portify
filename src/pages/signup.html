@@ -3,100 +3,525 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create an Account - Portify</title>
+  <title>Create Account — Portify</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>body { font-family: 'Inter', sans-serif; }</style>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    .input-field {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.625rem;
+      font-size: 0.875rem;
+      color: #1e293b;
+      background: #f8fafc;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+    .input-field:focus {
+      border-color: #2563eb;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .input-field.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+    .input-field.success {
+      border-color: #10b981;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+    .input-wrapper { position: relative; }
+    .input-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+    .input-field.with-icon { padding-left: 2.5rem; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.7rem 1.25rem;
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: 0.625rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+    .btn-primary:hover { background: #1d4ed8; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4); }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { background: #93c5fd; box-shadow: none; cursor: not-allowed; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e2e8f0;
+    }
+
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.625rem;
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.625rem;
+      background: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    .btn-social:hover { background: #f8fafc; border-color: #cbd5e1; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+
+    .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 0.1rem;
+      border: none;
+      background: transparent;
+      transition: color 0.15s;
+    }
+    .toggle-password:hover { color: #475569; }
+
+    .field-error {
+      font-size: 0.72rem;
+      color: #ef4444;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    /* Password strength */
+    .strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: #e2e8f0;
+      transition: background 0.3s;
+      flex: 1;
+    }
+    .strength-bar.weak { background: #ef4444; }
+    .strength-bar.fair { background: #f59e0b; }
+    .strength-bar.good { background: #3b82f6; }
+    .strength-bar.strong { background: #10b981; }
+
+    /* Left panel */
+    .left-panel {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      filter: blur(40px);
+    }
+
+    /* Benefit items */
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+    }
+    .benefit-icon {
+      width: 2rem;
+      height: 2rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.75s linear infinite; }
+
+    /* Checkbox custom */
+    input[type="checkbox"] { accent-color: #2563eb; }
+  </style>
 </head>
-<body class="bg-white text-slate-800 min-h-screen flex">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex">
 
-  <!-- LEFT PANEL: Gradient intro -->
-  <aside class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-500 to-blue-700 flex-col justify-center px-16">
-    <h1 class="text-4xl font-extrabold text-white mb-4">Let's start !</h1>
-    <p class="text-lg font-semibold text-blue-100">Register to start your journey,,,</p>
-  </aside>
+  <!-- Left Panel -->
+  <div class="hidden lg:flex flex-col justify-between w-[44%] min-h-screen left-panel p-12 text-white">
+    <div class="blob w-72 h-72 -top-16 -left-16"></div>
+    <div class="blob w-56 h-56 bottom-32 right-0"></div>
+    <div class="blob w-40 h-40 top-1/2 left-8"></div>
 
-  <!-- RIGHT PANEL: Form -->
-  <main class="flex-1 flex flex-col justify-center px-8 sm:px-16 py-12">
-    <div class="max-w-md w-full mx-auto">
-      <h2 class="text-2xl font-bold text-blue-900 mb-1">Create an account</h2>
-      <p class="text-sm text-blue-400 mb-8">Enter your information below to create your account</p>
+    <!-- Logo -->
+    <div class="relative z-10 flex items-center space-x-2.5">
+      <div class="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-lg tracking-tight">Portify</span>
+    </div>
 
-      <form id="signup-form" class="space-y-5" onsubmit="handleSignup(event)">
+    <!-- Benefits -->
+    <div class="relative z-10 space-y-8">
+      <div>
+        <h2 class="text-3xl font-extrabold leading-tight mb-2">Everything you need<br/>to land your next role.</h2>
+        <p class="text-blue-100 text-sm">It's free. No credit card required.</p>
+      </div>
 
-        <div>
-          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Full Name</label>
-          <input id="full-name" type="text" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
+      <div class="space-y-5">
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-sm">AI-powered CV parsing</p>
+            <p class="text-blue-100 text-xs mt-0.5">Instantly extract your skills, experience, and education from any CV.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-sm">Professional templates</p>
+            <p class="text-blue-100 text-xs mt-0.5">Dozens of polished, recruiter-approved portfolio designs.</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253"/>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-sm">Custom domain & hosting</p>
+            <p class="text-blue-100 text-xs mt-0.5">Go live with your own .com or use a free portify.io subdomain.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative z-10 text-blue-200 text-xs">© 2026 Portify · All rights reserved</div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="flex-1 flex flex-col items-center justify-center px-6 py-12 min-h-screen overflow-y-auto">
+
+    <!-- Mobile Logo -->
+    <div class="flex lg:hidden items-center space-x-2 mb-8">
+      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
+        </svg>
+      </div>
+      <span class="font-bold text-lg text-slate-800">Portify</span>
+    </div>
+
+    <div class="w-full max-w-[420px]">
+      <!-- Header -->
+      <div class="mb-7">
+        <h2 class="text-2xl font-extrabold text-slate-900 mb-1">Create your account</h2>
+        <p class="text-sm text-slate-500">Free forever. No credit card needed.</p>
+      </div>
+
+      <!-- Social Buttons -->
+      <div class="grid grid-cols-2 gap-3 mb-6">
+        <button class="btn-social" onclick="handleSocialLogin('google')">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Google
+        </button>
+        <button class="btn-social" onclick="handleSocialLogin('github')">
+          <svg class="w-4 h-4 text-slate-800 fill-current" viewBox="0 0 24 24">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          GitHub
+        </button>
+      </div>
+
+      <div class="divider mb-6">or register with email</div>
+
+      <!-- Register Form -->
+      <form id="register-form" onsubmit="handleRegister(event)" novalidate>
+
+        <!-- Full Name -->
+        <div class="mb-4">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Full name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+              </svg>
+            </span>
+            <input id="name" type="text" class="input-field with-icon" placeholder="Jane Doe"
+              autocomplete="name" oninput="clearFieldError('name-error')" />
+          </div>
+          <p id="name-error" class="field-error">Please enter your full name.</p>
         </div>
 
-        <div>
-          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Email</label>
-          <input id="signup-email" type="email" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
-          <p class="text-xs text-blue-400 mt-1.5">We'll use this to contact you. We will not share your email with anyone else.</p>
+        <!-- Email -->
+        <div class="mb-4">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Email address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+              </svg>
+            </span>
+            <input id="email" type="email" class="input-field with-icon" placeholder="you@example.com"
+              autocomplete="email" oninput="clearFieldError('email-error')" />
+          </div>
+          <p id="email-error" class="field-error">Please enter a valid email address.</p>
         </div>
 
-        <div>
-          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Password</label>
-          <input id="signup-password" type="password" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
-          <p class="text-xs text-blue-400 mt-1.5">Must be at least 8 characters.</p>
+        <!-- Password -->
+        <div class="mb-1.5">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+              </svg>
+            </span>
+            <input id="password" type="password" class="input-field with-icon" placeholder="Create a strong password"
+              autocomplete="new-password" style="padding-right: 2.75rem;"
+              oninput="clearFieldError('password-error'); updateStrength(this.value)" />
+            <button type="button" class="toggle-password" onclick="togglePassword('password', 'eye-1')" aria-label="Toggle">
+              <svg id="eye-1" class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </button>
+          </div>
+          <p id="password-error" class="field-error">Password must be at least 8 characters.</p>
         </div>
 
-        <div>
-          <label class="text-sm font-semibold text-blue-900 block mb-1.5">Confirm Password</label>
-          <input id="signup-confirm-password" type="password" class="w-full bg-blue-50/60 border border-blue-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-blue-500 transition" />
-          <p class="text-xs text-blue-400 mt-1.5">Please confirm your password.</p>
+        <!-- Password Strength -->
+        <div id="strength-section" class="mb-4 hidden">
+          <div class="flex items-center space-x-1.5 mb-1.5">
+            <div class="strength-bar" id="bar-1"></div>
+            <div class="strength-bar" id="bar-2"></div>
+            <div class="strength-bar" id="bar-3"></div>
+            <div class="strength-bar" id="bar-4"></div>
+          </div>
+          <p class="text-xs font-semibold" id="strength-label" style="color:#94a3b8">Strength: —</p>
         </div>
 
-        <!-- Error message -->
-        <div id="signup-error" class="hidden bg-red-50 border border-red-200 text-red-600 text-xs rounded-lg px-4 py-3"></div>
+        <!-- Confirm Password -->
+        <div class="mb-5">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Confirm password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+              </svg>
+            </span>
+            <input id="confirm-password" type="password" class="input-field with-icon" placeholder="Repeat your password"
+              autocomplete="new-password" style="padding-right: 2.75rem;"
+              oninput="clearFieldError('confirm-error')" />
+            <button type="button" class="toggle-password" onclick="togglePassword('confirm-password', 'eye-2')" aria-label="Toggle">
+              <svg id="eye-2" class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </button>
+          </div>
+          <p id="confirm-error" class="field-error">Passwords do not match.</p>
+        </div>
 
-        <button type="submit" class="w-full bg-blue-900 text-white font-semibold py-3 rounded-xl hover:bg-blue-800 transition text-sm">Create Account</button>
-        <button type="button" onclick="mockGoogleSignup()" class="w-full bg-blue-50/60 border border-blue-200 text-blue-900 font-semibold py-3 rounded-xl hover:bg-blue-50 transition text-sm">Sign up with Google</button>
+        <!-- Terms -->
+        <div class="mb-6">
+          <div class="flex items-start space-x-2.5">
+            <input id="terms" type="checkbox" class="w-4 h-4 mt-0.5 rounded cursor-pointer" />
+            <label for="terms" class="text-xs text-slate-500 cursor-pointer leading-relaxed">
+              I agree to Portify's
+              <a href="#" class="text-blue-600 font-semibold hover:underline">Terms of Service</a>
+              and
+              <a href="#" class="text-blue-600 font-semibold hover:underline">Privacy Policy</a>
+            </label>
+          </div>
+          <p id="terms-error" class="field-error ml-6">You must agree to the terms.</p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="register-btn" class="btn-primary">
+          <span id="register-btn-text" class="flex items-center justify-center space-x-2">
+            <span>Create account</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+          </span>
+        </button>
       </form>
 
-      <p class="text-sm text-blue-700 text-center mt-6">Already have an account? <a href="login.html" class="underline font-semibold">Login</a></p>
+      <!-- Sign in Link -->
+      <p class="text-center text-sm text-slate-500 mt-6">
+        Already have an account?
+        <a href="login.html" class="font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">Sign in</a>
+      </p>
     </div>
-  </main>
+  </div>
 
   <script>
-    function handleSignup(e) {
+    function togglePassword(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/>
+        `;
+      } else {
+        input.type = 'password';
+        icon.innerHTML = `
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        `;
+      }
+    }
+
+    function clearFieldError(errorId) {
+      const el = document.getElementById(errorId);
+      if (el) {
+        el.classList.remove('show');
+        const inputId = errorId.replace('-error', '');
+        const input = document.getElementById(inputId);
+        if (input) input.classList.remove('error');
+      }
+    }
+
+    function showFieldError(errorId, msg) {
+      const el = document.getElementById(errorId);
+      if (el) {
+        if (msg) el.textContent = msg;
+        el.classList.add('show');
+        const inputId = errorId.replace('-error', '');
+        const input = document.getElementById(inputId);
+        if (input) input.classList.add('error');
+      }
+    }
+
+    function updateStrength(value) {
+      const section = document.getElementById('strength-section');
+      const label = document.getElementById('strength-label');
+      const bars = [document.getElementById('bar-1'), document.getElementById('bar-2'), document.getElementById('bar-3'), document.getElementById('bar-4')];
+
+      if (!value) {
+        section.classList.add('hidden');
+        return;
+      }
+      section.classList.remove('hidden');
+
+      let score = 0;
+      if (value.length >= 8) score++;
+      if (value.length >= 12) score++;
+      if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+      if (/[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value)) score++;
+
+      const levels = [
+        { label: 'Weak', color: '#ef4444', cls: 'weak' },
+        { label: 'Fair', color: '#f59e0b', cls: 'fair' },
+        { label: 'Good', color: '#3b82f6', cls: 'good' },
+        { label: 'Strong', color: '#10b981', cls: 'strong' },
+      ];
+
+      const level = levels[Math.max(0, score - 1)];
+      label.textContent = `Strength: ${level.label}`;
+      label.style.color = level.color;
+
+      bars.forEach((bar, i) => {
+        bar.className = 'strength-bar';
+        if (i < score) bar.classList.add(level.cls);
+      });
+    }
+
+    function handleSocialLogin(provider) {
+      alert(`${provider.charAt(0).toUpperCase() + provider.slice(1)} OAuth coming soon!`);
+    }
+
+    function setLoading(loading) {
+      const btn = document.getElementById('register-btn');
+      const text = document.getElementById('register-btn-text');
+      btn.disabled = loading;
+      if (loading) {
+        text.innerHTML = `
+          <svg class="spinner w-4 h-4" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+          <span>Creating account...</span>
+        `;
+      } else {
+        text.innerHTML = `
+          <span>Create account</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+          </svg>
+        `;
+      }
+    }
+
+    function handleRegister(e) {
       e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirm-password').value;
+      const terms = document.getElementById('terms').checked;
+      let valid = true;
 
-      const fullName = document.getElementById('full-name').value.trim();
-      const email = document.getElementById('signup-email').value.trim();
-      const password = document.getElementById('signup-password').value;
-      const confirmPassword = document.getElementById('signup-confirm-password').value;
+      if (!name) { showFieldError('name-error'); valid = false; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldError('email-error'); valid = false; }
+      if (!password || password.length < 8) { showFieldError('password-error'); valid = false; }
+      if (!confirm || confirm !== password) { showFieldError('confirm-error', 'Passwords do not match.'); valid = false; }
+      if (!terms) { showFieldError('terms-error'); valid = false; }
+      if (!valid) return;
 
-      if (!fullName || !email || !password || !confirmPassword) {
-        showSignupError('Please fill in all fields.');
-        return;
-      }
-      if (password.length < 8) {
-        showSignupError('Password must be at least 8 characters.');
-        return;
-      }
-      if (password !== confirmPassword) {
-        showSignupError('Passwords do not match.');
-        return;
-      }
+      setLoading(true);
 
-      hideSignupError();
-      // Account created (simulated) — start the onboarding wizard
-      window.location.href = 'upload-cv.html';
-    }
-
-    function showSignupError(msg) {
-      const errorBox = document.getElementById('signup-error');
-      errorBox.textContent = msg;
-      errorBox.classList.remove('hidden');
-    }
-
-    function hideSignupError() {
-      document.getElementById('signup-error').classList.add('hidden');
-    }
-
-    function mockGoogleSignup() {
-      showSignupError('Google sign-up is simulated in this demo — please use the form above instead.');
+      setTimeout(() => {
+        setLoading(false);
+        // Simulate successful registration
+        window.location.href = '/src/pages/upload-cv.html';
+      }, 1400);
     }
   </script>
 </body>

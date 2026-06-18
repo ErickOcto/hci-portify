@@ -3,314 +3,790 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Macbook Gng — Create a Stunning Portfolio</title>
+  <title>MacbookGng — Create a Stunning Portfolio in 3 Minutes</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>body { font-family: 'Inter', sans-serif; }</style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #2563EB;
+      --blue-dark: #1D4ED8;
+      --blue-light: #EFF6FF;
+      --blue-mid: #60A5FA;
+    }
+    body { font-family: 'Inter', sans-serif; color: #0D1117; }
+
+    .grid-bg {
+      background-color: #ffffff;
+      background-image:
+        linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .marquee-track { display: flex; width: max-content; animation: marquee 28s linear infinite; align-items: center; }
+    .marquee-track:hover { animation-play-state: paused; }
+
+    #mobile-menu { transition: max-height 0.3s ease, opacity 0.3s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    #mobile-menu.open { max-height: 400px; opacity: 1; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue); color: white;
+      font-weight: 700; font-size: 0.9rem;
+      padding: 0.7rem 1.6rem; border-radius: 9999px;
+      border: none; cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+      text-decoration: none;
+    }
+    .btn-primary:hover { background: var(--blue-dark); box-shadow: 0 6px 20px rgba(37,99,235,0.45); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; color: #0D1117;
+      font-weight: 600; font-size: 0.9rem;
+      padding: 0.65rem 1.6rem; border-radius: 9999px;
+      border: 1.5px solid #d1d5db; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      text-decoration: none;
+    }
+    .btn-outline:hover { background: #f9fafb; border-color: #9ca3af; }
+
+    .btn-outline-blue {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--blue);
+      font-weight: 600; font-size: 0.875rem;
+      padding: 0.55rem 1.2rem; border-radius: 9999px;
+      border: 1.5px solid var(--blue); cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .btn-outline-blue:hover { background: var(--blue-light); }
+
+    .nav-link { font-size: 0.9rem; font-weight: 500; color: #374151; transition: color 0.15s; text-decoration: none; }
+    .nav-link:hover, .nav-link.active { color: var(--blue); }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700;
+      color: var(--blue); letter-spacing: 0.12em; text-transform: uppercase;
+      background: var(--blue-light); padding: 0.3rem 0.9rem;
+      border-radius: 9999px; border: 1px solid rgba(37,99,235,0.2);
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background: white; border: 1px solid #e5e7eb;
+      border-radius: 1rem; transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .card:hover { box-shadow: 0 8px 30px rgba(37,99,235,0.1); border-color: #bfdbfe; transform: translateY(-2px); }
+
+    .icon-badge {
+      width: 2.5rem; height: 2.5rem; border-radius: 0.625rem;
+      background: var(--blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .step-circle {
+      width: 3rem; height: 3rem; border-radius: 50%;
+      background: var(--blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 800; flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+    }
+
+    .check { width: 1.1rem; height: 1.1rem; border-radius: 50%; background: #10b981; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .check-x { width: 1.1rem; height: 1.1rem; border-radius: 50%; background: #e5e7eb; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .ptab { padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: #6b7280; transition: background 0.15s, color 0.15s; }
+    .ptab.active { background: var(--blue); color: white; box-shadow: 0 2px 8px rgba(37,99,235,0.3); }
+
+    .popular-ring { border: 2px solid var(--blue); box-shadow: 0 12px 40px rgba(37,99,235,0.18); }
+
+    .avatar { width: 2rem; height: 2rem; border-radius: 50%; border: 2px solid white; margin-left: -0.5rem; display: inline-flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; }
+    .avatar:first-child { margin-left: 0; }
+
+    .cta-bg {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563EB 55%, #60A5FA 100%);
+      position: relative; overflow: hidden;
+    }
+    .cta-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .db-sidebar-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 0.5rem; font-size: 0.7rem; font-weight: 500; color: #6b7280; cursor: pointer; }
+    .db-sidebar-item.active { background: #eff6ff; color: var(--blue); }
+    .db-sidebar-item svg { flex-shrink: 0; }
+  </style>
 </head>
-<body class="bg-white text-slate-800 min-h-screen">
+<body class="bg-white overflow-x-hidden">
 
   <!-- NAVBAR -->
-  <header class="border-b border-slate-200 px-6 py-3 sticky top-0 bg-white/90 backdrop-blur z-50">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <a href="landing.html" class="flex items-center gap-2 shrink-0">
-        <img src="/favicon.svg" alt="Macbook Gng" class="w-7 h-7" />
-        <span class="font-bold text-slate-900 text-base">Macbook Gng</span>
+  <header id="navbar" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100" style="transition: box-shadow 0.2s;">
+    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="landing.html" class="flex items-center gap-2.5 shrink-0">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="4" fill="#2563EB"/>
+          <line x1="16" y1="2" x2="16" y2="8" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="16" y1="24" x2="16" y2="30" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="2" y1="16" x2="8" y2="16" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="24" y1="16" x2="30" y2="16" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="5.757" y1="5.757" x2="9.757" y2="9.757" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="22.243" y1="22.243" x2="26.243" y2="26.243" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="26.243" y1="5.757" x2="22.243" y2="9.757" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="9.757" y1="22.243" x2="5.757" y2="26.243" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span class="font-extrabold text-[#2563EB] text-lg tracking-tight">MacbookGng</span>
       </a>
-      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
-        <a href="#" class="hover:text-blue-600 transition-colors">Home</a>
-        <a href="#" class="hover:text-blue-600 transition-colors">About Us</a>
-        <a href="#" class="hover:text-blue-600 transition-colors">Features</a>
-        <a href="#pricing" class="hover:text-blue-600 transition-colors">Pricing</a>
-        <a href="#" class="hover:text-blue-600 transition-colors">Community</a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="landing.html" class="nav-link active">Home</a>
+        <a href="#about" class="nav-link">About Us</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#community" class="nav-link">Community</a>
       </nav>
-      <a href="#" class="border border-slate-200 text-slate-700 text-sm font-semibold px-4 py-2 rounded-lg hover:bg-slate-50 transition shrink-0">Contact Us</a>
+
+      <div class="hidden md:flex items-center gap-3">
+        <a href="login.html" class="nav-link px-2">Sign in</a>
+        <a href="#" class="btn-outline-blue">Contact Us</a>
+      </div>
+
+      <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobile-menu" class="md:hidden bg-white border-t border-gray-100 px-6">
+      <nav class="py-4 flex flex-col gap-1">
+        <a href="landing.html" class="py-2 text-sm font-semibold text-blue-600">Home</a>
+        <a href="#about" class="py-2 text-sm font-medium text-gray-600 hover:text-blue-600" onclick="toggleMobileMenu()">About Us</a>
+        <a href="#features" class="py-2 text-sm font-medium text-gray-600 hover:text-blue-600" onclick="toggleMobileMenu()">Features</a>
+        <a href="#pricing" class="py-2 text-sm font-medium text-gray-600 hover:text-blue-600" onclick="toggleMobileMenu()">Pricing</a>
+        <a href="#community" class="py-2 text-sm font-medium text-gray-600 hover:text-blue-600" onclick="toggleMobileMenu()">Community</a>
+        <div class="pt-3 border-t border-gray-100 flex flex-col gap-2 mt-1">
+          <a href="login.html" class="text-center py-2.5 text-sm font-semibold text-gray-700 border border-gray-200 rounded-full">Sign in</a>
+          <a href="signup.html" class="text-center py-2.5 text-sm font-semibold text-white rounded-full" style="background:#2563EB">Get Started</a>
+        </div>
+      </nav>
     </div>
   </header>
 
+
   <!-- HERO -->
-  <section class="px-6 pt-16 pb-10 text-center">
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight max-w-2xl mx-auto">
-      Create a Stunning Portfolio 🚀<br />
-      in <span class="text-blue-600">Just 3 Minutes</span>
-    </h1>
-    <p class="text-sm text-slate-500 mt-4 max-w-md mx-auto">No coding. No design skills needed. Just pick a template and go live.</p>
-    <div class="flex items-center justify-center gap-3 mt-7">
-      <a href="signup.html" class="bg-blue-600 text-white font-semibold text-sm px-6 py-2.5 rounded-lg hover:bg-blue-700 transition">Get Started</a>
-      <a href="../../index.html" class="border border-slate-200 text-slate-700 font-semibold text-sm px-6 py-2.5 rounded-lg hover:bg-slate-50 transition">View Demo</a>
+  <section class="grid-bg px-6 pt-16 pb-0 md:pt-24 relative">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,255,255,0.9) 0%, transparent 70%)"></div>
+
+    <div class="relative max-w-4xl mx-auto text-center pb-8">
+      <div class="reveal mb-7">
+        <span class="section-label">AI-powered portfolio builder</span>
+      </div>
+
+      <h1 class="reveal text-4xl sm:text-5xl md:text-6xl font-black leading-[1.08] tracking-tight text-gray-900 mb-4">
+        Create a Stunning Portfolio 🚀<br/>
+        in <span style="color:#2563EB">Just 3 Minutes</span>
+      </h1>
+
+      <p class="reveal text-base text-gray-500 max-w-md mx-auto leading-relaxed mb-9">
+        No coding. No design skills needed. Just pick a template and go live.
+      </p>
+
+      <div class="reveal flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+        <a href="signup.html" class="btn-primary">Get Started</a>
+        <a href="../../index.html" class="btn-outline">View Demo</a>
+      </div>
+    </div>
+
+    <!-- Dashboard Mockup -->
+    <div class="reveal relative max-w-5xl mx-auto">
+      <div class="bg-white rounded-2xl overflow-hidden border border-gray-200" style="box-shadow: 0 24px 80px rgba(37,99,235,0.15), 0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Browser bar -->
+        <div class="bg-gray-50 border-b border-gray-200 px-4 py-2.5 flex items-center gap-3">
+          <div class="flex gap-1.5">
+            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+            <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+          </div>
+          <div class="flex-1 bg-white border border-gray-200 rounded-md px-3 py-1 flex items-center gap-2 max-w-sm mx-auto">
+            <svg class="w-3 h-3 text-gray-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75"/><path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5h18v10.5a.75.75 0 01-.75.75H3.75a.75.75 0 01-.75-.75V10.5z"/></svg>
+            <span class="text-[11px] text-gray-400">app.macbookgng.io/dashboard</span>
+          </div>
+        </div>
+
+        <!-- Dashboard body -->
+        <div class="flex" style="background:#f8fafc; min-height: 460px;">
+
+          <!-- Icon rail -->
+          <div class="w-14 bg-white border-r border-gray-100 flex flex-col items-center py-3 gap-2.5 shrink-0">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-sm" style="background:#2563EB;">MG</div>
+            <div class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-xs font-semibold text-gray-400 hover:border-blue-400 cursor-pointer">P1</div>
+            <div class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-xs font-semibold text-gray-400 hover:border-blue-400 cursor-pointer">P2</div>
+            <div class="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-xs font-semibold text-gray-400 hover:border-blue-400 cursor-pointer">P3</div>
+            <div class="w-9 h-9 rounded-xl border border-dashed border-gray-300 flex items-center justify-center text-lg font-light text-gray-400 cursor-pointer">+</div>
+            <div class="mt-auto w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold">JD</div>
+          </div>
+
+          <!-- Sidebar nav -->
+          <div class="w-52 bg-white border-r border-gray-100 flex flex-col py-4 shrink-0">
+            <div class="px-4 mb-5 flex items-center justify-between">
+              <button class="flex items-center gap-1.5 font-bold text-gray-800 text-sm">
+                <span>Macbook Gng</span>
+                <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+              </button>
+            </div>
+            <nav class="px-2 space-y-0.5">
+              <div class="db-sidebar-item active">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+                Dashboard
+              </div>
+              <div class="db-sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
+                Performance
+              </div>
+              <div class="db-sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75"/></svg>
+                Database
+              </div>
+              <div class="db-sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3"/></svg>
+                Domain
+              </div>
+              <div class="db-sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Live Preview
+              </div>
+              <div class="db-sidebar-item">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.992l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Settings
+              </div>
+            </nav>
+          </div>
+
+          <!-- Main content -->
+          <div class="flex-1 flex flex-col min-w-0">
+            <div class="bg-white border-b border-gray-100 h-11 flex items-center justify-between px-5 shrink-0">
+              <div class="flex items-center gap-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                <span>Macbook Gng</span>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                <span class="text-gray-600">Dashboard</span>
+              </div>
+              <div class="hidden sm:flex bg-gray-100 rounded-lg px-2.5 py-1 items-center gap-1.5 w-36">
+                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+                <span class="text-[10px] text-gray-400">Search…</span>
+              </div>
+            </div>
+
+            <div class="p-4 overflow-y-hidden grid grid-cols-1 lg:grid-cols-3 gap-3" style="height: calc(460px - 44px);">
+
+              <!-- Recent Activity -->
+              <div class="bg-white border border-gray-100 rounded-xl p-4 flex flex-col overflow-hidden">
+                <div class="flex items-center justify-between mb-3 shrink-0">
+                  <div>
+                    <p class="text-xs font-bold text-gray-800">Recent activity</p>
+                    <p class="text-[10px] text-gray-400">Latest changes on your site</p>
+                  </div>
+                  <span class="text-[10px] font-bold" style="color:#2563EB">View All</span>
+                </div>
+                <div class="space-y-2.5 overflow-hidden">
+                  <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-lg flex items-center justify-center shrink-0" style="background:#EFF6FF">
+                      <svg class="w-3 h-3" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                    </div>
+                    <div><p class="text-[11px] font-semibold text-gray-700">Products page edited</p><p class="text-[10px] text-gray-400">2 hours ago · by You</p></div>
+                  </div>
+                  <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
+                      <svg class="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div><p class="text-[11px] font-semibold text-gray-700">Site deployed successfully</p><p class="text-[10px] text-gray-400">5 hours ago · by You</p></div>
+                  </div>
+                  <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
+                      <svg class="w-3 h-3 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"/></svg>
+                    </div>
+                    <div><p class="text-[11px] font-semibold text-gray-700">SEO settings updated</p><p class="text-[10px] text-gray-400">yesterday · by Hafizh</p></div>
+                  </div>
+                  <div class="flex items-start gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-rose-50 flex items-center justify-center shrink-0">
+                      <svg class="w-3 h-3 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+                    </div>
+                    <div><p class="text-[11px] font-semibold text-gray-700">SSL certificate renewed</p><p class="text-[10px] text-gray-400">2 hours ago · by Claude</p></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="lg:col-span-2 bg-white border border-gray-100 rounded-xl p-4 flex flex-col overflow-hidden">
+                <div class="shrink-0 mb-3">
+                  <p class="text-xs font-bold text-gray-800">Quick Actions</p>
+                  <p class="text-[10px] text-gray-400">Common tasks, one click away</p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 flex-1">
+                  <div class="flex flex-col items-center justify-center gap-1.5 rounded-xl py-3 cursor-pointer border border-transparent hover:border-blue-100" style="background:#f8fafc">
+                    <div class="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                      <svg class="w-3.5 h-3.5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-600">Add new page</span>
+                  </div>
+                  <div class="flex flex-col items-center justify-center gap-1.5 rounded-xl py-3 cursor-pointer border border-transparent hover:border-blue-100" style="background:#f8fafc">
+                    <div class="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                      <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-600">Check SEO</span>
+                  </div>
+                  <div class="flex flex-col items-center justify-center gap-1.5 rounded-xl py-3 cursor-pointer border border-transparent hover:border-blue-100" style="background:#f8fafc">
+                    <div class="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                      <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-600">Preview page</span>
+                  </div>
+                  <div class="flex flex-col items-center justify-center gap-1.5 rounded-xl py-3 cursor-pointer border border-transparent hover:border-blue-100" style="background:#f8fafc">
+                    <div class="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                      <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5h10.5a2.25 2.25 0 002.25-2.25v-10.5A2.25 2.25 0 0017.25 4.5H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z"/></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-600">Deploy site</span>
+                  </div>
+                  <div class="flex flex-col items-center justify-center gap-1.5 rounded-xl py-3 cursor-pointer border border-transparent hover:border-blue-100" style="background:#f8fafc">
+                    <div class="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                      <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l1.29 1.29"/></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-600">Manage media</span>
+                  </div>
+                  <div class="flex flex-col items-center justify-center gap-1.5 rounded-xl py-3 cursor-pointer border border-transparent hover:border-blue-100" style="background:#f8fafc">
+                    <div class="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+                      <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828"/></svg>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-600">Site settings</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom faded rows -->
+              <div class="bg-white border border-gray-100 rounded-xl p-4" style="opacity:0.45">
+                <p class="text-xs font-bold text-gray-800 mb-0.5">Website Status</p>
+                <p class="text-[10px] text-gray-400">Your website is live &amp; accessible.</p>
+              </div>
+              <div class="bg-white border border-gray-100 rounded-xl p-4" style="opacity:0.35">
+                <p class="text-xs font-bold text-gray-800 mb-0.5">Performance Overview</p>
+                <p class="text-[10px] text-gray-400">See how your website is performing.</p>
+              </div>
+              <div class="bg-white border border-gray-100 rounded-xl p-4" style="opacity:0.25">
+                <p class="text-xs font-bold text-gray-800 mb-0.5">Pages</p>
+                <p class="text-[10px] text-gray-400">Manage your website structure.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 h-24 pointer-events-none" style="background: linear-gradient(to top, #fafafa 0%, transparent 100%)"></div>
     </div>
   </section>
 
-  <!-- DASHBOARD MOCKUP (decorative preview of the actual dashboard) -->
-  <section class="px-6 pb-20">
-    <div class="max-w-3xl mx-auto bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden">
-      <div class="bg-slate-50 border-b border-slate-200 px-4 py-2.5 flex items-center gap-2.5">
-        <span class="w-6 h-6 rounded-md bg-blue-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">MG</span>
-        <span class="text-[11px] text-slate-400 flex items-center gap-1">
-          Macbook Gng
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3 h-3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-          </svg>
-          <span class="px-0.5">›</span> Dashboard
-        </span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 bg-slate-50">
-        <div class="bg-white border border-slate-100 rounded-xl p-4">
-          <div class="flex items-center justify-between mb-3">
-            <p class="text-xs font-bold text-slate-700">Recent activity</p>
-            <span class="text-[10px] font-semibold text-blue-600">View All</span>
-          </div>
-          <div class="space-y-2.5">
-            <p class="text-[11px] text-slate-500">📝 Products page edited <span class="text-slate-300">· 2 hours ago</span></p>
-            <p class="text-[11px] text-slate-500">✅ Site deployed successfully <span class="text-slate-300">· 5 hours ago</span></p>
-            <p class="text-[11px] text-slate-500">🔍 SEO settings updated <span class="text-slate-300">· yesterday</span></p>
-            <p class="text-[11px] text-slate-500">🔒 SSL certificate renewed <span class="text-slate-300">· yesterday</span></p>
-          </div>
-        </div>
-        <div class="bg-white border border-slate-100 rounded-xl p-4">
-          <p class="text-xs font-bold text-slate-700 mb-0.5">Quick Actions</p>
-          <p class="text-[10px] text-slate-400 mb-3">Common tasks, one click away</p>
-          <div class="grid grid-cols-2 gap-2">
-            <span class="bg-slate-50 border border-slate-100 rounded-lg text-[11px] font-medium text-slate-600 px-2 py-2 text-center">+ Add new page</span>
-            <span class="bg-slate-50 border border-slate-100 rounded-lg text-[11px] font-medium text-slate-600 px-2 py-2 text-center">🔍 Check SEO</span>
-            <span class="bg-slate-50 border border-slate-100 rounded-lg text-[11px] font-medium text-slate-600 px-2 py-2 text-center">👁 Preview page</span>
-            <span class="bg-slate-50 border border-slate-100 rounded-lg text-[11px] font-medium text-slate-600 px-2 py-2 text-center">🚀 Deploy site</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- TRUSTED BY -->
-  <section class="px-6 py-10 bg-slate-50 border-y border-slate-100">
-    <p class="text-center text-sm font-semibold text-slate-500 mb-6">Trusted by</p>
-    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-      <span class="text-lg font-bold text-slate-400">BCA</span>
-      <span class="text-lg font-bold text-slate-400">Tokopedia</span>
-      <span class="text-lg font-bold text-slate-400">1000</span>
-      <span class="text-lg font-bold text-slate-400">Kominfo</span>
-      <span class="text-lg font-bold text-slate-400">blibli</span>
-      <span class="text-lg font-bold text-slate-400">Midtrans</span>
-      <span class="text-lg font-bold text-slate-400">TikTok</span>
+  <section class="py-12 border-y border-gray-100 overflow-hidden bg-white">
+    <p class="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-8">Trusted by</p>
+    <div class="relative">
+      <div class="marquee-track gap-14 px-8">
+        <span class="text-xl font-black text-gray-200 shrink-0">BCA</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">Tokopedia</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">1000Startups</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">Kominfo</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">blibli</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">Midtrans</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">TikTok</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">BCA</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">Tokopedia</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">1000Startups</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">Kominfo</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">blibli</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">Midtrans</span>
+        <span class="text-xl font-black text-gray-200 shrink-0">TikTok</span>
+      </div>
+      <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none"></div>
+      <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none"></div>
     </div>
   </section>
 
-  <!-- WHY IT IS HARD -->
-  <section class="px-6 py-20">
-    <h2 class="text-2xl font-bold text-slate-900 text-center mb-10">Why it is hard</h2>
-    <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
-        <div class="bg-blue-600 text-white w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8M12 3c2.5 2.667 4 6 4 9s-1.5 6.333-4 9c-2.5-2.667-4-6-4-9s1.5-6.333 4-9z" />
-          </svg>
-        </div>
-        <p class="text-sm font-semibold text-slate-700 pt-1.5">Do not know what to build</p>
+
+  <!-- WHY IT'S HARD -->
+  <section id="about" class="px-6 py-20 bg-white">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <span class="section-label">The problem</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Why it is <span style="color:#2563EB">hard</span></h2>
       </div>
-      <div class="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
-        <div class="bg-blue-600 text-white w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-          </svg>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="card p-6 reveal reveal-delay-1">
+          <div class="icon-badge mb-4">
+            <svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zM3.6 9h16.8M3.6 15h16.8M12 3c2.5 2.667 4 6 4 9s-1.5 6.333-4 9"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Don't know what to build</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Starting from a blank page is overwhelming — what sections, what order, what tone?</p>
         </div>
-        <p class="text-sm font-semibold text-slate-700 pt-1.5">Design is pretty difficult now</p>
-      </div>
-      <div class="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-4">
-        <div class="bg-blue-600 text-white w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18z" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v5l3 3" />
-          </svg>
+        <div class="card p-6 reveal reveal-delay-2">
+          <div class="icon-badge mb-4">
+            <svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Design is pretty difficult</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Making something look professional takes years of design experience most people don't have.</p>
         </div>
-        <p class="text-sm font-semibold text-slate-700 pt-1.5">It is going to take too much time</p>
+        <div class="card p-6 reveal reveal-delay-3">
+          <div class="icon-badge mb-4">
+            <svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">It takes too much time</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Design, copy, coding, hosting — a portfolio can steal weeks of your evenings.</p>
+        </div>
       </div>
     </div>
   </section>
+
+
+  <!-- FEATURES -->
+  <section id="features" class="px-6 py-20 border-y border-gray-100" style="background:#f8faff">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <span class="section-label">Features</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">We make the whole<br/><span style="color:#2563EB">process easy</span></h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="card p-6 bg-white reveal reveal-delay-1">
+          <div class="icon-badge mb-4"><svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg></div>
+          <h3 class="font-bold text-gray-900 mb-1.5">AI CV Parsing</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Upload your PDF and AI instantly extracts your skills, experience, and projects.</p>
+        </div>
+        <div class="card p-6 bg-white reveal reveal-delay-2">
+          <div class="icon-badge mb-4"><svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5z"/></svg></div>
+          <h3 class="font-bold text-gray-900 mb-1.5">Professional Templates</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Dozens of recruiter-approved, mobile-ready portfolio designs to pick from.</p>
+        </div>
+        <div class="card p-6 bg-white reveal reveal-delay-3">
+          <div class="icon-badge mb-4"><svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3"/></svg></div>
+          <h3 class="font-bold text-gray-900 mb-1.5">Custom Domain + SSL</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Connect your own domain or use a free macbookgng.io subdomain. HTTPS always on.</p>
+        </div>
+        <div class="card p-6 bg-white reveal reveal-delay-1">
+          <div class="icon-badge mb-4"><svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625z"/></svg></div>
+          <h3 class="font-bold text-gray-900 mb-1.5">Analytics Dashboard</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">See who views your portfolio, which sections they read, and where traffic comes from.</p>
+        </div>
+        <div class="card p-6 bg-white reveal reveal-delay-2">
+          <div class="icon-badge mb-4"><svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg></div>
+          <h3 class="font-bold text-gray-900 mb-1.5">Visual Builder</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Drag-and-drop sections, tweak colors, swap fonts — zero code required.</p>
+        </div>
+        <div class="card p-6 bg-white reveal reveal-delay-3">
+          <div class="icon-badge mb-4"><svg class="w-5 h-5" style="color:#2563EB" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div>
+          <h3 class="font-bold text-gray-900 mb-1.5">One-click Deploy</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Hit publish and you're live in seconds. Updates ship instantly, every single time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works" class="px-6 py-20 bg-white">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <span class="section-label">How it works</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Live in <span style="color:#2563EB">3 steps</span></h2>
+        <p class="text-gray-500 text-sm mt-2">From CV to published portfolio in under 3 minutes.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 relative">
+        <div class="hidden sm:block absolute top-[1.4rem] left-[36%] w-[28%] border-t border-dashed" style="border-color:#bfdbfe"></div>
+        <div class="hidden sm:block absolute top-[1.4rem] left-[68%] w-[14%] border-t border-dashed" style="border-color:#bfdbfe"></div>
+        <div class="flex flex-col items-center text-center reveal reveal-delay-1">
+          <div class="step-circle mb-5 relative z-10">1</div>
+          <h3 class="font-bold text-gray-900 text-base mb-2">Upload your CV</h3>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-[180px]">Drop in your PDF or DOCX. AI reads every detail instantly.</p>
+        </div>
+        <div class="flex flex-col items-center text-center reveal reveal-delay-2">
+          <div class="step-circle mb-5 relative z-10">2</div>
+          <h3 class="font-bold text-gray-900 text-base mb-2">AI builds your site</h3>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-[180px]">Pick a design theme. Your full portfolio generates in seconds.</p>
+        </div>
+        <div class="flex flex-col items-center text-center reveal reveal-delay-3">
+          <div class="step-circle mb-5 relative z-10">3</div>
+          <h3 class="font-bold text-gray-900 text-base mb-2">Publish instantly</h3>
+          <p class="text-sm text-gray-500 leading-relaxed max-w-[180px]">One click and you're live. Share your link and get hired.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- STATS -->
+  <section class="px-6 py-16" style="background:#2563EB">
+    <div class="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 text-white text-center">
+      <div class="reveal"><p class="text-4xl font-black">12K+</p><p class="text-blue-200 text-sm mt-1.5">Portfolios built</p></div>
+      <div class="reveal reveal-delay-1"><p class="text-4xl font-black">3 min</p><p class="text-blue-200 text-sm mt-1.5">Avg. build time</p></div>
+      <div class="reveal reveal-delay-2"><p class="text-4xl font-black">99.9%</p><p class="text-blue-200 text-sm mt-1.5">Uptime SLA</p></div>
+      <div class="reveal reveal-delay-3"><p class="text-4xl font-black">4.9★</p><p class="text-blue-200 text-sm mt-1.5">Average rating</p></div>
+    </div>
+  </section>
+
+
+  <!-- TESTIMONIALS -->
+  <section id="community" class="px-6 py-20 border-y border-gray-100" style="background:#f8faff">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-14 reveal">
+        <span class="section-label">Community</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2">Loved by job seekers</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="card bg-white p-6 reveal reveal-delay-1">
+          <div class="flex gap-0.5 mb-4">
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed mb-5">"Uploaded my CV on Monday, had two interview calls by Wednesday. The portfolio looked more professional than anything I could've built myself."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white text-xs font-bold">AR</div>
+            <div><p class="text-sm font-bold text-gray-900">Alicia R.</p><p class="text-xs text-gray-400">UX Designer · Hired at Tokopedia</p></div>
+          </div>
+        </div>
+        <div class="card bg-white p-6 reveal reveal-delay-2">
+          <div class="flex gap-0.5 mb-4">
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed mb-5">"As a fresh grad with zero coding skills, this was a lifesaver. My portfolio looks stunning and I had it live in literally 4 minutes."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-bold">JK</div>
+            <div><p class="text-sm font-bold text-gray-900">Jordan K.</p><p class="text-xs text-gray-400">Software Engineer · Fresh Grad</p></div>
+          </div>
+        </div>
+        <div class="card bg-white p-6 reveal reveal-delay-3">
+          <div class="flex gap-0.5 mb-4">
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg class="w-4 h-4 fill-current text-amber-400" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="text-sm text-gray-600 leading-relaxed mb-5">"I was paying $300/month for a freelancer to maintain my portfolio. MacbookGng replaced all of it — and honestly looks better."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white text-xs font-bold">MS</div>
+            <div><p class="text-sm font-bold text-gray-900">Maya S.</p><p class="text-xs text-gray-400">Product Manager · Blibli</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- PRICING -->
-  <section id="pricing" class="px-6 py-20 bg-slate-50 border-y border-slate-100">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl font-bold text-slate-900 mb-1">Pricing</h2>
-      <p class="text-sm text-slate-500">Simple, transparent pricing. Start for free, upgrade when you're ready.</p>
-    </div>
-
-    <!-- Monthly / Yearly Toggle -->
-    <div class="flex items-center justify-center gap-3 mb-10">
-      <span id="toggle-label-monthly" class="text-sm font-semibold text-slate-400">Monthly</span>
-      <button id="pricing-toggle" onclick="togglePricingPeriod()" class="relative w-12 h-6 bg-blue-600 rounded-full transition-colors shrink-0">
-        <span id="pricing-toggle-knob" class="absolute top-0.5 left-[26px] w-5 h-5 bg-white rounded-full shadow transition-all"></span>
-      </button>
-      <span id="toggle-label-yearly" class="text-sm font-semibold text-slate-800">Yearly</span>
-      <span id="save-badge" class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Save 20%</span>
-    </div>
-
-    <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-      <!-- Free Plan -->
-      <div class="bg-white border border-slate-200 rounded-2xl p-6">
-        <p class="text-xs font-bold text-slate-400 tracking-wider uppercase mb-2">Free</p>
-        <p class="text-3xl font-extrabold text-slate-900 mb-1">$0<span class="text-sm font-medium text-slate-400"> /forever</span></p>
-        <ul class="text-sm text-slate-600 space-y-2 my-6">
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            1 portfolio site
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            CV upload &amp; AI analysis
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            3 design themes
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Custom domain
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Unlimited AI edits
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Analytics
-          </li>
-        </ul>
-        <a href="signup.html" class="block w-full text-center border border-slate-200 text-slate-600 font-semibold text-sm py-2.5 rounded-lg hover:bg-slate-50 transition">Get Started Free</a>
+  <section id="pricing" class="px-6 py-20 bg-white">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-10 reveal">
+        <span class="section-label">Pricing</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-2 mb-2">Simple, transparent pricing</h2>
+        <p class="text-gray-500 text-sm">Start free. Upgrade when you need more.</p>
       </div>
 
-      <!-- Pro Plan -->
-      <div class="relative bg-blue-600 text-white rounded-2xl p-6 shadow-xl">
-        <span class="absolute -top-3 right-6 bg-amber-400 text-amber-900 text-[10px] font-bold px-2.5 py-1 rounded-full">Most Popular</span>
-        <p class="text-xs font-bold text-blue-200 tracking-wider uppercase mb-2">Pro</p>
-        <p class="text-3xl font-extrabold mb-1"><span id="pro-price">$9</span><span id="pro-price-note" class="text-sm font-medium text-blue-200"> /month, billed yearly</span></p>
-        <ul class="text-sm text-blue-50 space-y-2 my-6">
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Unlimited portfolio sites
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            CV upload &amp; AI analysis
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            All design themes
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Custom domain
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Unlimited AI edits
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            Analytics dashboard
-          </li>
-        </ul>
-        <a href="signup.html" class="flex items-center justify-center gap-2 w-full bg-white text-blue-600 font-semibold text-sm py-2.5 rounded-lg hover:bg-blue-50 transition">
-          Upgrade to Pro
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
-        </a>
+      <div class="flex items-center justify-center mb-10 reveal">
+        <div class="flex items-center gap-1 bg-gray-100 rounded-full p-1">
+          <button id="tab-monthly" class="ptab active" onclick="setPricing(false)">Monthly billing</button>
+          <button id="tab-yearly" class="ptab" onclick="setPricing(true)">
+            Annual billing
+            <span class="ml-1 bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full">Save 25%</span>
+          </button>
+        </div>
       </div>
 
-    </div>
-  </section>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
-  <!-- WE MAKE THE ALL PROCESS EASY -->
-  <section class="px-6 py-20">
-    <h2 class="text-2xl font-bold text-slate-900 text-center mb-10">We make the all process easy</h2>
-    <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <div class="border border-slate-200 rounded-xl text-center py-5 px-4">
-        <p class="text-sm font-semibold text-slate-700">1. Pick a template</p>
-      </div>
-      <div class="border border-slate-200 rounded-xl text-center py-5 px-4">
-        <p class="text-sm font-semibold text-slate-700">2. Auto design</p>
-      </div>
-      <div class="border border-slate-200 rounded-xl text-center py-5 px-4">
-        <p class="text-sm font-semibold text-slate-700">3. Publish instantly</p>
+        <!-- Starter -->
+        <div class="card p-7 reveal reveal-delay-1 flex flex-col">
+          <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Starter</p>
+          <div class="flex items-baseline gap-1 mb-1"><span class="text-4xl font-black text-gray-900">$0</span><span class="text-sm text-gray-400">/forever</span></div>
+          <p class="text-sm text-gray-500 mb-6">Everything you need to get started.</p>
+          <a href="signup.html" class="btn-outline w-full justify-center mb-7">Get started free</a>
+          <div>
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">FEATURES</p>
+            <ul class="space-y-2.5">
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>1 portfolio site</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>CV upload &amp; AI analysis</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>3 design themes</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>macbookgng.io subdomain</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-400"><span class="check-x"><svg class="w-2.5 h-2.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></span>Custom domain</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Pro -->
+        <div class="popular-ring bg-white rounded-2xl p-7 reveal reveal-delay-2 flex flex-col relative">
+          <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-white text-[10px] font-black px-3 py-1.5 rounded-full" style="background:#2563EB">Most Popular</span>
+          <p class="text-xs font-black uppercase tracking-widest mb-3" style="color:#2563EB">Pro</p>
+          <div class="flex items-baseline gap-1 mb-0.5"><span class="text-4xl font-black text-gray-900" id="pro-price">$9</span><span class="text-sm text-gray-400" id="pro-period">/month</span></div>
+          <p class="text-xs text-gray-400 mb-5" id="pro-note">Billed yearly · save $36/year</p>
+          <a href="signup.html" class="btn-primary w-full justify-center mb-7" style="border-radius:9999px">Upgrade to Pro</a>
+          <div>
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">FEATURES</p>
+            <ul class="space-y-2.5">
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Unlimited portfolio sites</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>All design themes</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Custom domain + SSL</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Unlimited AI edits</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Advanced analytics</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="card p-7 reveal reveal-delay-3 flex flex-col">
+          <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Enterprise</p>
+          <div class="flex items-baseline gap-1 mb-0.5"><span class="text-4xl font-black text-gray-900" id="ent-price">$29</span><span class="text-sm text-gray-400" id="ent-period">/month</span></div>
+          <p class="text-xs text-gray-400 mb-5" id="ent-note">Billed yearly</p>
+          <a href="signup.html" class="btn-outline w-full justify-center mb-7">Get started</a>
+          <div>
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">FEATURES</p>
+            <ul class="space-y-2.5">
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Team workspaces</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>White-label branding</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Priority 24/7 support</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Audit log &amp; data export</li>
+              <li class="flex items-center gap-2.5 text-sm text-gray-700"><span class="check"><svg class="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></span>Custom integrations</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
 
   <!-- CTA -->
-  <section class="px-6 py-20 text-center bg-gradient-to-b from-blue-50 to-white">
-    <h2 class="text-2xl sm:text-3xl font-extrabold text-blue-700 max-w-lg mx-auto leading-snug">Start Your Portfolio Today – It's Free</h2>
-    <div class="flex items-center justify-center gap-3 mt-7">
-      <a href="signup.html" class="bg-blue-600 text-white font-semibold text-sm px-6 py-2.5 rounded-lg hover:bg-blue-700 transition">Get Started for Free</a>
-      <a href="../../index.html" class="border border-slate-200 text-slate-700 font-semibold text-sm px-6 py-2.5 rounded-lg hover:bg-slate-50 transition">View Demo</a>
+  <section class="px-6 py-24 cta-bg">
+    <div class="relative z-10 max-w-2xl mx-auto text-center text-white reveal">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-4 leading-tight">Start Your Portfolio Today<br/>— It's Free</h2>
+      <p class="text-blue-100 text-sm mb-10 max-w-md mx-auto">Join 12,000+ professionals who built their portfolio on MacbookGng.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a href="signup.html" class="flex items-center gap-2 bg-white font-bold text-sm px-7 py-3.5 rounded-full hover:bg-blue-50 transition w-full sm:w-auto justify-center" style="color:#2563EB">
+          Get Started for Free
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+        </a>
+        <a href="../../index.html" class="flex items-center gap-2 bg-white/15 text-white font-semibold text-sm px-7 py-3.5 rounded-full hover:bg-white/20 transition border border-white/20 w-full sm:w-auto justify-center backdrop-blur-sm">
+          View Demo
+        </a>
+      </div>
+      <p class="text-blue-200 text-xs mt-5">No coding · No design skills needed · Just pick a template and go live</p>
     </div>
-    <p class="text-xs text-slate-400 mt-4">No coding. No design skills needed. Just pick a template and go live.</p>
   </section>
 
+
   <!-- FOOTER -->
-  <footer class="bg-blue-700 text-blue-100 px-6 py-12">
-    <div class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-4 gap-8">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <img src="/favicon.svg" alt="Macbook Gng" class="w-6 h-6" />
-          <span class="font-bold text-white text-sm">Macbook Gng</span>
+  <footer style="background:#1e3a8a" class="text-blue-200 px-6 py-14">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-10 mb-10">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="3.5" fill="white"/>
+              <line x1="16" y1="2" x2="16" y2="8" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="16" y1="24" x2="16" y2="30" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="2" y1="16" x2="8" y2="16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="24" y1="16" x2="30" y2="16" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="5.757" y1="5.757" x2="9.757" y2="9.757" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="22.243" y1="22.243" x2="26.243" y2="26.243" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="26.243" y1="5.757" x2="22.243" y2="9.757" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="9.757" y1="22.243" x2="5.757" y2="26.243" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span class="font-extrabold text-white text-sm">MacbookGng</span>
+          </div>
+          <p class="text-xs leading-relaxed text-blue-300">Build and publish a portfolio in minutes. No code required.</p>
         </div>
-        <p class="text-xs text-blue-200 leading-relaxed">Build and publish a portfolio website in minutes, no code required.</p>
-      </div>
-      <div>
-        <p class="text-xs font-bold text-white uppercase tracking-wider mb-3">Product</p>
-        <div class="flex flex-col gap-2 text-sm">
-          <a href="#" class="hover:text-white transition-colors">Features</a>
-          <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+        <div>
+          <p class="text-[11px] font-bold text-white uppercase tracking-widest mb-4">Product</p>
+          <div class="flex flex-col gap-2.5 text-sm">
+            <a href="#features" class="hover:text-white transition-colors">Features</a>
+            <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+            <a href="../../index.html" class="hover:text-white transition-colors">Demo</a>
+          </div>
+        </div>
+        <div>
+          <p class="text-[11px] font-bold text-white uppercase tracking-widest mb-4">Community</p>
+          <div class="flex flex-col gap-2.5 text-sm">
+            <a href="#about" class="hover:text-white transition-colors">About us</a>
+            <a href="#" class="hover:text-white transition-colors">Contact us</a>
+            <a href="#community" class="hover:text-white transition-colors">Reviews</a>
+          </div>
+        </div>
+        <div>
+          <p class="text-[11px] font-bold text-white uppercase tracking-widest mb-4">Legal</p>
+          <div class="flex flex-col gap-2.5 text-sm">
+            <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+          </div>
         </div>
       </div>
-      <div>
-        <p class="text-xs font-bold text-white uppercase tracking-wider mb-3">Community</p>
-        <div class="flex flex-col gap-2 text-sm">
-          <a href="#" class="hover:text-white transition-colors">About us</a>
-          <a href="#" class="hover:text-white transition-colors">Contact us</a>
-        </div>
+      <div class="border-t border-blue-800 pt-7 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-blue-300">
+        <p>© 2026 MacbookGng. All rights reserved.</p>
+        <p>Made with ❤️ in Indonesia</p>
       </div>
-      <div>
-        <p class="text-xs font-bold text-white uppercase tracking-wider mb-3">Social</p>
-        <div class="flex flex-col gap-2 text-sm">
-          <a href="#" class="hover:text-white transition-colors">Community</a>
-        </div>
-      </div>
-    </div>
-    <div class="max-w-5xl mx-auto border-t border-blue-600 mt-8 pt-6 text-xs text-blue-200 text-center">
-      © 2026 Macbook Gng. All rights reserved.
     </div>
   </footer>
 
+
   <script>
-    let isYearly = true;
-
-    function togglePricingPeriod() {
-      isYearly = !isYearly;
-
-      const knob = document.getElementById('pricing-toggle-knob');
-      const saveBadge = document.getElementById('save-badge');
-      const labelMonthly = document.getElementById('toggle-label-monthly');
-      const labelYearly = document.getElementById('toggle-label-yearly');
-      const proPrice = document.getElementById('pro-price');
-      const proPriceNote = document.getElementById('pro-price-note');
-
+    let isYearly = false;
+    function setPricing(yearly) {
+      isYearly = yearly;
+      const tM = document.getElementById('tab-monthly');
+      const tY = document.getElementById('tab-yearly');
       if (isYearly) {
-        knob.className = 'absolute top-0.5 left-[26px] w-5 h-5 bg-white rounded-full shadow transition-all';
-        saveBadge.classList.remove('hidden');
-        labelMonthly.className = 'text-sm font-semibold text-slate-400';
-        labelYearly.className = 'text-sm font-semibold text-slate-800';
-        proPrice.textContent = '$9';
-        proPriceNote.textContent = ' /month, billed yearly';
+        tM.classList.remove('active'); tY.classList.add('active');
+        document.getElementById('pro-price').textContent = '$9';
+        document.getElementById('pro-period').textContent = '/month';
+        document.getElementById('pro-note').textContent = 'Billed yearly · save $36/year';
+        document.getElementById('ent-price').textContent = '$29';
+        document.getElementById('ent-period').textContent = '/month';
+        document.getElementById('ent-note').textContent = 'Billed yearly';
       } else {
-        knob.className = 'absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-all';
-        saveBadge.classList.add('hidden');
-        labelMonthly.className = 'text-sm font-semibold text-slate-800';
-        labelYearly.className = 'text-sm font-semibold text-slate-400';
-        proPrice.textContent = '$12';
-        proPriceNote.textContent = ' /month, billed monthly';
+        tY.classList.remove('active'); tM.classList.add('active');
+        document.getElementById('pro-price').textContent = '$12';
+        document.getElementById('pro-period').textContent = '/month';
+        document.getElementById('pro-note').textContent = 'Billed monthly';
+        document.getElementById('ent-price').textContent = '$39';
+        document.getElementById('ent-period').textContent = '/month';
+        document.getElementById('ent-note').textContent = 'Billed monthly';
       }
     }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    }
+
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').style.boxShadow =
+        window.scrollY > 8 ? '0 1px 16px rgba(0,0,0,0.07)' : '';
+    });
   </script>
 </body>
 </html>

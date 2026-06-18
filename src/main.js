@@ -1135,45 +1135,62 @@ function initDatabasePage() {
     { type: 'DELETE', color: 'text-rose-600', sql: 'DELETE FROM logs WHERE created_at < NOW() - INTERVAL 30 DAY' }
   ];
 
-  if (runMockQueryBtn && queryLogList) {
-    runMockQueryBtn.addEventListener('click', () => {
-      const q = queries[Math.floor(Math.random() * queries.length)];
-      const now = new Date();
-      const timeStr = now.toTimeString().split(' ')[0];
+  const executeMockQuery = (showToastAndActivity = true) => {
+    if (!queryLogList) return;
+    const q = queries[Math.floor(Math.random() * queries.length)];
+    const now = new Date();
+    const timeStr = now.toTimeString().split(' ')[0];
 
-      const item = document.createElement('div');
-      item.className = 'flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-all duration-300 opacity-0 -translate-y-2';
-      
-      // SQL Highlight formatting
-      let formattedSql = q.sql;
-      formattedSql = formattedSql.replace(/(SELECT|UPDATE|INSERT|DELETE|FROM|WHERE|ORDER BY|LIMIT|SET|INTO|VALUES|INTERVAL|DAY|AND|OR|JOIN|ON|NOW\(\))/g, '<span class="text-blue-600 font-semibold">$1</span>');
-      // Fix specific color matching
-      if (q.type === 'UPDATE') {
-        formattedSql = formattedSql.replace('UPDATE', '<span class="text-amber-600 font-semibold">UPDATE</span>');
-      } else if (q.type === 'INSERT') {
-        formattedSql = formattedSql.replace('INSERT', '<span class="text-emerald-600 font-semibold">INSERT</span>');
-      } else if (q.type === 'DELETE') {
-        formattedSql = formattedSql.replace('DELETE', '<span class="text-rose-600 font-semibold">DELETE</span>');
-      }
+    const item = document.createElement('div');
+    item.className = 'flex items-start space-x-3 py-1.5 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 px-1 rounded-md transition-all duration-300 opacity-0 -translate-y-2';
+    
+    // SQL Highlight formatting
+    let formattedSql = q.sql;
+    formattedSql = formattedSql.replace(/(SELECT|UPDATE|INSERT|DELETE|FROM|WHERE|ORDER BY|LIMIT|SET|INTO|VALUES|INTERVAL|DAY|AND|OR|JOIN|ON|NOW\(\))/g, '<span class="text-blue-600 font-semibold">$1</span>');
+    // Fix specific color matching
+    if (q.type === 'UPDATE') {
+      formattedSql = formattedSql.replace('UPDATE', '<span class="text-amber-600 font-semibold">UPDATE</span>');
+    } else if (q.type === 'INSERT') {
+      formattedSql = formattedSql.replace('INSERT', '<span class="text-emerald-600 font-semibold">INSERT</span>');
+    } else if (q.type === 'DELETE') {
+      formattedSql = formattedSql.replace('DELETE', '<span class="text-rose-600 font-semibold">DELETE</span>');
+    }
 
-      item.innerHTML = `
-        <span class="text-slate-400 flex-shrink-0">${timeStr}</span>
-        <p class="text-slate-700 break-all">${formattedSql}</p>
-      `;
+    item.innerHTML = `
+      <span class="text-slate-400 flex-shrink-0">${timeStr}</span>
+      <p class="text-slate-700 break-all">${formattedSql}</p>
+    `;
 
-      queryLogList.insertBefore(item, queryLogList.firstChild);
-      
-      // Animate in
-      setTimeout(() => {
-        item.classList.remove('opacity-0', '-translate-y-2');
-      }, 10);
+    queryLogList.insertBefore(item, queryLogList.firstChild);
+    
+    // Animate in
+    setTimeout(() => {
+      item.classList.remove('opacity-0', '-translate-y-2');
+    }, 10);
 
-      // Scroll list to top
-      queryLogList.scrollTop = 0;
+    // Limit list length to prevent infinite growth
+    if (queryLogList.children.length > 25) {
+      queryLogList.lastChild.remove();
+    }
 
+    // Scroll list to top
+    queryLogList.scrollTop = 0;
+
+    if (showToastAndActivity) {
       showToast(`Mock query executed: ${q.type}`, 'success');
       appendActivityLog(`Database ${q.type} query executed`, `Just now · by System`, 'blue');
+    }
+  };
+
+  if (runMockQueryBtn && queryLogList) {
+    runMockQueryBtn.addEventListener('click', () => {
+      executeMockQuery(true);
     });
+
+    // Automatically execute dummy query every 4 seconds for prototyping simulation
+    setInterval(() => {
+      executeMockQuery(false);
+    }, 4000);
   }
 
   // Backup execution
@@ -1580,9 +1597,16 @@ function initVisualBuilder() {
   const inspectorBtnPrimary = document.getElementById('inspector-btn-primary');
   const inspectorBtnSecondary = document.getElementById('inspector-btn-secondary');
   const inspectorBgTheme = document.getElementById('inspector-bg-theme');
+  const inspectorPadding = document.getElementById('inspector-padding');
+  const inspectorAlignment = document.getElementById('inspector-alignment');
+  const inspectorGridGroup = document.getElementById('inspector-grid-group');
+  const inspectorGridCols = document.getElementById('inspector-grid-cols');
 
   const builderResetBtn = document.getElementById('builder-reset-btn');
   const builderSaveBtn = document.getElementById('builder-save-btn');
+  const builderDesktopBtn = document.getElementById('builder-desktop-btn');
+  const builderMobileBtn = document.getElementById('builder-mobile-btn');
+  const mobileStatusBar = document.getElementById('mobile-status-bar');
   
   const aiPromptInput = document.getElementById('ai-prompt-input');
   const aiGenerateBtn = document.getElementById('ai-generate-btn');
@@ -1615,7 +1639,10 @@ function initVisualBuilder() {
         subhead: el.getAttribute('data-subhead') || '',
         ctaPrimary: el.getAttribute('data-cta-primary') || '',
         ctaSecondary: el.getAttribute('data-cta-secondary') || '',
-        bgTheme: el.getAttribute('data-bg-theme') || 'white'
+        bgTheme: el.getAttribute('data-bg-theme') || 'white',
+        padding: el.getAttribute('data-padding') || 'py-8',
+        alignment: el.getAttribute('data-alignment') || 'text-left',
+        gridCols: el.getAttribute('data-grid-cols') || 'grid-cols-3'
       });
     });
     
@@ -1738,21 +1765,23 @@ function initVisualBuilder() {
     sectionIndex++;
     const id = data ? data.id : `${type}-${sectionIndex}`;
     const div = document.createElement('div');
-    div.className = 'canvas-section relative group/section border-2 border-transparent hover:border-blue-500/50 transition-all select-text cursor-pointer p-8';
     div.setAttribute('data-section-id', id);
     div.setAttribute('data-section-type', type);
 
     // Setup initial contents from state or defaults
-    let headline = data ? data.headline : (type === 'hero' ? 'Headline Title' : (type === 'features' ? 'Feature Section Title' : (type === 'pricing' ? 'Flexible Pricing' : (type === 'testimonials' ? 'Client Endorsements' : (type === 'cta' ? 'Launch your next project' : 'Contact Support')))));
-    let subhead = data ? data.subhead : (type === 'hero' ? 'Start editing this description to explain your product value proposition.' : (type === 'features' ? 'Describe your core architectural advantages or layouts.' : (type === 'pricing' ? 'Choose a plan that fits your business scale.' : (type === 'testimonials' ? 'Hear what leading visual architects say about our services.' : (type === 'cta' ? 'Get started with high performance hosting and CDN networks.' : 'Fill out details to get in touch with our team.')))));
+    let headline = data ? data.headline : (type === 'hero' ? 'Headline Title' : (type === 'features' ? 'Feature Section Title' : (type === 'pricing' ? 'Flexible Pricing' : (type === 'testimonials' ? 'Client Endorsements' : (type === 'cta' ? 'Launch your next project' : (type === 'gallery' ? 'Interactive Gallery' : (type === 'faq' ? 'Frequently Asked Questions' : (type === 'stats' ? 'Platform Performance' : (type === 'footer' ? 'Portify Labs' : 'Contact Support')))))))));
+    let subhead = data ? data.subhead : (type === 'hero' ? 'Start editing this description to explain your product value proposition.' : (type === 'features' ? 'Describe your core architectural advantages or layouts.' : (type === 'pricing' ? 'Choose a plan that fits your business scale.' : (type === 'testimonials' ? 'Hear what leading visual architects say about our services.' : (type === 'cta' ? 'Get started with high performance hosting and CDN networks.' : (type === 'gallery' ? 'A showcase of our layout compositions, product screenshots, and design elements.' : (type === 'faq' ? 'Common queries about our visual editor features, custom hosting limits, and billing.' : (type === 'stats' ? 'Fast, reliable, secure. Backed by enterprise infrastructure.' : (type === 'footer' ? '© 2026 Portify Inc. All rights reserved. Deployed at the edge.' : 'Fill out details to get in touch with our team.')))))))));
     let btnPrimary = data ? data.ctaPrimary : 'Get Started';
     let btnSecondary = data ? data.ctaSecondary : 'Learn More';
-    let bgTheme = data ? data.bgTheme : (type === 'hero' ? 'slate-dark' : (type === 'features' ? 'slate-light' : (type === 'cta' ? 'blue-royal' : 'white')));
+    let bgTheme = data ? data.bgTheme : (type === 'hero' ? 'slate-dark' : (type === 'features' ? 'slate-light' : (type === 'cta' ? 'blue-royal' : (type === 'gallery' ? 'white' : (type === 'faq' ? 'white' : (type === 'stats' ? 'slate-light' : (type === 'footer' ? 'slate-light' : 'white')))))));
+    
+    // Framer style custom styling variables
+    let padding = data ? (data.padding || 'py-8') : 'py-8';
+    let alignment = data ? (data.alignment || (type === 'hero' || type === 'cta' ? 'text-center' : 'text-left')) : (type === 'hero' || type === 'cta' ? 'text-center' : 'text-left');
+    let gridCols = data ? (data.gridCols || 'grid-cols-3') : 'grid-cols-3';
 
+    div.className = 'canvas-section relative group/section border-2 border-transparent hover:border-blue-500/50 transition-all select-text cursor-pointer px-8 ' + padding + ' ' + alignment;
     div.className += ' ' + (themeClasses[bgTheme] || themeClasses['white']);
-    if (type === 'hero' || type === 'cta') {
-      div.className += ' text-center';
-    }
 
     const toolbarHtml = `
       <div class="absolute top-2 right-2 flex items-center space-x-1 opacity-0 group-hover/section:opacity-100 transition-opacity bg-slate-900/90 text-white rounded-lg p-1 text-[10px] font-bold border border-slate-800 z-10" onclick="event.stopPropagation();">
@@ -1774,7 +1803,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-blue-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Hero Banner</span>
-        <div class="max-w-xl mx-auto py-8">
+        <div class="max-w-xl mx-auto py-4">
           <h2 class="text-3xl font-extrabold tracking-tight" id="${id}-headline">${headline}</h2>
           <p class="text-xs text-slate-300 mt-2 leading-relaxed" id="${id}-subhead">${subhead}</p>
           <div class="mt-5 flex items-center justify-center space-x-3">
@@ -1787,11 +1816,11 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-emerald-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Features Grid</span>
-        <div class="max-w-xl mx-auto text-center mb-6">
+        <div class="max-w-xl mx-auto mb-6">
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
-        <div class="grid grid-cols-3 gap-4 text-left text-slate-800">
+        <div class="grid ${gridCols} gap-4 text-left text-slate-800" id="${id}-grid-container">
           <div class="bg-white border border-slate-200 rounded-lg p-3">
             <span class="text-blue-500 font-bold text-xs">01</span>
             <h4 class="font-bold text-xs text-slate-700 mt-1">Stunning Speed</h4>
@@ -1813,7 +1842,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-amber-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Pricing Table</span>
-        <div class="max-w-xl mx-auto text-center mb-6">
+        <div class="max-w-xl mx-auto mb-6">
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
@@ -1837,7 +1866,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-purple-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Testimonials</span>
-        <div class="max-w-xl mx-auto text-center mb-6">
+        <div class="max-w-xl mx-auto mb-6">
           <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
           <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
         </div>
@@ -1856,7 +1885,7 @@ function initVisualBuilder() {
       innerHTML = `
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-rose-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Call-to-Action</span>
-        <div class="max-w-xl mx-auto py-6">
+        <div class="max-w-xl mx-auto py-4">
           <h2 class="text-2xl font-extrabold tracking-tight" id="${id}-headline">${headline}</h2>
           <p class="text-xs text-blue-100 mt-1" id="${id}-subhead">${subhead}</p>
           <div class="mt-4 flex items-center justify-center space-x-3">
@@ -1870,7 +1899,7 @@ function initVisualBuilder() {
         ${toolbarHtml}
         <span class="absolute top-2 left-2 bg-indigo-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Contact Form</span>
         <div class="max-w-md mx-auto text-slate-800">
-          <div class="text-center mb-5">
+          <div class="mb-5">
             <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
             <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
           </div>
@@ -1887,6 +1916,116 @@ function initVisualBuilder() {
           </div>
         </div>
       `;
+    } else if (type === 'gallery') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-purple-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Media Gallery</span>
+        <div class="max-w-4xl mx-auto">
+          <div class="mb-6">
+            <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
+            <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="grid ${gridCols} gap-4 text-left" id="${id}-grid-container">
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200">
+              <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 1">
+            </div>
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200">
+              <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 2">
+            </div>
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 3">
+            </div>
+            <div class="aspect-video bg-slate-100 rounded-lg overflow-hidden relative group/img cursor-zoom-in border border-slate-200 ${gridCols === 'grid-cols-4' ? '' : 'hidden'}" id="${id}-img-4">
+              <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=300&q=80" class="w-full h-full object-cover transition-transform group-hover/img:scale-105" alt="Portfolio 4">
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'faq') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-sky-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">FAQ Accordion</span>
+        <div class="max-w-2xl mx-auto">
+          <div class="mb-6">
+            <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
+            <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="space-y-3 text-slate-800">
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+              <button class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors" onclick="event.stopPropagation(); const p = this.nextElementSibling; const svg = this.querySelector('svg'); p.classList.toggle('hidden'); svg.classList.toggle('rotate-180');">
+                <span>Is the layout fully responsive?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-slate-400 transition-transform"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </button>
+              <div class="px-4 pb-3.5 text-[10.5px] text-slate-500 leading-relaxed border-t border-slate-50 pt-2.5">
+                Yes! Every layout block is optimized for mobile responsiveness and grid systems automatically.
+              </div>
+            </div>
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+              <button class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors" onclick="event.stopPropagation(); const p = this.nextElementSibling; const svg = this.querySelector('svg'); p.classList.toggle('hidden'); svg.classList.toggle('rotate-180');">
+                <span>Can I export code directly from Portify?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-slate-400 transition-transform rotate-180"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </button>
+              <div class="px-4 pb-3.5 text-[10.5px] text-slate-500 leading-relaxed border-t border-slate-50 pt-2.5 hidden">
+                Yes! In the advanced settings tab, you can compile and download the entire project layout as a clean JSON structure or HTML/JS build.
+              </div>
+            </div>
+            <div class="border border-slate-200 rounded-xl bg-white overflow-hidden transition-all duration-300">
+              <button class="w-full flex items-center justify-between p-3.5 text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors" onclick="event.stopPropagation(); const p = this.nextElementSibling; const svg = this.querySelector('svg'); p.classList.toggle('hidden'); svg.classList.toggle('rotate-180');">
+                <span>Is SSL certificate hosting free?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 text-slate-400 transition-transform rotate-180"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+              </button>
+              <div class="px-4 pb-3.5 text-[10.5px] text-slate-500 leading-relaxed border-t border-slate-50 pt-2.5 hidden">
+                 Absolutely. All websites deployed via Portify receive custom domain security SSL certificates completely free.
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'stats') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-orange-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Stats Counters</span>
+        <div class="max-w-4xl mx-auto">
+          <div class="mb-6">
+            <h3 class="text-xl font-bold tracking-tight" id="${id}-headline">${headline}</h3>
+            <p class="text-xs text-slate-500 mt-1" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="grid ${gridCols} gap-4 text-slate-800" id="${id}-grid-container">
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm">
+              <div class="text-3xl font-extrabold text-blue-600 tracking-tight">99.9%</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">Uptime SLA</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm">
+              <div class="text-3xl font-extrabold text-emerald-500 tracking-tight">&lt; 100ms</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">Page Load Time</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm">
+              <div class="text-3xl font-extrabold text-purple-600 tracking-tight">500k+</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">Deployments</p>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all hover:shadow-sm ${gridCols === 'grid-cols-4' ? '' : 'hidden'}" id="${id}-stat-4">
+              <div class="text-3xl font-extrabold text-amber-500 tracking-tight">100M+</div>
+              <p class="text-[11px] text-slate-500 font-bold mt-1">API Requests</p>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (type === 'footer') {
+      innerHTML = `
+        ${toolbarHtml}
+        <span class="absolute top-2 left-2 bg-slate-600 text-white font-mono text-[9px] px-2 py-0.5 rounded opacity-0 group-hover/section:opacity-100 transition-opacity uppercase font-bold tracking-wider pointer-events-none">Custom Footer</span>
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between border-t border-slate-200/50 pt-4 text-slate-500">
+          <div class="mb-4 md:mb-0">
+            <h4 class="font-bold text-xs text-slate-700" id="${id}-headline">${headline}</h4>
+            <p class="text-[10px] text-slate-400 mt-0.5" id="${id}-subhead">${subhead}</p>
+          </div>
+          <div class="flex space-x-5 text-[10px] font-semibold text-slate-400">
+            <a href="#" class="hover:text-blue-600 transition-colors" onclick="event.preventDefault(); showToast('Navigating to Privacy Policy (mock)');">Privacy Policy</a>
+            <a href="#" class="hover:text-blue-600 transition-colors" onclick="event.preventDefault(); showToast('Navigating to Terms of Service (mock)');">Terms of Use</a>
+            <a href="#" class="hover:text-blue-600 transition-colors" onclick="event.preventDefault(); showToast('Navigating to Help Documentation (mock)');">Documentation</a>
+          </div>
+        </div>
+      `;
     }
 
     div.setAttribute('data-headline', headline);
@@ -1894,6 +2033,9 @@ function initVisualBuilder() {
     div.setAttribute('data-cta-primary', btnPrimary);
     div.setAttribute('data-cta-secondary', btnSecondary);
     div.setAttribute('data-bg-theme', bgTheme);
+    div.setAttribute('data-padding', padding);
+    div.setAttribute('data-alignment', alignment);
+    div.setAttribute('data-grid-cols', gridCols);
     div.innerHTML = innerHTML;
 
     return div;
@@ -1930,6 +2072,22 @@ function initVisualBuilder() {
     if (inspectorBtnPrimary) inspectorBtnPrimary.value = btnPrimary;
     if (inspectorBtnSecondary) inspectorBtnSecondary.value = btnSecondary;
     if (inspectorBgTheme) inspectorBgTheme.value = theme;
+
+    const padding = section.getAttribute('data-padding') || 'py-8';
+    const alignment = section.getAttribute('data-alignment') || (type === 'hero' || type === 'cta' ? 'text-center' : 'text-left');
+    const gridCols = section.getAttribute('data-grid-cols') || 'grid-cols-3';
+
+    if (inspectorPadding) inspectorPadding.value = padding;
+    if (inspectorAlignment) inspectorAlignment.value = alignment;
+    if (inspectorGridCols) inspectorGridCols.value = gridCols;
+
+    if (inspectorGridGroup) {
+      if (type === 'features' || type === 'gallery' || type === 'stats') {
+        inspectorGridGroup.classList.remove('hidden');
+      } else {
+        inspectorGridGroup.classList.add('hidden');
+      }
+    }
 
     if (inspectorCtasGroup) {
       if (type === 'hero' || type === 'cta') {
@@ -2068,6 +2226,90 @@ function initVisualBuilder() {
         }
       }
       saveCanvasStateToData();
+    });
+  }
+
+  if (inspectorPadding) {
+    inspectorPadding.addEventListener('change', (e) => {
+      if (!selectedSection) return;
+      const newVal = e.target.value;
+      const oldVal = selectedSection.getAttribute('data-padding') || 'py-8';
+      selectedSection.setAttribute('data-padding', newVal);
+      selectedSection.classList.remove(oldVal);
+      selectedSection.classList.add(newVal);
+      saveCanvasStateToData();
+    });
+  }
+
+  if (inspectorAlignment) {
+    inspectorAlignment.addEventListener('change', (e) => {
+      if (!selectedSection) return;
+      const newVal = e.target.value;
+      const oldVal = selectedSection.getAttribute('data-alignment') || 'text-left';
+      selectedSection.setAttribute('data-alignment', newVal);
+      selectedSection.classList.remove(oldVal);
+      selectedSection.classList.add(newVal);
+      saveCanvasStateToData();
+    });
+  }
+
+  if (inspectorGridCols) {
+    inspectorGridCols.addEventListener('change', (e) => {
+      if (!selectedSection) return;
+      const newVal = e.target.value;
+      const oldVal = selectedSection.getAttribute('data-grid-cols') || 'grid-cols-3';
+      selectedSection.setAttribute('data-grid-cols', newVal);
+
+      const id = selectedSection.getAttribute('data-section-id');
+      const gridContainer = document.getElementById(`${id}-grid-container`);
+      if (gridContainer) {
+        gridContainer.classList.remove(oldVal);
+        gridContainer.classList.add(newVal);
+      }
+
+      // Toggle 4th item visibility in gallery or stats if applicable
+      const img4 = document.getElementById(`${id}-img-4`);
+      if (img4) {
+        if (newVal === 'grid-cols-4') {
+          img4.classList.remove('hidden');
+        } else {
+          img4.classList.add('hidden');
+        }
+      }
+      const stat4 = document.getElementById(`${id}-stat-4`);
+      if (stat4) {
+        if (newVal === 'grid-cols-4') {
+          stat4.classList.remove('hidden');
+        } else {
+          stat4.classList.add('hidden');
+        }
+      }
+
+      saveCanvasStateToData();
+    });
+  }
+
+  if (builderDesktopBtn && builderMobileBtn && canvas && mobileStatusBar) {
+    builderDesktopBtn.addEventListener('click', () => {
+      builderDesktopBtn.className = "px-2.5 py-1 rounded bg-white text-slate-800 shadow-2xs transition-all cursor-pointer";
+      builderMobileBtn.className = "px-2.5 py-1 rounded text-slate-500 hover:text-slate-800 transition-all cursor-pointer";
+
+      canvas.style.width = '';
+      canvas.className = "flex-1 overflow-y-auto bg-white rounded-xl border border-slate-200 shadow-sm relative custom-scrollbar flex flex-col min-h-0 transition-all duration-300";
+
+      mobileStatusBar.classList.add('hidden');
+      mobileStatusBar.classList.remove('flex');
+    });
+
+    builderMobileBtn.addEventListener('click', () => {
+      builderMobileBtn.className = "px-2.5 py-1 rounded bg-white text-slate-800 shadow-2xs transition-all cursor-pointer";
+      builderDesktopBtn.className = "px-2.5 py-1 rounded text-slate-500 hover:text-slate-800 transition-all cursor-pointer";
+
+      canvas.style.width = '375px';
+      canvas.className = "flex-1 overflow-y-auto bg-white border-[12px] border-slate-900 rounded-[32px] mx-auto shadow-2xl relative custom-scrollbar flex flex-col min-h-0 transition-all duration-300";
+
+      mobileStatusBar.classList.remove('hidden');
+      mobileStatusBar.classList.add('flex');
     });
   }
 

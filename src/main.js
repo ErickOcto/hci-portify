@@ -14,6 +14,17 @@ const projectData = {
     name: 'Macbook Gng',
     domain: 'macbookgng.com',
     updated: 'Updated 2 hours ago · by You',
+    description: 'The ultimate portfolio theme for modern creators and designers. Clean layout, dark modes, and modular blocks.',
+    language: 'en',
+    seoTitle: 'Design Macbook Gang Pro — Portfolio Theme',
+    seoDescription: 'Check out the official Macbook Gang website. Designed with modular blocks, sleek gradients, and clean performance optimization.',
+    analyticsId: 'UA-129988-1',
+    primaryColor: '#2563eb',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' },
+      { name: 'Hafizh', email: 'hafizh@portify.io', role: 'Collaborator', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -45,6 +56,16 @@ const projectData = {
     name: 'Project 1',
     domain: 'project1.portify.io',
     updated: 'Created 1 day ago · by System',
+    description: 'A clean, modern boilerplate theme ready for your creative content.',
+    language: 'en',
+    seoTitle: 'Welcome to Project 1',
+    seoDescription: 'Project 1 boilerplate site. Kickstart your next development project with custom components.',
+    analyticsId: 'UA-129988-2',
+    primaryColor: '#3b82f6',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -59,6 +80,16 @@ const projectData = {
     name: 'Project 2',
     domain: 'project2.portify.io',
     updated: 'Created 2 days ago · by System',
+    description: 'A clean SaaS website framework for bootstrapping micro-businesses.',
+    language: 'en',
+    seoTitle: 'Welcome to Project 2',
+    seoDescription: 'Project 2 SaaS site. Start selling your product today.',
+    analyticsId: 'UA-129988-3',
+    primaryColor: '#8b5cf6',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -73,6 +104,16 @@ const projectData = {
     name: 'Project 3',
     domain: 'project3.portify.io',
     updated: 'Created 3 days ago · by System',
+    description: 'A minimalist photography showcase theme optimized for light and dark contrast.',
+    language: 'en',
+    seoTitle: 'Welcome to Project 3',
+    seoDescription: 'Project 3 photography portfolio site. Stunning visual gallery.',
+    analyticsId: 'UA-129988-4',
+    primaryColor: '#10b981',
+    fontFamily: 'Inter',
+    members: [
+      { name: 'Jane Doe', email: 'jane@portify.io', role: 'Owner', avatar: '/avatar.png' }
+    ],
     pages: {
       home: {
         name: 'Home',
@@ -173,6 +214,15 @@ function selectProject(projectId) {
   if (window.builderPageManager) {
     window.builderPageManager.updatePageSelect();
     window.builderPageManager.loadPageCanvas(activePages[projectId]);
+  }
+
+  // Apply visual branding color/font
+  applyBrandingStyles();
+
+  // If settings view is open, synchronize fields
+  const settingsView = document.getElementById('settings-view');
+  if (settingsView && !settingsView.classList.contains('hidden')) {
+    syncSettingsFields();
   }
 
   showToast(`Switched to workspace: ${proj.name}`, 'success');
@@ -341,6 +391,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectSwitcher();
   initAddPageModal();
   renderOverviewPages();
+  initSettingsPage();
+  applyBrandingStyles();
 
   // Overview View Builder footer button redirection
   const viewBuilderBtn = document.getElementById('overview-view-builder-btn');
@@ -413,6 +465,7 @@ function initTabs() {
   const domainView = document.getElementById('domain-view');
   const customPageView = document.getElementById('custom-page-view');
   const livePreviewView = document.getElementById('live-preview-view');
+  const settingsView = document.getElementById('settings-view');
 
   if (!navLinks) return;
 
@@ -457,6 +510,9 @@ function initTabs() {
         } else if (tabId === 'live-preview') {
           guidanceTitle.innerText = 'Live Site Preview';
           guidanceDesc.innerText = 'View and test your published website in a live preview. Switch views to inspect responsiveness across desktop, tablet, and mobile layouts.';
+        } else if (tabId === 'settings') {
+          guidanceTitle.innerText = 'Project Settings';
+          guidanceDesc.innerText = 'Manage your project configurations, descriptions, search engine indexing preferences, access control lists, and custom css branding palettes.';
         } else {
           guidanceTitle.innerText = tabName + ' Guide';
           guidanceDesc.innerText = 'Guidance and controls for managing your project\'s settings and page layout options.';
@@ -471,6 +527,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         showToast('Switched to Dashboard Overview');
       } else if (tabId === 'performance') {
         if (overviewView) overviewView.classList.add('hidden');
@@ -479,6 +536,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger page entrance animations
         triggerPerformanceAnimations();
@@ -490,6 +548,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger database page animations
         triggerDatabaseAnimations();
@@ -501,6 +560,7 @@ function initTabs() {
         if (domainView) domainView.classList.remove('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger domain page animations
         triggerDomainAnimations();
@@ -512,6 +572,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.remove('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         
         // Trigger custom page animations
         triggerCustomPageAnimations();
@@ -523,10 +584,22 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.remove('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
 
         // Trigger live preview animations
         triggerLivePreviewAnimations();
         showToast('Switched to Live Preview Page');
+      } else if (tabId === 'settings') {
+        if (overviewView) overviewView.classList.add('hidden');
+        if (performanceView) performanceView.classList.add('hidden');
+        if (databaseView) databaseView.classList.add('hidden');
+        if (domainView) domainView.classList.add('hidden');
+        if (customPageView) customPageView.classList.add('hidden');
+        if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.remove('hidden');
+
+        syncSettingsFields();
+        showToast('Switched to Settings Page');
       } else {
         // Mock default behavior for settings etc.
         if (overviewView) overviewView.classList.add('hidden');
@@ -535,6 +608,7 @@ function initTabs() {
         if (domainView) domainView.classList.add('hidden');
         if (customPageView) customPageView.classList.add('hidden');
         if (livePreviewView) livePreviewView.classList.add('hidden');
+        if (settingsView) settingsView.classList.add('hidden');
         showToast(`Tab content for "${tabName}" is under development.`);
       }
     });
@@ -565,6 +639,17 @@ function initTabs() {
       logoutBtn.addEventListener('click', (e) => {
         e.preventDefault();
         window.location.href = 'src/pages/landing.html';
+      });
+    }
+
+    // Programmatic redirection for account settings
+    const profileSettingsBtn = document.getElementById('profile-settings-btn');
+    if (profileSettingsBtn) {
+      profileSettingsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        profileMenu.classList.add('hidden');
+        const settingsTabBtn = document.querySelector('button[data-tab="settings"]');
+        if (settingsTabBtn) settingsTabBtn.click();
       });
     }
   }
@@ -2182,5 +2267,454 @@ function initVisualBuilder() {
   // Initial load
   window.builderPageManager.updatePageSelect();
   window.builderPageManager.loadPageCanvas(activePages[activeProject]);
+}
+
+// --- Dynamic Settings Page Implementation ---
+function syncSettingsFields() {
+  const proj = projectData[activeProject];
+  if (!proj) return;
+
+  // General Settings
+  const settingName = document.getElementById('setting-project-name');
+  const settingLang = document.getElementById('setting-project-lang');
+  const settingDesc = document.getElementById('setting-project-desc');
+  if (settingName) settingName.value = proj.name || '';
+  if (settingLang) settingLang.value = proj.language || 'en';
+  if (settingDesc) settingDesc.value = proj.description || '';
+
+  // SEO Settings
+  const settingSeoTitle = document.getElementById('setting-seo-title');
+  const settingSeoDesc = document.getElementById('setting-seo-desc');
+  const settingAnalyticsId = document.getElementById('setting-analytics-id');
+  if (settingSeoTitle) {
+    settingSeoTitle.value = proj.seoTitle || '';
+    updateCharCounter('setting-seo-title', 'char-count-title', 60);
+  }
+  if (settingSeoDesc) {
+    settingSeoDesc.value = proj.seoDescription || '';
+    updateCharCounter('setting-seo-desc', 'char-count-desc', 160);
+  }
+  if (settingAnalyticsId) settingAnalyticsId.value = proj.analyticsId || '';
+
+  // Branding Settings
+  const settingAccentPicker = document.getElementById('setting-accent-color-picker');
+  const settingAccentHex = document.getElementById('setting-accent-color-hex');
+  const settingFontFamily = document.getElementById('setting-font-family');
+  if (settingAccentPicker) settingAccentPicker.value = proj.primaryColor || '#2563eb';
+  if (settingAccentHex) settingAccentHex.value = proj.primaryColor || '#2563eb';
+  if (settingFontFamily) settingFontFamily.value = proj.fontFamily || 'Inter';
+
+  // Team members
+  renderMembersTable();
+}
+
+function updateCharCounter(inputId, counterId, limit) {
+  const input = document.getElementById(inputId);
+  const counter = document.getElementById(counterId);
+  if (!input || !counter) return;
+  const len = input.value.length;
+  counter.innerText = `${len} / ${limit}`;
+  if (len > limit) {
+    counter.className = 'text-[10px] font-bold text-red-500';
+  } else {
+    counter.className = 'text-[10px] font-bold text-slate-400';
+  }
+}
+
+function renderMembersTable() {
+  const tbody = document.getElementById('settings-members-list-body');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  const proj = projectData[activeProject];
+  if (!proj || !proj.members) return;
+
+  proj.members.forEach((member, index) => {
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-slate-50/50 transition-colors opacity-0 translate-y-2';
+    const isOwner = member.role === 'Owner';
+    const actionsHtml = isOwner 
+      ? `<span class="text-[10px] font-medium text-slate-400">System Protected</span>`
+      : `<button type="button" class="remove-member-btn text-red-600 hover:text-red-800 hover:bg-red-55 p-1.5 rounded-md transition-all cursor-pointer hover:scale-110" data-member-index="${index}" title="Remove Member">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+          </svg>
+        </button>`;
+
+    tr.innerHTML = `
+      <td class="py-3 font-semibold text-slate-700 flex items-center space-x-2">
+        <img src="${member.avatar || '/avatar.png'}" class="w-6 h-6 rounded-full object-cover" alt="" />
+        <span>${member.name}</span>
+      </td>
+      <td class="py-3 text-slate-500 font-mono text-[11px]">${member.email}</td>
+      <td class="py-3">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold ${isOwner ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-slate-100 text-slate-600'}">${member.role}</span>
+      </td>
+      <td class="py-3 text-center">
+        ${actionsHtml}
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+    // Trigger enter animation
+    setTimeout(() => {
+      tr.classList.remove('opacity-0', 'translate-y-2');
+      tr.classList.add('opacity-100', 'translate-y-0');
+    }, index * 50);
+  });
+
+  // Bind remove buttons
+  tbody.querySelectorAll('.remove-member-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const index = parseInt(btn.getAttribute('data-member-index'));
+      const member = proj.members[index];
+      if (confirm(`Are you sure you want to remove ${member.name} from this project?`)) {
+        proj.members.splice(index, 1);
+        showToast(`Removed ${member.name}`, 'warning');
+        appendActivityLog(`Removed collaborator: ${member.name}`, `Just now · by You`, 'rose');
+        renderMembersTable();
+      }
+    });
+  });
+}
+
+function applyBrandingStyles() {
+  const proj = projectData[activeProject];
+  if (!proj) return;
+
+  const color = proj.primaryColor || '#2563eb';
+  const font = proj.fontFamily || 'Inter';
+
+  let styleEl = document.getElementById('dynamic-branding-styles');
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'dynamic-branding-styles';
+    document.head.appendChild(styleEl);
+  }
+
+  styleEl.innerHTML = `
+    :root {
+      --brand-primary: ${color};
+      --brand-font: '${font}', sans-serif;
+    }
+    
+    /* Apply Font Family */
+    body {
+      font-family: var(--brand-font) !important;
+    }
+
+    /* Override buttons or accent styles */
+    .bg-blue-600 {
+      background-color: var(--brand-primary) !important;
+    }
+    .text-blue-600 {
+      color: var(--brand-primary) !important;
+    }
+    .bg-blue-50 {
+      background-color: color-mix(in srgb, var(--brand-primary) 10%, transparent) !important;
+    }
+    .border-blue-200 {
+      border-color: color-mix(in srgb, var(--brand-primary) 20%, transparent) !important;
+    }
+    .border-blue-400 {
+      border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent) !important;
+    }
+    .focus\\:border-blue-400:focus {
+      border-color: var(--brand-primary) !important;
+    }
+    .group-hover\\:text-blue-500:hover {
+      color: var(--brand-primary) !important;
+    }
+  `;
+}
+
+function initSettingsPage() {
+  // 1. Settings sub-navigation tabs
+  const nav = document.getElementById('settings-nav');
+  if (nav) {
+    const buttons = nav.querySelectorAll('button[data-sett-tab]');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetTab = btn.getAttribute('data-sett-tab');
+        
+        // Active styling
+        buttons.forEach(b => {
+          b.className = "w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer";
+        });
+        btn.className = "w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all bg-blue-50 text-blue-600 cursor-pointer";
+
+        // Toggle panels
+        document.querySelectorAll('.settings-panel').forEach(panel => {
+          panel.classList.add('hidden');
+        });
+        const activePanel = document.getElementById(`settings-panel-${targetTab}`);
+        if (activePanel) activePanel.classList.remove('hidden');
+      });
+    });
+  }
+
+  // 2. Character counters binding
+  const seoTitleInput = document.getElementById('setting-seo-title');
+  const seoDescInput = document.getElementById('setting-seo-desc');
+  if (seoTitleInput) {
+    seoTitleInput.addEventListener('input', () => updateCharCounter('setting-seo-title', 'char-count-title', 60));
+  }
+  if (seoDescInput) {
+    seoDescInput.addEventListener('input', () => updateCharCounter('setting-seo-desc', 'char-count-desc', 160));
+  }
+
+  // 3. Save General Settings
+  const generalForm = document.getElementById('general-settings-form');
+  if (generalForm) {
+    generalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      const newName = document.getElementById('setting-project-name').value.trim();
+      const newLang = document.getElementById('setting-project-lang').value;
+      const newDesc = document.getElementById('setting-project-desc').value.trim();
+
+      if (!newName) return;
+
+      proj.name = newName;
+      proj.language = newLang;
+      proj.description = newDesc;
+
+      // Sync across header & sidebar elements
+      const sidebarProjName = document.getElementById('sidebar-project-name');
+      const headerProjName = document.getElementById('header-project-name');
+      if (sidebarProjName) sidebarProjName.innerText = newName;
+      if (headerProjName) headerProjName.innerText = newName;
+
+      // Update the Left Sidebar P1, P2 or MG button text if changed
+      const activeBtn = document.getElementById(`project-btn-${activeProject}`);
+      if (activeBtn) {
+        // Just extract first two letters
+        const initials = newName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+        activeBtn.innerText = initials;
+      }
+
+      showToast('General Settings saved successfully!', 'success');
+      appendActivityLog('General settings updated', 'Just now · by You', 'blue');
+    });
+  }
+
+  // 4. Save SEO Settings
+  const seoForm = document.getElementById('seo-settings-form');
+  if (seoForm) {
+    seoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      proj.seoTitle = document.getElementById('setting-seo-title').value.trim();
+      proj.seoDescription = document.getElementById('setting-seo-desc').value.trim();
+      proj.analyticsId = document.getElementById('setting-analytics-id').value.trim();
+
+      showToast('SEO Settings saved successfully!', 'success');
+      appendActivityLog('SEO settings updated', 'Just now · by You', 'blue');
+    });
+  }
+
+  // 5. Invite Member Form
+  const inviteForm = document.getElementById('invite-member-form');
+  if (inviteForm) {
+    inviteForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      const name = document.getElementById('invite-name').value.trim();
+      const email = document.getElementById('invite-email').value.trim();
+      const role = document.getElementById('invite-role').value;
+
+      if (!name || !email) return;
+
+      // Check duplicate email
+      const exists = proj.members.some(m => m.email.toLowerCase() === email.toLowerCase());
+      if (exists) {
+        showToast('Member with this email is already in the project!', 'warning');
+        return;
+      }
+
+      proj.members.push({
+        name,
+        email,
+        role,
+        avatar: '/avatar.png'
+      });
+
+      showToast(`Invited ${name} as ${role}!`, 'success');
+      appendActivityLog(`Invited collaborator: ${name}`, 'Just now · by You', 'emerald');
+      inviteForm.reset();
+      renderMembersTable();
+    });
+  }
+
+  // 6. Branding Accent Color bindings
+  const accentPicker = document.getElementById('setting-accent-color-picker');
+  const accentHex = document.getElementById('setting-accent-color-hex');
+  if (accentPicker && accentHex) {
+    accentPicker.addEventListener('input', (e) => {
+      accentHex.value = e.target.value;
+    });
+    accentHex.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (/^#[0-9A-F]{6}$/i.test(val)) {
+        accentPicker.value = val;
+      }
+    });
+  }
+
+  const brandingForm = document.getElementById('branding-settings-form');
+  if (brandingForm) {
+    brandingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      proj.primaryColor = document.getElementById('setting-accent-color-picker').value;
+      proj.fontFamily = document.getElementById('setting-font-family').value;
+
+      // Apply branding changes
+      applyBrandingStyles();
+
+      showToast('Branding styles updated!', 'success');
+      appendActivityLog('Visual branding styles updated', 'Just now · by You', 'blue');
+    });
+  }
+
+  // Bind quick color preset chips
+  const colorChips = document.querySelectorAll('.preset-color-chip');
+  colorChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const color = chip.getAttribute('data-color');
+      if (accentPicker) accentPicker.value = color;
+      if (accentHex) accentHex.value = color;
+    });
+  });
+
+  // 7. Export static build bundle
+  const exportBtn = document.getElementById('export-site-btn');
+  const exportProgress = document.getElementById('export-status-container');
+  const exportLabel = document.getElementById('export-status-label');
+  const exportPct = document.getElementById('export-pct');
+  const exportFill = document.getElementById('export-progress-fill');
+  if (exportBtn && exportProgress) {
+    exportBtn.addEventListener('click', () => {
+      exportBtn.disabled = true;
+      exportProgress.classList.remove('hidden');
+      exportLabel.innerText = 'Packaging assets...';
+      exportPct.innerText = '0%';
+      exportFill.style.width = '0%';
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          exportLabel.innerText = 'Build package ready for download!';
+          showToast('Project static build exported!', 'success');
+          appendActivityLog('Project static build exported', 'Just now · by You', 'emerald');
+          exportBtn.disabled = false;
+          
+          // Trigger fake file download
+          const blob = new Blob([JSON.stringify(projectData[activeProject], null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${activeProject}_build_static.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        exportPct.innerText = `${progress}%`;
+        exportFill.style.width = `${progress}%`;
+      }, 150);
+    });
+  }
+
+  // 8. Delete Project Workflow
+  const openDeleteBtn = document.getElementById('open-delete-project-btn');
+  const deleteModal = document.getElementById('delete-project-modal');
+  const deleteCard = document.getElementById('delete-project-modal-card');
+  const closeDeleteBtn = document.getElementById('close-delete-project-modal');
+  const cancelDeleteBtn = document.getElementById('cancel-delete-project-btn');
+  const confirmDeleteBtn = document.getElementById('confirm-delete-project-btn');
+  const deleteInput = document.getElementById('delete-project-confirm-input');
+  const deleteNameSpan = document.getElementById('delete-project-name-span');
+
+  if (openDeleteBtn && deleteModal && deleteCard) {
+    openDeleteBtn.addEventListener('click', () => {
+      const proj = projectData[activeProject];
+      if (!proj) return;
+
+      if (deleteNameSpan) deleteNameSpan.innerText = proj.name;
+      if (deleteInput) deleteInput.value = '';
+      if (confirmDeleteBtn) {
+        confirmDeleteBtn.disabled = true;
+        confirmDeleteBtn.className = "bg-red-600 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-not-allowed opacity-50";
+      }
+
+      toggleModalState(deleteModal, deleteCard, true);
+    });
+
+    const closeModal = () => toggleModalState(deleteModal, deleteCard, false);
+
+    if (closeDeleteBtn) closeDeleteBtn.addEventListener('click', closeModal);
+    if (cancelDeleteBtn) cancelDeleteBtn.addEventListener('click', closeModal);
+
+    if (deleteInput) {
+      deleteInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        const proj = projectData[activeProject];
+        if (proj && val.toLowerCase() === proj.name.toLowerCase()) {
+          confirmDeleteBtn.disabled = false;
+          confirmDeleteBtn.className = "bg-red-600 hover:bg-red-700 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-pointer";
+        } else {
+          confirmDeleteBtn.disabled = true;
+          confirmDeleteBtn.className = "bg-red-600 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-not-allowed opacity-50";
+        }
+      });
+    }
+
+    if (confirmDeleteBtn) {
+      confirmDeleteBtn.addEventListener('click', () => {
+        const nameToDelete = projectData[activeProject].name;
+        const keys = Object.keys(projectData);
+        if (keys.length <= 1) {
+          showToast('Cannot delete the only workspace left!', 'warning');
+          closeModal();
+          return;
+        }
+
+        // Remove project from state
+        delete projectData[activeProject];
+        showToast(`Project "${nameToDelete}" successfully deleted.`, 'success');
+        
+        // Find another project to switch to
+        const remainingKeys = Object.keys(projectData);
+        const nextActive = remainingKeys[0];
+        
+        // Hide settings modal
+        closeModal();
+
+        // Switch to the other project button (which automatically triggers selectProject)
+        const targetBtn = document.getElementById(`project-btn-${nextActive}`);
+        if (targetBtn) {
+          targetBtn.click();
+        } else {
+          selectProject(nextActive);
+        }
+
+        // Switch tab back to Overview
+        const overviewTabBtn = document.querySelector('button[data-tab="overview"]');
+        if (overviewTabBtn) overviewTabBtn.click();
+      });
+    }
+  }
 }
 

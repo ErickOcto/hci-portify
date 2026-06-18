@@ -64,7 +64,7 @@
                 <p class="text-xs text-slate-400">Signed in as</p>
                 <p class="text-sm font-semibold text-slate-700 truncate">Jane Doe</p>
               </div>
-              <a href="#" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">Account Settings</a>
+              <button id="profile-settings-btn" class="w-full text-left block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 cursor-pointer">Account Settings</button>
               <a href="#" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">Billing</a>
               <a href="src/pages/landing.html" id="logout-btn" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-slate-100">Sign out</a>
             </div>
@@ -2107,8 +2107,260 @@
                   </button>
                 </div>
               </div>
+          </div>
+        </div>
+
+        <!-- View 7: Settings View -->
+        <div id="settings-view" class="p-6 space-y-6 grow min-w-0 hidden">
+          <!-- Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <div>
+              <h1 class="text-lg font-bold text-slate-800 tracking-tight">Project Settings</h1>
+              <p class="text-xs text-slate-400 mt-0.5">Manage your project configuration, SEO settings, team access, and visual branding.</p>
+            </div>
+          </div>
+
+          <!-- Layout Split: Sidebar Navigation + Settings Form -->
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Sidebar Navigation -->
+            <div class="lg:col-span-1 bg-white border border-slate-200 rounded-2xl p-4 shadow-sm h-fit">
+              <nav class="space-y-1" id="settings-nav">
+                <button data-sett-tab="general" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all bg-blue-50 text-blue-600 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992" /></svg>
+                  <span>General Settings</span>
+                </button>
+                <button data-sett-tab="seo" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18.75V7.5a2.25 2.25 0 012.25-2.25H9m1.5-4.5h3a2.25 2.25 0 012.25 2.25v.75m-6 0h6" /></svg>
+                  <span>SEO & Socials</span>
+                </button>
+                <button data-sett-tab="team" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A3.318 3.318 0 0111.5 21a3.318 3.318 0 01-3.5-1.763v-.109m0-1.774a9.337 9.337 0 00-4.121-.952 4.125 4.125 0 00-7.533 2.493M8 19.128v-.003c0-1.113.285-2.16.786-3.07M8 19.128A3.322 3.322 0 0111.5 17.25c1.29 0 2.417.731 2.97 1.774M11.5 13.5a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" /></svg>
+                  <span>Team & Access</span>
+                </button>
+                <button data-sett-tab="branding" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-2.22 1.124l-3.145 3.67a.75.75 0 00.566 1.22H19.27a.75.75 0 00.566-1.22l-3.144-3.67a3 3 0 00-2.22-1.124H9.53z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 3a9 9 0 00-9 9c0 1.29.271 2.518.76 3.63a3.318 3.318 0 013.228-2.25c.342 0 .673.05.986.147A3.333 3.333 0 0012 11.25a3.333 3.333 0 003.026 2.277c.313-.097.644-.147.986-.147a3.318 3.318 0 013.228 2.25A9.002 9.002 0 0012 3z" /></svg>
+                  <span>Visual Branding</span>
+                </button>
+                <button data-sett-tab="advanced" class="w-full flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-950 text-rose-600 hover:text-rose-700 hover:bg-rose-50 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+                  <span>Advanced Zone</span>
+                </button>
+              </nav>
             </div>
 
+            <!-- Settings Form Content Pane -->
+            <div class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+              
+              <!-- Panel 1: General Settings -->
+              <div id="settings-panel-general" class="settings-panel space-y-6">
+                <div>
+                  <h2 class="text-sm font-bold text-slate-800 tracking-tight">General settings</h2>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Configure main workspace parameters.</p>
+                </div>
+                <form id="general-settings-form" class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-[10px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Project Name</label>
+                      <input type="text" id="setting-project-name" required class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors font-medium text-slate-700" />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Site Language</label>
+                      <select id="setting-project-lang" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors">
+                        <option value="en">English (en)</option>
+                        <option value="id">Indonesian (id)</option>
+                        <option value="es">Spanish (es)</option>
+                        <option value="ja">Japanese (ja)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Project Description</label>
+                    <textarea id="setting-project-desc" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors text-slate-600" placeholder="Brief description of this project..."></textarea>
+                  </div>
+                  <div class="flex justify-end pt-3 border-t border-slate-100">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow-sm hover:scale-102 active:scale-98 transition-all cursor-pointer">
+                      Save General Settings
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Panel 2: SEO Settings -->
+              <div id="settings-panel-seo" class="settings-panel space-y-6 hidden">
+                <div>
+                  <h2 class="text-sm font-bold text-slate-800 tracking-tight">Search Engine Optimization (SEO)</h2>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Define metadata and analytics tracking parameters.</p>
+                </div>
+                <form id="seo-settings-form" class="space-y-4">
+                  <div>
+                    <div class="flex justify-between items-center mb-1">
+                      <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Meta Title</label>
+                      <span id="char-count-title" class="text-[10px] font-bold text-slate-400">0 / 60</span>
+                    </div>
+                    <input type="text" id="setting-seo-title" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors font-medium text-slate-700" placeholder="e.g. Acme Studio — Modern portfolio" />
+                    <p class="text-[10px] text-slate-400 mt-1">Recommended length: 50-60 characters.</p>
+                  </div>
+                  <div>
+                    <div class="flex justify-between items-center mb-1">
+                      <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Meta Description</label>
+                      <span id="char-count-desc" class="text-[10px] font-bold text-slate-400">0 / 160</span>
+                    </div>
+                    <textarea id="setting-seo-desc" rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors text-slate-600" placeholder="Provide a search snippet meta description..."></textarea>
+                    <p class="text-[10px] text-slate-400 mt-1">Recommended length: 150-160 characters.</p>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Google Analytics ID</label>
+                    <input type="text" id="setting-analytics-id" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors font-mono" placeholder="G-XXXXXX or UA-XXXXX-Y" />
+                  </div>
+                  <div class="flex justify-end pt-3 border-t border-slate-100">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow-sm hover:scale-102 active:scale-98 transition-all cursor-pointer">
+                      Save SEO Settings
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Panel 3: Team Settings -->
+              <div id="settings-panel-team" class="settings-panel space-y-6 hidden">
+                <div class="flex justify-between items-center flex-wrap gap-2">
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-800 tracking-tight">Collaborators & Team Access</h2>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Control team roles and invite users to this workspace.</p>
+                  </div>
+                </div>
+
+                <!-- Invite Collaborator Form Card -->
+                <div class="bg-slate-50 border border-slate-200/60 rounded-xl p-4 space-y-3">
+                  <h3 class="text-xs font-bold text-slate-700">Invite new collaborator</h3>
+                  <form id="invite-member-form" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input type="text" id="invite-name" required placeholder="Full Name" class="bg-white border border-slate-200 rounded-lg py-1.5 px-3 text-xs focus:border-blue-400 focus:outline-none transition-all text-slate-700" />
+                    <input type="email" id="invite-email" required placeholder="User email" class="bg-white border border-slate-200 rounded-lg py-1.5 px-3 text-xs focus:border-blue-400 focus:outline-none transition-all text-slate-700" />
+                    <div class="flex gap-2">
+                      <select id="invite-role" class="bg-white border border-slate-200 rounded-lg py-1.5 px-2 text-xs focus:border-blue-400 focus:outline-none transition-all text-slate-600 w-full">
+                        <option value="Collaborator">Collaborator</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Viewer">Viewer</option>
+                      </select>
+                      <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3 py-1.5 rounded-lg shrink-0 flex items-center justify-center transition-all cursor-pointer active:scale-95">
+                        Invite
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- Members Table -->
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr class="text-slate-400 font-semibold border-b border-slate-100 uppercase tracking-wider">
+                        <th class="py-2.5">User</th>
+                        <th class="py-2.5">Email</th>
+                        <th class="py-2.5">Role</th>
+                        <th class="py-2.5 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="settings-members-list-body" class="divide-y divide-slate-100">
+                      <!-- Loaded dynamically via JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Panel 4: Branding Settings -->
+              <div id="settings-panel-branding" class="settings-panel space-y-6 hidden">
+                <div>
+                  <h2 class="text-sm font-bold text-slate-800 tracking-tight">Visual Branding & Theme</h2>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Customize global styles, fonts, and accents for this project.</p>
+                </div>
+                <form id="branding-settings-form" class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Accent Color Selection -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Theme Accent Color</label>
+                      <div class="flex items-center space-x-3">
+                        <input type="color" id="setting-accent-color-picker" class="w-10 h-10 border border-slate-200 rounded-lg cursor-pointer p-0.5" />
+                        <div>
+                          <input type="text" id="setting-accent-color-hex" class="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-3 text-xs font-mono w-24 text-center focus:bg-white focus:outline-none" />
+                        </div>
+                      </div>
+                      <!-- Quick Presets -->
+                      <div class="flex space-x-1.5 mt-2">
+                        <button type="button" data-color="#2563eb" class="preset-color-chip w-6 h-6 rounded-full bg-blue-600 border border-white hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"></button>
+                        <button type="button" data-color="#8b5cf6" class="preset-color-chip w-6 h-6 rounded-full bg-violet-500 border border-white hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"></button>
+                        <button type="button" data-color="#10b981" class="preset-color-chip w-6 h-6 rounded-full bg-emerald-500 border border-white hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"></button>
+                        <button type="button" data-color="#f59e0b" class="preset-color-chip w-6 h-6 rounded-full bg-amber-500 border border-white hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"></button>
+                        <button type="button" data-color="#e11d48" class="preset-color-chip w-6 h-6 rounded-full bg-rose-600 border border-white hover:scale-110 active:scale-95 transition-all shadow-xs cursor-pointer"></button>
+                      </div>
+                    </div>
+
+                    <!-- Typography Options -->
+                    <div class="space-y-2">
+                      <label class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Font Family</label>
+                      <select id="setting-font-family" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-blue-400 focus:outline-none transition-colors">
+                        <option value="Inter">Inter (Sans-Serif)</option>
+                        <option value="Outfit">Outfit (Geometric Sans)</option>
+                        <option value="Roboto">Roboto (Mechanical Sans)</option>
+                        <option value="Playfair Display">Playfair Display (Serif)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end pt-3 border-t border-slate-100">
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-4 py-2 rounded-lg shadow-sm hover:scale-102 active:scale-98 transition-all cursor-pointer">
+                      Save Branding Styles
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Panel 5: Advanced Settings (Danger Zone) -->
+              <div id="settings-panel-advanced" class="settings-panel space-y-6 hidden">
+                <div>
+                  <h2 class="text-sm font-bold text-slate-800 tracking-tight">Advanced site management</h2>
+                  <p class="text-[11px] text-slate-400 mt-0.5">Export site bundles or perform deletion operations.</p>
+                </div>
+
+                <!-- Export Site -->
+                <div class="p-4 bg-slate-50 border border-slate-200/60 rounded-xl space-y-3">
+                  <div class="flex justify-between items-start">
+                    <div>
+                      <h3 class="text-xs font-bold text-slate-700">Export static code bundle</h3>
+                      <p class="text-[10px] text-slate-400 mt-0.5">Download a compiled package containing index.html, JS modules, and Tailwind CSS files.</p>
+                    </div>
+                    <button id="export-site-btn" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer hover:scale-102 active:scale-95 flex items-center space-x-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                      <span>Export Static Build</span>
+                    </button>
+                  </div>
+
+                  <!-- Exporting status (hidden initially) -->
+                  <div id="export-status-container" class="hidden space-y-2 border-t border-slate-200 pt-3">
+                    <div class="flex justify-between items-center text-[10px] font-semibold">
+                      <span id="export-status-label" class="text-slate-600">Preparing build assets...</span>
+                      <span id="export-pct" class="text-blue-600">0%</span>
+                    </div>
+                    <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                      <div id="export-progress-fill" class="h-full bg-blue-600 rounded-full transition-all duration-300 w-0"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="p-4 bg-red-50 border border-red-100 rounded-xl space-y-3">
+                  <h3 class="text-xs font-bold text-red-800 uppercase tracking-wider">Danger Zone</h3>
+                  <div class="flex justify-between items-center gap-4 flex-wrap">
+                    <div>
+                      <h4 class="text-xs font-bold text-slate-700">Delete Project</h4>
+                      <p class="text-[10px] text-slate-500 mt-0.5">Permanently delete this project and all of its pages. This action is irreversible.</p>
+                    </div>
+                    <button id="open-delete-project-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer hover:scale-102 active:scale-95 shadow-sm">
+                      Delete Project
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </main>
@@ -2260,6 +2512,35 @@
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+
+        <!-- Modal: Delete Project Confirmation -->
+        <div id="delete-project-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300">
+          <div class="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full border border-slate-100 transform scale-95 transition-all duration-300" id="delete-project-modal-card">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-base font-bold text-slate-800">Delete Project</h3>
+              <button id="close-delete-project-modal" class="p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-50 transition-colors cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">Are you sure you want to delete <span class="font-bold text-slate-700" id="delete-project-name-span"></span>? All pages, styling templates, and custom code will be permanently lost.</p>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-[10px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Type project name to confirm</label>
+                <input type="text" id="delete-project-confirm-input" class="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm focus:bg-white focus:border-red-400 focus:outline-none transition-colors" placeholder="e.g. Macbook Gng" />
+              </div>
+              <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+                <button type="button" id="cancel-delete-project-btn" class="border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors cursor-pointer">
+                  Cancel
+                </button>
+                <button type="button" id="confirm-delete-project-btn" disabled class="bg-red-600 text-white font-semibold text-xs px-3.5 py-2 rounded-lg shadow-sm transition-all cursor-not-allowed opacity-50">
+                  Delete Workspace
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
